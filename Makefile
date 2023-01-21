@@ -1,9 +1,9 @@
-NAME	=	Containers
+NAME	=	ircserv
 
 INC		=	Includes
 
 CXC		=	c++
-CFLAGS	=	-Wall -Wextra -Werror -g -Wshadow -std=c++98 -I $(INC)
+CFLAGS	=	-Wall -Wextra -Werror -std=c++98 -I $(INC)
 CDEP	=	-MMD
 # -Wshadow : Warn whenever a local variable or type declaration shadows another 
 #             variable, parameter, type or class member
