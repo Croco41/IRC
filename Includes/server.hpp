@@ -2,6 +2,12 @@
 # define SERVER_HPP
 
 #include <string>
+#include <sys/socket.h> // socket
+#include <sys/types.h> // bind
+#include <arpa/inet.h> // htonl / htons / ntohl / ntohs
+#include <stdexcept> // pour les exceptions throw !
+#include <unistd.h> // fcntl
+#include <fcntl.h> // fcntl
 
 class Server
 {
@@ -20,7 +26,6 @@ class Server
 		const std::string   _password;
 		const std::string   _port;
 		int					_socket;
-
 };
 
 #endif
