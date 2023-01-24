@@ -13,7 +13,7 @@ RM		=	/usr/bin/rm -rf
 vpath %.cpp Srcs
 
 SRC		=	Srcs/main.cpp \
-# SRC		=	Srcs/subject_main.cpp \
+			Srcs/server.cpp \
 
 OBJ		=	$(SRC:Srcs/%.cpp=Objs/%.o)
 DEP		=	$(SRC:Srcs/%.cpp=Objs/%.d)
