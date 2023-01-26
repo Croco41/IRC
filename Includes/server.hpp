@@ -2,7 +2,9 @@
 # define SERVER_HPP
 
 #include <string>
+#include <cstring> // strstr
 #include <stdio.h> // perror
+#include <netdb.h> // getnameinfo
 #include <cerrno> // errno
 #include <stdlib.h> // strtol
 #include <sys/socket.h> // socket
@@ -26,6 +28,9 @@ class Server
 		int			getSocket() const;
 		int			launch_socket();
 		void		start_epoll();
+		void		onClientConnect(sockaddr_in connect_serv_socket);
+		void		onClientDisconnect(int fd, int epoll_fd);
+		std::string	onClientMessage(int fd);
 
 	private:
 		Server(Server const &copy);
