@@ -15,8 +15,10 @@
 #include <fcntl.h> // fcntl
 #include <iostream> // cerr
 #include <sys/epoll.h> // epoll / epoll_create
+#include "client.hpp"
 
 #define MAX_EVENTS 10
+
 
 class Server
 {
@@ -28,7 +30,7 @@ class Server
 		int			getSocket() const;
 		int			launch_socket();
 		void		start_epoll();
-		void		onClientConnect(sockaddr_in connect_serv_socket);
+		void		onClientConnect(sockaddr_in connect_serv_socket, int socket_client);
 		void		onClientDisconnect(int fd, int epoll_fd);
 		std::string	onClientMessage(int fd);
 

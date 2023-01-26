@@ -101,52 +101,55 @@ void		Server::start_epoll()
 	if (epoll_fd < 0)
 		throw std::runtime_error("Error while creating epoll file descriptor.\n");
 
-	struct epoll_event ev;
-	ev.data.fd = _socket;
-	ev.events = EPOLLIN; // monitor for incoming data. EPOLLIN : The associated file is available for read(2) operations.
+	struct epoll_event server_ev;
+	server_ev.data.fd = _socket;
+	server_ev.events = EPOLLIN; // monitor for incoming data. EPOLLIN : The associated file is available for read(2) operations.
 
-	if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, _socket, &ev))
+	if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, _socket, &server_ev))
 		throw std::runtime_error("Error while adding server socket to epoll.\n");
 	std::cout << "Server listening..." << std::endl;
 	// ft_log("Server listening...");
-	struct epoll_event events[MAX_EVENTS];
+	struct epoll_event connect_ev[MAX_EVENTS];
 	while (1)
 	{
 		// std::cout << "Polling for input..." << std::endl;
-		int nfds = epoll_wait(epoll_fd, events, MAX_EVENTS, -1); // -1 = infinite timeout
+		int nfds = epoll_wait(epoll_fd, connect_ev, MAX_EVENTS, -1); // -1 = infinite timeout
 		if (nfds < 0)
 			throw std::runtime_error("Error while waiting for epoll.\n");
 		// std::cout << nfds << " ready events." << std::endl;
 		for (int i = 0; i < nfds; i++)
 		{
-			int fd = events[i].data.fd;
+			int fd = connect_ev[i].data.fd;
+//std::cout << "fd" << fd << "   /notre socket server: " << _socket << std::endl;
 			if (fd == _socket)
 			{
 				int connect_sockfd;
 				sockaddr_in connect_serv_socket = {AF_INET, 0, {0}, {0}};
 				socklen_t connectsize = sizeof connect_serv_socket;
 				connect_sockfd = accept(_socket, (struct sockaddr *) &connect_serv_socket, &connectsize);
+//std::cout << "fd" << fd << "   /connect_sockfd: " << connect_sockfd << std::endl;
 				if (connect_sockfd < 0)
 				{
 					if (errno == EINTR)
 						continue;
 					throw std::runtime_error("Error while accepting a connexion YOUHOU.\n");
 				}
-				ev.data.fd = connect_sockfd;
-				ev.events = EPOLLIN;
-				if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, connect_sockfd, &ev) == 0)
+				server_ev.data.fd = connect_sockfd;
+//std::cout << "fd" << fd << "   /server_ev.data.fd: " << server_ev.data.fd << std::endl;
+				server_ev.events = EPOLLIN;
+				if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, connect_sockfd, &server_ev) == 0)
 				{
-					// std::cout << "Client n°" << ev.data.fd << " s'est connecté !" << std::endl;
-					onClientConnect(connect_serv_socket);
-					// continue;
+					std::cout << "Client n°" << server_ev.data.fd << " s'est connecté !" << std::endl;
+					onClientConnect(connect_serv_socket, connect_sockfd);
+					//continue;
 				}
-
-				onClientMessage(fd);
-				std::cout << " ????? " << std::endl;
+//std::cout << " ????? " << std::endl;
+				//onClientMessage(fd);
+				//std::cout << " ????? " << std::endl;
 			}
 			else
 			{
-				std::cout << "On arrive la" << std::endl;
+//std::cout << "On arrive la" << std::endl;
 				char buffer[1024];
 				ssize_t n = recv(fd, buffer, sizeof buffer, 0);
 				if(n == -1)
@@ -171,14 +174,34 @@ void		Server::start_epoll()
 		throw std::runtime_error("Error while closing epoll file descriptor.\n");
 }
 
-void		Server::onClientConnect(sockaddr_in connect_serv_socket)
+void		Server::onClientConnect(sockaddr_in connect_serv_socket, int socket_client)
 {
 	char hostname[100];
 	if (getnameinfo((struct sockaddr *) &connect_serv_socket, sizeof(connect_serv_socket), hostname, 100, NULL, 0, NI_NUMERICSERV) != 0)
 		throw std::runtime_error("Error while getting hostname on new client.");
 	//client à faire??
 
-	std::cout << hostname << ":" << ntohs(connect_serv_socket.sin_port) << " has connected." << std::endl;
+	Client *client = new Client(hostname, socket_client, ntohs(connect_serv_socket.sin_port));
+	std::cout << hostname << ":" << ntohs(connect_serv_socket.sin_port) << " has connected." << std::endl << std::endl;
+	std::cout << connect_serv_socket.sin_addr << std::endl << std::endl;
+
+
+	std::string message;
+	char tmp[100] = {0};
+	while (message.find("\r\n") == std::string::npos)
+	{
+		int r = recv(socket_client, tmp, 100, 0);
+		if (r < 0)
+		{
+			if (errno != EWOULDBLOCK)
+				throw std::runtime_error("Error while receiving message from client.");			
+		}
+		message.append(tmp, r);
+	}
+	std::cout << "message = " << message << std::endl;
+	std::cout << client->getHostname() << std::endl;
+	client->setRealname("test");
+	std::cout << client->getRealname() << std::endl;
 }
 
 void		Server::onClientDisconnect(int fd, int epoll_fd)
@@ -196,25 +219,17 @@ void		Server::onClientDisconnect(int fd, int epoll_fd)
 std::string	Server::onClientMessage(int fd)
 {
 	std::string message;
-	char tmp[100]; // = {0};
-	bzero(tmp, 100);
-	std::cout << "On arrive ici" << std::endl;
-	while (!std::strstr(tmp, "\r\n"))
-	// while (message.find("\r\n") == std::string::npos)
+	char tmp[100] = {0};
+	while (message.find("\r\n") == std::string::npos)
 	{
-		// bzero(tmp, 512);
-		// std::cout << "On arrive ici bis" << std::endl;
-		std::cout << "tmp = " << tmp << " et fd = " << fd << std::endl;
-		int r = recv(fd, tmp, 100, 0) < 0;
-		std::cout << "tmp = " << tmp << " et r = " << r << std::endl;
-		// if (recv(fd, tmp, 512, 0) < 0)
+
+		int r = recv(fd, tmp, 100, 0);
 		if (r < 0)
 		{
 			if (errno != EWOULDBLOCK)
 				throw std::runtime_error("Error while receiving message from client.");			
 		}
 		message.append(tmp, r);
-		std::cout << "message boucle = " << message << std::endl;
 	}
 	std::cout << "message = " << message << std::endl;
 	return (message);

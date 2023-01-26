@@ -8,12 +8,13 @@ CDEP	=	-MMD
 # -Wshadow : Warn whenever a local variable or type declaration shadows another 
 #             variable, parameter, type or class member
 CFA		=	-fsanitize=address -g3
-RM		=	/usr/bin/rm -rf
+RM		=	rm -rf
 
 vpath %.cpp Srcs
 
 SRC		=	Srcs/main.cpp \
 			Srcs/server.cpp \
+			Srcs/client.cpp \
 
 OBJ		=	$(SRC:Srcs/%.cpp=Objs/%.o)
 DEP		=	$(SRC:Srcs/%.cpp=Objs/%.d)
