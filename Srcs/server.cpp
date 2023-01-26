@@ -182,9 +182,9 @@ void		Server::onClientConnect(sockaddr_in connect_serv_socket, int socket_client
 	//client à faire??
 
 	Client *client = new Client(hostname, socket_client, ntohs(connect_serv_socket.sin_port));
-	std::cout << hostname << ":" << ntohs(connect_serv_socket.sin_port) << " has connected." << std::endl << std::endl;
-	std::cout << connect_serv_socket.sin_addr << std::endl << std::endl;
-
+	_clients.insert(std::make_pair(socket_client, client)); // on enregistre l'instance client au niveau de la clé fd (il ne peut y avoir 2x le même fd, donc map parfait !)
+	std::cout << hostname << " : " << ntohs(connect_serv_socket.sin_port) << " has connected." << std::endl << std::endl;
+	// std::cout << connect_serv_socket.sin_addr << std::endl << std::endl;
 
 	std::string message;
 	char tmp[100] = {0};
