@@ -19,11 +19,14 @@ class Client
         std::string    getRealname() const;
         std::string    getUsername() const;
         std::string    getNickname() const;
+        std::string    getPassword() const;
 
         // SETTERS
         void           setRealname(const std::string &realname);
         void           setUsername(const std::string &username);
         void           setNickname(const std::string &nickname);
+        void           setPassword(const std::string &password);
+
 
     private:
         // variables initialisées lors de la construction
@@ -34,6 +37,7 @@ class Client
         std::string    _realname;
         std::string    _username;
         std::string    _nickname;
+        std::string    _password;
 };
 
 #endif

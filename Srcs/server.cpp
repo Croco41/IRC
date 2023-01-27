@@ -174,17 +174,48 @@ void		Server::start_epoll()
 		throw std::runtime_error("Error while closing epoll file descriptor.\n");
 }
 
+std::string	ParsingonClientConnect(std::string message, std::string word, Client *client)
+{
+		std::string newword;
+		size_t found = message.find(word);
+		size_t start;
+		size_t end;
+
+		if (word == "USER")
+		{
+			if (found != std::string::npos)
+			{
+				start = message.find_first_not_of("\t\n", found + word.length() + 1);
+				end = message.find_first_of(" ", start);
+				newword = message.substr(start, end - start);
+				client->setUsername(newword);
+				start = message.find(":");
+				end = message.find_first_of("\t\n", start);
+				newword = message.substr(start + 1, end - start);
+			}
+		}
+		else if (found != std::string::npos)
+		{
+			start = message.find_first_not_of("\t\n", found + word.length() + 1);
+			end = message.find_first_of("\t\n", start);
+			newword = message.substr(start, end - start);
+		}
+		else
+			newword = "";
+		return(newword);
+}
+
+
+
 void		Server::onClientConnect(sockaddr_in connect_serv_socket, int socket_client)
 {
 	char hostname[100];
 	if (getnameinfo((struct sockaddr *) &connect_serv_socket, sizeof(connect_serv_socket), hostname, 100, NULL, 0, NI_NUMERICSERV) != 0)
 		throw std::runtime_error("Error while getting hostname on new client.");
-	//client à faire??
 
 	Client *client = new Client(hostname, socket_client, ntohs(connect_serv_socket.sin_port));
 	std::cout << hostname << ":" << ntohs(connect_serv_socket.sin_port) << " has connected." << std::endl << std::endl;
-	std::cout << connect_serv_socket.sin_addr << std::endl << std::endl;
-
+	_clients.insert(std::make_pair(socket_client, client)); // on enregistre l'instance client au niveau de la clé fd (il ne peut y avoir 2x le même fd, donc map parfait !)
 
 	std::string message;
 	char tmp[100] = {0};
@@ -199,9 +230,14 @@ void		Server::onClientConnect(sockaddr_in connect_serv_socket, int socket_client
 		message.append(tmp, r);
 	}
 	std::cout << "message = " << message << std::endl;
-	std::cout << client->getHostname() << std::endl;
-	client->setRealname("test");
-	std::cout << client->getRealname() << std::endl;
+	client->setPassword(ParsingonClientConnect(message, "PASS", client));
+	client->setNickname(ParsingonClientConnect(message, "NICK", client));
+	client->setRealname(ParsingonClientConnect(message, "USER", client));
+	
+	std::cout << "password: " << client->getPassword() << std::endl;
+	std::cout << "nickname: " << client->getNickname() << std::endl;
+	std::cout << "username: " << client->getUsername() << std::endl;
+	std::cout << "realname: " << client->getRealname() << std::endl;
 }
 
 void		Server::onClientDisconnect(int fd, int epoll_fd)

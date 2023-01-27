@@ -45,6 +45,11 @@ std::string    Client::getNickname() const
     return(this->_nickname);
 }
 
+std::string    Client::getPassword() const
+{
+    return(this->_password);
+}
+
 
 // SETTERS
 
@@ -61,4 +66,9 @@ void    Client::setUsername(const std::string &username)
 void    Client::setNickname(const std::string &nickname) 
 {
     _nickname = nickname;
+}
+
+void    Client::setPassword(const std::string &password) 
+{
+    _password = password;
 }
