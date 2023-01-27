@@ -15,6 +15,7 @@
 #include <fcntl.h> // fcntl
 #include <iostream> // cerr
 #include <sys/epoll.h> // epoll / epoll_create
+#include <map> //map
 #include "client.hpp"
 
 #define MAX_EVENTS 10
@@ -41,6 +42,7 @@ class Server
 		const std::string	_port;
 		const std::string	_password;
 		int					_socket;
+		std::map<int, Client *>    _clients; // nos clients seront enregistrés dans une map associant clé = fd, valeur = objet Client
 };
 
 #endif
