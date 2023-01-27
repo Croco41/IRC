@@ -8,6 +8,23 @@ Server::Server(const std::string &port, const std::string &password)
 
 Server::~Server(void)
 {
+	if (_clients.size())
+	{
+		typename std::map<int, Client>::iterator it;
+		for (it = _clients.begin(); it != _clients.end(); ++it)
+		{
+			close(it->first);
+			delete it->second;
+		}
+			// delete _clients.at(_clients.second())
+			//epoll_ctl(epoll_fd, EPOLL_CTL_DEL, _clients.fd, 0);
+		_clients.clear();
+	}
+{
+
+	_clients.clear();
+}
+
 	return;
 }
 
@@ -220,9 +237,9 @@ std::string	Server::onClientMessage(int fd)
 {
 	std::string message;
 	char tmp[100] = {0};
+
 	while (message.find("\r\n") == std::string::npos)
 	{
-
 		int r = recv(fd, tmp, 100, 0);
 		if (r < 0)
 		{
@@ -234,3 +251,30 @@ std::string	Server::onClientMessage(int fd)
 	std::cout << "message = " << message << std::endl;
 	return (message);
 }
+
+void    ParsingonClientConnect(std::string message, Client *client)
+{
+
+	std::cout << "dans la boucle message principale" <<std::endl;
+	size_t pos = message.find("PASS") + 5;
+	std::cout << pos << std::endl;
+
+	if(pos <= message.length())
+	{
+		std::cout << "dans la boucle message.at" <<std::endl;
+		std::cout << pos << message[pos] << std::endl;
+
+		std::string content;
+		int end = pos;
+		while(message[end] != '\n')
+		{
+			end++;
+		}
+		client->setPassword(content.append(message, pos, end));
+
+		// while(!message.find("\n"))
+		// {
+		//     std::cout << "dans la boucle setpassword" <<std::endl;
+		//     client->setPassword(message);
+		// }
+        }

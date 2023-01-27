@@ -39,9 +39,9 @@ class Server
 		Server(Server const &copy);
 		Server &operator=(Server const &rhs);
 
-		const std::string	_port;
-		const std::string	_password;
-		int					_socket;
+		const std::string		_port;
+		const std::string		_password;
+		int						_socket;
 		std::map<int, Client *>	_clients; // nos clients seront enregistrés dans une map associant clé = fd, valeur = objet Client
 };
 
