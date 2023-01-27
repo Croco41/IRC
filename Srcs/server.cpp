@@ -206,7 +206,6 @@ std::string	ParsingonClientConnect(std::string message, std::string word, Client
 }
 
 
-
 void		Server::onClientConnect(sockaddr_in connect_serv_socket, int socket_client)
 {
 	char hostname[100];
@@ -246,8 +245,11 @@ void		Server::onClientDisconnect(int fd, int epoll_fd)
 	epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, 0);
 
 	// Close the socket for this client
+	std::cout << "Client n°" << fd << " username: " << _clients.at(fd)->getUsername() << " va se déconnecter." << std::endl;
+	delete _clients.at(fd);
+	_clients.erase(fd);
 	close(fd);
-
+	 
 	// Log the client disconnection
 	std::cout << "Client n°" << fd << " s'est déconnecté." << std::endl;
 }
