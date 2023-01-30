@@ -23,7 +23,6 @@
 
 extern int	Run;
 
-
 class Server
 {
 	public:

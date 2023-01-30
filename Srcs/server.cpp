@@ -91,28 +91,6 @@ int			Server::launch_socket()
 		// 3.a/ écouter : listen()
 	if (listen(sockfd, 1000) < 0) // 1000 = nb de connections simultanées acceptées par le serveur
 		throw std::runtime_error("Error while listening on socket.\n");
-		// 3.b/ accepter la connection d'un client : accept() renvoie un nouveau socket qu'on stocke dans une nvle struct !
-	std::cout << "On arrive ici !" << std::endl;
-		// int connect_sockfd;
-		// sockaddr_in connect_serv_socket = {AF_INET, 0, {0}, {0}};
-		// socklen_t connectsize = sizeof connect_serv_socket;
-	// while (true)
-	// {
-	// 	connect_sockfd = accept(sockfd, (sockaddr *) &connect_serv_socket, &connectsize);
-	// 	if (connect_sockfd < 0)
-	// 	{
-	// 		if (errno == EINTR)
-	// 			continue;
-	// 		throw std::runtime_error("Error while accepting a connexion YOUHOU.");
-	// 	}
-	// }
-
-	// int connect_sockfd;
-	// sockaddr_in connect_serv_socket = {AF_INET, 0, {0}, {0}}; // new structure pour une new connection ! (et mise à 0 de ses variables)
-	// socklen_t connectsize = sizeof connect_serv_socket;
-	// connect_sockfd = accept(sockfd, (sockaddr *) &connect_serv_socket, &connectsize);
-	// if (connect_sockfd < 0)
-	// 	throw std::runtime_error("Error while accepting a connexion.");
 	return sockfd;
 }
 
@@ -130,13 +108,11 @@ void		Server::start_epoll()
 	memset(&server_ev, 0, sizeof(server_ev)); // Initialiser tous les octets de event à zéro
 	server_ev.data.fd = _socket;
 	server_ev.events = EPOLLIN; // monitor for incoming data. EPOLLIN : The associated file is available for read(2) operations.
-	
 	if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, _socket, &server_ev))
 		throw std::runtime_error("Error while adding server socket to epoll.\n");
 	struct epoll_event connect_ev[MAX_EVENTS];
 	std::cout << "Server listening..." << std::endl;
 	// ft_log("Server listening...");
-	
 	while (Run)
 	{
 		if (Run == 0)
@@ -148,18 +124,15 @@ void		Server::start_epoll()
 				break;
 			throw std::runtime_error("Error while waiting for epoll.\n");
 		}
-		// std::cout << nfds << " ready events." << std::endl;
 		for (int i = 0; i < nfds; i++)
 		{
 			int fd = connect_ev[i].data.fd;
-//std::cout << "fd" << fd << "   /notre socket server: " << _socket << std::endl;
 			if (fd == _socket)
 			{
 				int connect_sockfd;
-				sockaddr_in connect_serv_socket = {AF_INET, 0, {0}, {0}};
+				sockaddr_in connect_serv_socket = {AF_INET, 0, {0}, {0}}; // new structure pour une new connection ! (et mise à 0 de ses variables)
 				socklen_t connectsize = sizeof connect_serv_socket;
-				connect_sockfd = accept(_socket, (struct sockaddr *) &connect_serv_socket, &connectsize);
-//std::cout << "fd" << fd << "   /connect_sockfd: " << connect_sockfd << std::endl;
+				connect_sockfd = accept(_socket, (struct sockaddr *) &connect_serv_socket, &connectsize); //accepter la connection d'un client : accept() renvoie un nouveau socket qu'on stocke dans une nvle struct !
 				if (connect_sockfd < 0)
 				{
 					if (errno == EINTR)
@@ -167,7 +140,6 @@ void		Server::start_epoll()
 					throw std::runtime_error("Error while accepting a connexion YOUHOU.\n");
 				}
 				server_ev.data.fd = connect_sockfd;
-//std::cout << "fd" << fd << "   /server_ev.data.fd: " << server_ev.data.fd << std::endl;
 				server_ev.events = EPOLLIN;
 				if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, connect_sockfd, &server_ev) == 0)
 				{
@@ -237,7 +209,6 @@ std::string	ParsingonClientConnect(std::string message, std::string word, Client
 		return(newword);
 }
 
-
 void		Server::onClientConnect(sockaddr_in connect_serv_socket, int socket_client)
 {
 	char hostname[100];
@@ -275,13 +246,11 @@ void		Server::onClientDisconnect(int fd, int epoll_fd)
 {
 	// Remove the client from the epoll instance (flag EPOLL_CTL_DEL)
 	epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, 0);
-
 	// Close the socket for this client
 	std::cout << "Client n°" << fd << " username: " << _clients.at(fd)->getUsername() << " va se déconnecter." << std::endl;
 	delete _clients.at(fd);
 	_clients.erase(fd);
 	close(fd);
-	 
 	// Log the client disconnection
 	std::cout << "Client n°" << fd << " s'est déconnecté." << std::endl;
 }
@@ -292,7 +261,6 @@ std::string	Server::onClientMessage(int fd)
 	char tmp[100] = {0};
 	while (message.find("\r\n") == std::string::npos)
 	{
-
 		int r = recv(fd, tmp, 100, 0);
 		if (r < 0)
 		{
@@ -304,4 +272,3 @@ std::string	Server::onClientMessage(int fd)
 	std::cout << "message = " << message << std::endl;
 	return (message);
 }
-

@@ -1,7 +1,5 @@
 #include "../Includes/server.hpp"
 
-int run;
-
 int main(int argc, char **argv)
 {
 	try
