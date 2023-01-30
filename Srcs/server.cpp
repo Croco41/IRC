@@ -1,14 +1,29 @@
 #include "../Includes/server.hpp"
 
+int Run;
+
 Server::Server(const std::string &port, const std::string &password)
 	: _port(port), _password(password)
 {
+	Run = 1;
 	_socket = launch_socket();
 }
 
 Server::~Server(void)
 {
-	return;
+	std::cout << "on passe par ici" << std::endl;
+    if (_clients.size())
+    {
+        typename std::map<int, Client *>::iterator it;
+        for (it = _clients.begin(); it != _clients.end(); ++it)
+        {
+            close(it->first);
+            delete it->second;
+        }
+        _clients.clear();
+    }
+	std::cout << "Server closed." <<std::endl;
+    return;
 }
 
 std::string	Server::getPassword() const
@@ -19,6 +34,14 @@ std::string	Server::getPassword() const
 int			Server::getSocket() const
 {
 	return (_socket);
+}
+
+void handleSignal(int sigint)
+{
+	std::cout << std::endl;
+	std::cout << "Exiting server..." << std::endl;
+	if (sigint == SIGINT)
+		Run = 0;
 }
 
 /*
@@ -33,6 +56,7 @@ int			Server::launch_socket()
 {
 	// 1/ initialiser le socket
 		// 1.a/ ouvrir un fd socket avec socket(int domain, int type, int protocol)
+	signal(SIGINT, handleSignal);
 	int sockfd = socket(AF_INET, SOCK_STREAM, 0); // AF_INET pour IPv4 Internet Protocol (si on veut IPv6 : AF_INET6) / SOCK_STREAM : full duplex-byte streams / 0 : un seul protocole supporté par le socket (ici IPv4)
 	if (sockfd < 0)
 		throw std::runtime_error("Error while opening socket.\n");
@@ -40,32 +64,29 @@ int			Server::launch_socket()
 	int val = 1; // non zero = enable a boolean option
 	if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val)))
 		throw std::runtime_error("Error while setting socket options.\n");
-		// 1.c/ mettre le socket en mode NON-BLOCKING (F_SETFL = set the file status flags to the value specified in 3rd argument)
+	// 1.c/ mettre le socket en mode NON-BLOCKING (F_SETFL = set the file status flags to the value specified in 3rd argument)
 	if (fcntl(sockfd, F_SETFL, O_NONBLOCK) < 0)
 		throw std::runtime_error("Error while setting socket to NON-BLOCKING.\n");
-
 	// 2/ faire un lien avec le port
 		// 2.a/ On va utiliser les variables de la structure générique sockaddr_in (sin) notamment : sin.addr et sin.port
 	struct sockaddr_in serv_socket = {AF_INET, 0, {0}, {0}}; // met toutes les variables à zero (évite certaines erreurs) et on recastera plus tard cette structure en sockaddr.
 	serv_socket.sin_family = AF_INET;
 	serv_socket.sin_addr.s_addr = htonl(INADDR_ANY); // notre serveur accepte n'importe quelle adresse
-	// serv_socket.sin_port = htons(std::strtol(_port.c_str(), NULL, 10)); // htons() converts unsigned short int to big-endian network byte order as expected from TCP protocol standards
 	try
 	{
 		int port = std::strtol(_port.c_str(), NULL, 10);
 		if (port < 0 || port > 65535)
 			throw std::invalid_argument("Invalid port number.\n");
-		serv_socket.sin_port = htons(port);
+		serv_socket.sin_port = htons(port); // htons() converts unsigned short int to big-endian network byte order as expected from TCP protocol standards
 	}
 	catch (const std::invalid_argument &e)
 	{
 		perror("Error: Invalid port number.\n");
 		exit(EXIT_FAILURE);
 	}
-		// 2.b/ on lie le socket avec l'adresse IP actuelle du port (bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen))
+	// 2.b/ on lie le socket avec l'adresse IP actuelle du port (bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen))
 	if (bind(sockfd, (struct sockaddr *) &serv_socket, sizeof(serv_socket)) < 0)
 		throw std::runtime_error("Error while binding socket.\n");
-	
 	// 3/ écouter et accepter une connexion entrante
 		// 3.a/ écouter : listen()
 	if (listen(sockfd, 1000) < 0) // 1000 = nb de connections simultanées acceptées par le serveur
@@ -100,22 +121,33 @@ void		Server::start_epoll()
 	int epoll_fd = epoll_create1(0); // create a new epoll instance
 	if (epoll_fd < 0)
 		throw std::runtime_error("Error while creating epoll file descriptor.\n");
-
+	// if (epoll_fd == -1) 
+	// {
+    //     perror("epoll_create1");
+    //     exit(EXIT_FAILURE);
+    // }
 	struct epoll_event server_ev;
+	memset(&server_ev, 0, sizeof(server_ev)); // Initialiser tous les octets de event à zéro
 	server_ev.data.fd = _socket;
 	server_ev.events = EPOLLIN; // monitor for incoming data. EPOLLIN : The associated file is available for read(2) operations.
-
+	
 	if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, _socket, &server_ev))
 		throw std::runtime_error("Error while adding server socket to epoll.\n");
+	struct epoll_event connect_ev[MAX_EVENTS];
 	std::cout << "Server listening..." << std::endl;
 	// ft_log("Server listening...");
-	struct epoll_event connect_ev[MAX_EVENTS];
-	while (1)
+	
+	while (Run)
 	{
-		// std::cout << "Polling for input..." << std::endl;
+		if (Run == 0)
+			break;
 		int nfds = epoll_wait(epoll_fd, connect_ev, MAX_EVENTS, -1); // -1 = infinite timeout
 		if (nfds < 0)
+		{
+			if (Run == 0)
+				break;
 			throw std::runtime_error("Error while waiting for epoll.\n");
+		}
 		// std::cout << nfds << " ready events." << std::endl;
 		for (int i = 0; i < nfds; i++)
 		{
@@ -272,3 +304,4 @@ std::string	Server::onClientMessage(int fd)
 	std::cout << "message = " << message << std::endl;
 	return (message);
 }
+
