@@ -15,6 +15,7 @@ vpath %.cpp Srcs
 SRC		=	Srcs/main.cpp \
 			Srcs/server.cpp \
 			Srcs/client.cpp \
+			Srcs/channel.cpp \
 
 OBJ		=	$(SRC:Srcs/%.cpp=Objs/%.o)
 DEP		=	$(SRC:Srcs/%.cpp=Objs/%.d)

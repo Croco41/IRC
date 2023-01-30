@@ -36,6 +36,17 @@ int			Server::getSocket() const
 	return (_socket);
 }
 
+Channel*	Server::getChannel(const std::string &name)
+{
+	typedef std::vector<Channel *>::iterator chan_iterator;
+	for (chan_iterator it = _channels.begin(); it != _channels.end(); it++)
+	{
+		if (it.operator*()->getName() == name)
+			return (it.operator*());
+	}
+	return NULL;
+}
+
 void handleSignal(int sigint)
 {
 	std::cout << std::endl;
@@ -240,6 +251,8 @@ void		Server::onClientConnect(sockaddr_in connect_serv_socket, int socket_client
 	std::cout << "nickname: " << client->getNickname() << std::endl;
 	std::cout << "username: " << client->getUsername() << std::endl;
 	std::cout << "realname: " << client->getRealname() << std::endl;
+
+	createChannel("Fantasy", "Gandalf", client);
 }
 
 void		Server::onClientDisconnect(int fd, int epoll_fd)
@@ -300,4 +313,18 @@ void    ParsingonClientConnect(std::string message, Client *client)
 		//     client->setPassword(message);
 		// }
         }
+}
+
+Channel*	Server::createChannel(const std::string &name, const std::string &password, Client *client)
+{
+	// if (client == NULL)
+	// 	Channel *channel = new Channel(name, password);
+	// else
+	Channel *channel = new Channel(name, password, client);
+	_channels.push_back(channel);
+	std::cout << "creation de notre premier channel de force !" << std::endl;
+	std::cout << "name of the channel = " << _channels.front()->getName() << std::endl;
+	std::cout << "password = " << _channels.front()->getPassword() << std::endl;
+	std::cout << "nom du Client = " << _channels.front()->getAdmin()->getNickname() << std::endl;
+	return (channel);
 }
