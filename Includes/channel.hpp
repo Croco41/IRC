@@ -7,7 +7,7 @@
 class Channel {
 
 	public:
-		Channel(const std::string &name);
+		Channel(const std::string &name, const std::string &password);
 		Channel(const std::string &name, const std::string &password, Client *admin);
 		~Channel();
 

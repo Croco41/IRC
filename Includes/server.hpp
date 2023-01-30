@@ -16,6 +16,7 @@
 #include <iostream> // cerr
 #include <sys/epoll.h> // epoll / epoll_create
 #include <map> // map
+#include <vector>
 #include <signal.h>
 #include "client.hpp"
 #include "channel.hpp"
@@ -39,7 +40,6 @@ class Server
 		std::string	onClientMessage(int fd);
 		//partie liée au channel:
 		Channel*	createChannel(const std::string &name, const std::string &password, Client *client);
-
 
 
 	private:

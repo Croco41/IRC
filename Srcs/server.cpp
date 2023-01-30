@@ -272,3 +272,14 @@ std::string	Server::onClientMessage(int fd)
 	std::cout << "message = " << message << std::endl;
 	return (message);
 }
+
+Channel	*Server::createChannel(const std::string &name, const std::string &password, Client *client)
+{
+	if (client == NULL)
+		Channel *channel = new Channel(name, password);
+	else
+		Channel	*channel = new Channel(name, password, client);
+	_channels.push_back(channel);
+
+	return (channel);
+}
