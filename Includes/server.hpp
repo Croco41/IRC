@@ -15,15 +15,17 @@
 #include <fcntl.h> // fcntl
 #include <iostream> // cerr
 #include <sys/epoll.h> // epoll / epoll_create
+#include <signal.h> // signal
 #include <map> // map
-#include <vector>
-#include <signal.h>
+#include <vector> // vector
 #include "client.hpp"
 #include "channel.hpp"
 
 #define MAX_EVENTS 10
 
 extern int	Run;
+
+class Channel;
 
 class Server
 {
@@ -39,19 +41,18 @@ class Server
 		void		onClientDisconnect(int fd, int epoll_fd);
 		std::string	onClientMessage(int fd);
 		//partie liée au channel:
+		Channel*	getChannel(const std::string &name);
 		Channel*	createChannel(const std::string &name, const std::string &password, Client *client);
-
 
 	private:
 		Server(Server const &copy);
 		Server &operator=(Server const &rhs);
 
-		const std::string	_port;
-		const std::string	_password;
-		int					_socket;
-		std::map<int, Client *>		_clients; // nos clients seront enregistrés dans une map associant clé = fd, valeur = objet Client
-		std::vector<Channel *>		_channels;
-
+		const std::string		_port;
+		const std::string		_password;
+		int						_socket;
+		std::map<int, Client *>	_clients; // nos clients seront enregistrés dans une map associant clé = fd, valeur = objet Client
+		std::vector<Channel*>	_channels; // nos channels seront enregistrés dans un tableau
 };
 
 #endif
