@@ -20,6 +20,7 @@
 #include <vector> // vector
 #include "client.hpp"
 #include "channel.hpp"
+#include "utils.hpp"
 
 #define MAX_EVENTS 10
 

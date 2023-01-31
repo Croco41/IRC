@@ -2,6 +2,12 @@
 # define CLIENT_HPP
 
 #include <string>
+#include <sys/poll.h>
+#include <sys/socket.h>
+
+#include "utils.hpp"
+
+
 
 class Client
 {
@@ -24,6 +30,8 @@ class Client
 		void			setUsername(const std::string &username);
 		void			setNickname(const std::string &nickname);
 		void			setPassword(const std::string &password);
+		void			reply(const std::string &reply);
+		void 			writetosend(const std::string &message) const;
 
 	private:
 		// variables initialisées lors de la construction
@@ -35,6 +43,10 @@ class Client
 		std::string		_username;
 		std::string		_nickname;
 		std::string		_password;
+
+		//fonctions pour les messages
+		std::string		getPrefix() const;
+		
 };
 
 #endif

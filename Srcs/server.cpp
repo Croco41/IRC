@@ -156,6 +156,7 @@ void		Server::start_epoll()
 				{
 					std::cout << "Client n°" << server_ev.data.fd << " s'est connecté !" << std::endl;
 					onClientConnect(connect_serv_socket, connect_sockfd);
+					
 					//continue;
 				}
 //std::cout << " ????? " << std::endl;
@@ -206,14 +207,14 @@ std::string	ParsingonClientConnect(std::string message, std::string word, Client
 				client->setUsername(newword);
 				start = message.find(":");
 				end = message.find_first_of("\t\n", start);
-				newword = message.substr(start + 1, end - start);
+				newword = message.substr(start + 1, end - start -1);
 			}
 		}
 		else if (found != std::string::npos)
 		{
 			start = message.find_first_not_of("\t\n", found + word.length() + 1);
 			end = message.find_first_of("\t\n", start);
-			newword = message.substr(start, end - start);
+			newword = message.substr(start, end - start -1);
 		}
 		else
 			newword = "";
@@ -252,6 +253,8 @@ void		Server::onClientConnect(sockaddr_in connect_serv_socket, int socket_client
 	std::cout << "username: " << client->getUsername() << std::endl;
 	std::cout << "realname: " << client->getRealname() << std::endl;
 
+	client->reply(RPL_WELCOME(client->getNickname()));
+
 	createChannel("Fantasy", "Gandalf", client);
 }
 
@@ -287,33 +290,33 @@ std::string	Server::onClientMessage(int fd)
 	return (message);
 }
 
-void    ParsingonClientConnect(std::string message, Client *client)
-{
+// void    ParsingonClientConnect(std::string message, Client *client)
+// {
 
-	std::cout << "dans la boucle message principale" <<std::endl;
-	size_t pos = message.find("PASS") + 5;
-	std::cout << pos << std::endl;
+// 	std::cout << "dans la boucle message principale" <<std::endl;
+// 	size_t pos = message.find("PASS") + 5;
+// 	std::cout << pos << std::endl;
 
-	if(pos <= message.length())
-	{
-		std::cout << "dans la boucle message.at" <<std::endl;
-		std::cout << pos << message[pos] << std::endl;
+// 	if(pos <= message.length())
+// 	{
+// 		std::cout << "dans la boucle message.at" <<std::endl;
+// 		std::cout << pos << message[pos] << std::endl;
 
-		std::string content;
-		int end = pos;
-		while(message[end] != '\n')
-		{
-			end++;
-		}
-		client->setPassword(content.append(message, pos, end));
+// 		std::string content;
+// 		int end = pos;
+// 		while(message[end] != '\n')
+// 		{
+// 			end++;
+// 		}
+// 		client->setPassword(content.append(message, pos, end));
 
-		// while(!message.find("\n"))
-		// {
-		//     std::cout << "dans la boucle setpassword" <<std::endl;
-		//     client->setPassword(message);
-		// }
-        }
-}
+// 		// while(!message.find("\n"))
+// 		// {
+// 		//     std::cout << "dans la boucle setpassword" <<std::endl;
+// 		//     client->setPassword(message);
+// 		// }
+//         }
+// }
 
 Channel*	Server::createChannel(const std::string &name, const std::string &password, Client *client)
 {
