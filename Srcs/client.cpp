@@ -1,10 +1,14 @@
 #include "../Includes/client.hpp"
 
-//hello ISA coucou !
-
 Client::Client(const std::string &hostname, int fd, int port)
     : _hostname(hostname), _fd(fd), _port(port)
 {
+	if (_hostname.size() > 63)
+	{
+		std::stringstream ss;
+		ss << port;
+		_hostname = ss.str();
+	}
     return;
 }
 
@@ -49,7 +53,6 @@ std::string    Client::getPassword() const
 {
     return(this->_password);
 }
-
 
 // SETTERS
 
