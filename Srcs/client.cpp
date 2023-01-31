@@ -75,3 +75,25 @@ void    Client::setPassword(const std::string &password)
 {
     _password = password;
 }
+
+void Client::writetosend(const std::string &message) const 
+{
+	std::cout << "here? in write to send?" << std::endl;
+	std::cout << "---> " << message << std::endl;
+
+	std::string buffer = message + "\r\n";
+	if (send(_fd, buffer.c_str(), buffer.length(), 0) < 0)
+		throw std::runtime_error("Error while sending message to client.");
+}
+
+std::string Client::getPrefix() const 
+{
+	return (_nickname + "!" + _username + "@" + _hostname);
+}
+
+void	Client::reply(const std::string &reply)
+{
+	writetosend(":" + getPrefix() + " " + reply);
+	//std::cout << ":" << getPrefix() << " " << reply << std::endl;
+}
+
