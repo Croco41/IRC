@@ -38,6 +38,11 @@ size_t		Channel::getMaxclients() const
 	return (_maxclients);
 }
 
+size_t		Channel::getNbclients() const
+{
+	return (_nbclients);
+}
+
 // SETTERS
 void		Channel::setPassword(const std::string password)
 {
@@ -47,4 +52,9 @@ void		Channel::setPassword(const std::string password)
 void		Channel::setMaxclients(const size_t maxclients)
 {
 	_maxclients = maxclients;
+}
+
+void		Channel::setNbclients(const size_t nbclients)
+{
+	_nbclients = nbclients;
 }

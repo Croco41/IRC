@@ -7,6 +7,7 @@ Server::Server(const std::string &port, const std::string &password)
 {
 	Run = 1;
 	_socket = launch_socket();
+	_commandHandler = new CommandHandler(this);
 }
 
 Server::~Server(void)
@@ -22,6 +23,7 @@ Server::~Server(void)
         }
         _clients.clear();
     }
+	delete _commandHandler;
 	std::cout << "Server closed." <<std::endl;
     return;
 }

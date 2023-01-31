@@ -1,32 +1,37 @@
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
-#include <string>
-#include <cstring> // strstr
+class Server; // on déclare la class Server avant de la définir complètement, parce qu'il y a des aller-retour entre server, client et channel... 
+
 #include <stdio.h> // perror
 #include <netdb.h> // getnameinfo
-#include <cerrno> // errno
 #include <stdlib.h> // strtol
 #include <sys/socket.h> // socket
 #include <sys/types.h> // bind
 #include <arpa/inet.h> // htonl / htons / ntohl / ntohs
-#include <stdexcept> // pour les exceptions throw !
 #include <unistd.h> // fcntl
 #include <fcntl.h> // fcntl
-#include <iostream> // cerr
 #include <sys/epoll.h> // epoll / epoll_create
 #include <signal.h> // signal
+
+#include <cerrno> // errno
+#include <stdexcept> // pour les exceptions throw !
+#include <iostream> // cerr
+#include <string>
+#include <cstring> // strstr
 #include <map> // map
 #include <vector> // vector
+
 #include "client.hpp"
 #include "channel.hpp"
+#include "commandhandler.hpp"
 #include "utils.hpp"
 
 #define MAX_EVENTS 10
 
 extern int	Run;
 
-class Channel;
+// class Channel;
 
 class Server
 {
@@ -54,6 +59,7 @@ class Server
 		int						_socket;
 		std::map<int, Client *>	_clients; // nos clients seront enregistrés dans une map associant clé = fd, valeur = objet Client
 		std::vector<Channel*>	_channels; // nos channels seront enregistrés dans un tableau
+		CommandHandler			*_commandHandler;
 };
 
 #endif

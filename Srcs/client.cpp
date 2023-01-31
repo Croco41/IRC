@@ -54,6 +54,11 @@ std::string    Client::getPassword() const
     return(this->_password);
 }
 
+Channel*		Client::getChannel() const
+{
+	return(_channel);
+}
+
 // SETTERS
 
 void    Client::setRealname(const std::string &realname) 
@@ -74,6 +79,11 @@ void    Client::setNickname(const std::string &nickname)
 void    Client::setPassword(const std::string &password) 
 {
     _password = password;
+}
+
+void	Client::setChannel(Channel *channel)
+{
+	_channel = channel;
 }
 
 void Client::writetosend(const std::string &message) const 
@@ -97,3 +107,7 @@ void	Client::reply(const std::string &reply)
 	//std::cout << ":" << getPrefix() << " " << reply << std::endl;
 }
 
+void	Client::join_channel(Channel *channel)
+{
+	std::cout << "Il va falloir coder la fonction qui permet au client de join le channel " << channel->getName() << std::endl;
+}
