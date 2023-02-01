@@ -11,8 +11,10 @@ class CommandHandler
 		CommandHandler(Server *server);
 		~CommandHandler();
 
+		void	recup_msg(Client *client, std::string message);
+
 	private:
-		Server		*_server;
+		Server								*_server;
 		std::map<std::string, Command *>	_commands;
 };
 
