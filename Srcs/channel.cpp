@@ -43,6 +43,18 @@ size_t		Channel::getNbclients() const
 	return (_nbclients);
 }
 
+std::vector<std::string>	Channel::getNicknames()
+{
+	std::vector<std::string>	nicknames;
+
+	for(std::vector<Client *>::iterator it = _clients.begin(); it != _clients.end(); it++)
+	{
+		Client *client = it.operator*();
+		nicknames.push_back((_admin == client ? "@" : "") + (*it)->getNickname());
+	}
+	return (nicknames);
+}
+
 // SETTERS
 void		Channel::setPassword(const std::string password)
 {
@@ -58,3 +70,21 @@ void		Channel::setNbclients(const size_t nbclients)
 {
 	_nbclients = nbclients;
 }
+
+// FCT MEMBRES
+void		Channel::addClient(Client *client)
+{
+	_clients.push_back(client);
+}
+
+void		Channel::sendall(const std::string& message)
+{
+  // Iterate over the list of clients in the channel
+  for (std::vector<Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
+  {
+    // Send the message to each client
+	std::cout << GREEN;
+    (*it)->reply(message);
+	std::cout << RESET;
+  }
+} 

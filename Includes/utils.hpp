@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 
+#include "colors.hpp"
 
 //Messages d'erreur
 #define ERR_NEEDMOREPARAMS(source, command)		"461 " + source + " " + command + " :Not enough parameters"
@@ -13,8 +14,11 @@
 #define ERR_UNKNOWNCOMMAND(source, command)		"421 " + source + " " + command + " :Command unknown"
 
 //Réponses du server
-#define RPL_WELCOME(source)		"001 " + source + " :Welcome to the ft_irc network " + source
+#define RPL_WELCOME(source)						"001 " + source + " :Welcome to the ft_irc network " + source
+#define RPL_NAMREPLY(source, channel, users)    "353 " + source + " = " + channel + " :" + users
+#define RPL_ENDOFNAMES(source, channel)			"366 " + source + " " + channel + " :End of /NAMES list."
 
 //Réponses suite aux commandes
+#define RPL_JOIN(source, channel)				":" + source + " JOIN :" + channel	
 
 #endif

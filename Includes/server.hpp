@@ -22,6 +22,7 @@ class Server; // on déclare la class Server avant de la définir complètement,
 #include <map> // map
 #include <vector> // vector
 
+#include "colors.hpp"
 #include "client.hpp"
 #include "channel.hpp"
 #include "commandhandler.hpp"

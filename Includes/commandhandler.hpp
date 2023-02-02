@@ -3,6 +3,7 @@
 
 class CommandHandler;
 
+#include "colors.hpp"
 #include "command_list.hpp"
 
 class CommandHandler

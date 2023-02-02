@@ -8,6 +8,7 @@ class Client;
 #include <sys/poll.h>
 #include <sys/socket.h>
 
+#include "colors.hpp"
 #include "channel.hpp"
 #include "utils.hpp"
 

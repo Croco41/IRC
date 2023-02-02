@@ -47,7 +47,9 @@ void	CommandHandler::recup_msg(Client *client, std::string message)
 		}
 		catch (const std::out_of_range &e)
 		{
+			std::cout << RED;
 			client->reply(ERR_UNKNOWNCOMMAND(client->getNickname(), cde_name));
+			std::cout << RESET;
 		}
 	}
 }

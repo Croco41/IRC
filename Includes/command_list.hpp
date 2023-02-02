@@ -3,6 +3,7 @@
 
 class Command;
 
+#include "colors.hpp"
 #include "server.hpp"
 #include "client.hpp"
 
@@ -21,6 +22,15 @@ class Command
 };
 
 // ici on aura toutes les classes dérivées de Command : join, quit, user, nick...
+
+class PingCommand : public Command
+{
+	public:
+		PingCommand(Server *server);
+		~PingCommand();
+
+		void execute(Client *client, std::vector<std::string> arg);
+};
 
 class JoinCommand : public Command
 {

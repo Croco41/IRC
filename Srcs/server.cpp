@@ -253,7 +253,9 @@ void		Server::onClientConnect(sockaddr_in connect_serv_socket, int socket_client
 	std::cout << "username: " << client->getUsername() << std::endl;
 	std::cout << "realname: " << client->getRealname() << std::endl;
 
+	std::cout << YELLOW;
 	client->reply(RPL_WELCOME(client->getNickname()));
+	std::cout << RESET;
 
 	// createChannel("Fantasy", "Gandalf", client);
 }
@@ -291,6 +293,7 @@ std::cout << "ON ENTRE ICI ?" << std::endl;
 	try
 	{
 		Client	*client = _clients.at(fd);
+		std::cout << "on est dans le try-catch de onClientMessage !" << std::endl;
 		_commandHandler->recup_msg(client, message);
 	}
 	catch(const std::exception& e)
