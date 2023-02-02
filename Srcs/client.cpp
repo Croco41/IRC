@@ -1,10 +1,14 @@
 #include "../Includes/client.hpp"
 
-//hello ISA coucou !
-
 Client::Client(const std::string &hostname, int fd, int port)
     : _hostname(hostname), _fd(fd), _port(port)
 {
+	if (_hostname.size() > 63)
+	{
+		std::stringstream ss;
+		ss << port;
+		_hostname = ss.str();
+	}
     return;
 }
 
@@ -50,9 +54,12 @@ std::string    Client::getPassword() const
     return(this->_password);
 }
 
+Channel*		Client::getChannel() const
+{
+	return(_channel);
+}
 
 // SETTERS
-
 void    Client::setRealname(const std::string &realname) 
 {
     _realname = realname;
@@ -73,6 +80,12 @@ void    Client::setPassword(const std::string &password)
     _password = password;
 }
 
+void	Client::setChannel(Channel *channel)
+{
+	_channel = channel;
+}
+
+//FCT MEMBRES
 void Client::writetosend(const std::string &message) const 
 {
 	std::cout << "---> " << message << std::endl;
@@ -95,3 +108,32 @@ void	Client::reply(const std::string &reply)
 	//std::cout << ":" << getPrefix() << " " << reply << std::endl;
 }
 
+
+// void Client::join(Channel * channel)
+// {
+//     channel->addClient(this); //add client to the channem
+
+// }
+
+void	Client::join_channel(Channel *channel)
+{
+	std::cout << "Il va falloir coder la fonction qui permet au client de join le channel " << channel->getName() << std::endl;
+	channel->addClient(this);
+	std::cout << "client : " << getNickname() << " has been added to channel : " << channel->getName() << std::endl; 
+	_channel = channel; // Store a reference to the channel the client has joined
+
+	// Get a list of nicknames of clients in the channel
+	const std::vector<std::string>& nicknames = channel->getNicknames();
+	// Concatenate the nicknames into a single string, separated by spaces
+	std::string users;
+	for (std::vector<std::string>::const_iterator it = nicknames.begin(); it != nicknames.end(); ++it) 
+		users += *it + " ";
+	//Send a reply to the client with the list of nicknames
+	reply(RPL_NAMREPLY(_nickname, channel->getName(), users));
+	//Send another reply indicating the end of the list of nicknames
+	reply(RPL_ENDOFNAMES(_nickname, channel->getName()));
+	//Send a message to all clients in the channel to notify them of the new client joining
+	channel->sendall(RPL_JOIN(getPrefix(), channel->getName()));
+	
+	std::cout << _nickname << " has joined channel " << channel->getName() << std::endl; 
+}

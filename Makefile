@@ -10,32 +10,35 @@ CDEP	=	-MMD
 CFA		=	-fsanitize=address -g3
 RM		=	rm -rf
 
-vpath %.cpp Srcs
+# vpath %.cpp Srcs Srcs/Command
 
 SRC		=	Srcs/main.cpp \
 			Srcs/server.cpp \
 			Srcs/client.cpp \
 			Srcs/channel.cpp \
+			Srcs/commandhandler.cpp \
+			Srcs/Command/JoinCommand.cpp \
 
 OBJ		=	$(SRC:Srcs/%.cpp=Objs/%.o)
 DEP		=	$(SRC:Srcs/%.cpp=Objs/%.d)
 
 
-all			:	obj $(NAME)
+all			:	$(NAME)
 
+$(DEP):
 -include $(DEP)
 
 $(NAME)		:	$(OBJ)
 				$(CXC) $(CFLAGS) -o $(NAME) $(SRC)
 
-obj			:
-			@if [ ! -d "./Objs" ]; then\
-				echo "mkdir -p Objs";\
-				mkdir -p Objs;\
-			fi
-				@echo ""
+obj			:	; mkdir -p Objs/Command
+# @if [ ! -d "./Objs" ]; then\
+# 	echo "mkdir -p Objs";\
+# 	mkdir -p Objs;\
+# fi
+# 	@echo ""
 
-Objs/%.o	:	Srcs/%.cpp
+Objs/%.o	:	Srcs/%.cpp Objs/%.d | obj
 				$(CXC) -o $@ -c $< $(CFLAGS) $(CDEP)
 
 clean		: 
@@ -46,7 +49,7 @@ clean		:
 fclean		:	clean
 				$(RM) $(NAME)
 
-fsa			:	fclean obj $(OBJ)
+fsa			:	fclean $(OBJ)
 				$(CXC) $(CFLAGS) $(CFA) -o $(NAME) $(SRC)
 
 re			:	fclean all

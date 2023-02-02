@@ -7,6 +7,7 @@ Server::Server(const std::string &port, const std::string &password)
 {
 	Run = 1;
 	_socket = launch_socket();
+	_commandHandler = new CommandHandler(this);
 }
 
 Server::~Server(void)
@@ -22,6 +23,7 @@ Server::~Server(void)
         }
         _clients.clear();
     }
+	delete _commandHandler;
 	std::cout << "Server closed." <<std::endl;
     return;
 }
@@ -159,9 +161,6 @@ void		Server::start_epoll()
 					
 					//continue;
 				}
-//std::cout << " ????? " << std::endl;
-				//onClientMessage(fd);
-				//std::cout << " ????? " << std::endl;
 			}
 			else
 			{
@@ -178,11 +177,12 @@ void		Server::start_epoll()
 					onClientDisconnect(fd, epoll_fd);
 					continue;
 				}
-				// else
-				// {
-				// 	onClientMessage(fd);
-				// 	continue;
-				// }
+				else
+				{
+					onClientMessage(fd);
+					std::cout << "quit ClientMsg ?" << std::endl;
+					continue;
+				}
 			}
 		}
 	}
@@ -253,9 +253,11 @@ void		Server::onClientConnect(sockaddr_in connect_serv_socket, int socket_client
 	std::cout << "username: " << client->getUsername() << std::endl;
 	std::cout << "realname: " << client->getRealname() << std::endl;
 
+	std::cout << YELLOW;
 	client->reply(RPL_WELCOME(client->getNickname()));
+	std::cout << RESET;
 
-	createChannel("Fantasy", "Gandalf", client);
+	// createChannel("Fantasy", "Gandalf", client);
 }
 
 void		Server::onClientDisconnect(int fd, int epoll_fd)
@@ -271,11 +273,12 @@ void		Server::onClientDisconnect(int fd, int epoll_fd)
 	std::cout << "Client n°" << fd << " s'est déconnecté." << std::endl;
 }
 
-std::string	Server::onClientMessage(int fd)
+// std::string	Server::onClientMessage(int fd)
+void	Server::onClientMessage(int fd)
 {
 	std::string message;
 	char tmp[100] = {0};
-
+std::cout << "ON ENTRE ICI ?" << std::endl;
 	while (message.find("\r\n") == std::string::npos)
 	{
 		int r = recv(fd, tmp, 100, 0);
@@ -287,7 +290,17 @@ std::string	Server::onClientMessage(int fd)
 		message.append(tmp, r);
 	}
 	std::cout << "message = " << message << std::endl;
-	return (message);
+	try
+	{
+		Client	*client = _clients.at(fd);
+		std::cout << "on est dans le try-catch de onClientMessage !" << std::endl;
+		_commandHandler->recup_msg(client, message);
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
+	return;
 }
 
 // void    ParsingonClientConnect(std::string message, Client *client)
@@ -325,7 +338,7 @@ Channel*	Server::createChannel(const std::string &name, const std::string &passw
 	// else
 	Channel *channel = new Channel(name, password, client);
 	_channels.push_back(channel);
-	std::cout << "creation de notre premier channel de force !" << std::endl;
+	std::cout << "creation de notre premier channel !" << std::endl;
 	std::cout << "name of the channel = " << _channels.front()->getName() << std::endl;
 	std::cout << "password = " << _channels.front()->getPassword() << std::endl;
 	std::cout << "nom du Client = " << _channels.front()->getAdmin()->getNickname() << std::endl;
