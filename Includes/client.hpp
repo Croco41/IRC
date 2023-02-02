@@ -28,6 +28,8 @@ class Client
 		std::string		getNickname() const;
 		std::string		getPassword() const;
 		Channel			*getChannel() const;
+		//fonctions pour les messages
+		std::string		getPrefix() const;
 
 		// SETTERS
 		void			setRealname(const std::string &realname);
@@ -52,9 +54,6 @@ class Client
 		std::string		_nickname;
 		std::string		_password;
 		Channel			*_channel;
-
-		//fonctions pour les messages
-		std::string		getPrefix() const;	
 };
 
 #endif

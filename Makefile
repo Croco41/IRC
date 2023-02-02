@@ -18,6 +18,8 @@ SRC		=	Srcs/main.cpp \
 			Srcs/channel.cpp \
 			Srcs/commandhandler.cpp \
 			Srcs/Command/JoinCommand.cpp \
+			Srcs/Command/PingCommand.cpp \
+			Srcs/Command/PongCommand.cpp \
 
 OBJ		=	$(SRC:Srcs/%.cpp=Objs/%.o)
 DEP		=	$(SRC:Srcs/%.cpp=Objs/%.d)
