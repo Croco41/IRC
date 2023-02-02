@@ -75,7 +75,6 @@ void    Client::setPassword(const std::string &password)
 
 void Client::writetosend(const std::string &message) const 
 {
-	std::cout << "here? in write to send?" << std::endl;
 	std::cout << "---> " << message << std::endl;
 
 	std::string buffer = message + "\r\n";
@@ -85,6 +84,8 @@ void Client::writetosend(const std::string &message) const
 
 std::string Client::getPrefix() const 
 {
+	//return (_nickname + "@" + _hostname);
+	//return (_username + "@" + _hostname);
 	return (_nickname + "!" + _username + "@" + _hostname);
 }
 
