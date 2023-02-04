@@ -278,10 +278,12 @@ void	Server::onClientMessage(int fd)
 {
 	std::string message;
 	char tmp[100] = {0};
-std::cout << "ON ENTRE ICI ?" << std::endl;
+std::cout << GREEN << "ON ENTRE Dans Server::OnClientMessage !" << RESET << std::endl;
 	while (message.find("\r\n") == std::string::npos)
 	{
+		std::cout << LIMEGREEN << "boucle while, ici tmp = " << tmp << RESET << std::endl;
 		int r = recv(fd, tmp, 100, 0);
+		std::cout << FORESTGREEN << "after recv" << RESET << std::endl;
 		if (r < 0)
 		{
 			std::cout << "dans r < 0 on Server::Clientmessage" << std::endl; 
@@ -291,7 +293,7 @@ std::cout << "ON ENTRE ICI ?" << std::endl;
 		std::cout << r << std::endl;
 		message.append(tmp, r);
 	}
-	std::cout << "message = " << message << std::endl;
+	std::cout << FUCHSIA << "message = " << message << RESET << std::endl;
 	try
 	{
 		Client	*client = _clients.at(fd);

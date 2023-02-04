@@ -20,5 +20,6 @@
 
 //Réponses suite aux commandes
 #define RPL_JOIN(source, channel)				":" + source + " JOIN :" + channel	
+#define RPL_PING(source, command)				":" + source + " PONG :" + command
 
 #endif

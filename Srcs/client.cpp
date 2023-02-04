@@ -86,7 +86,7 @@ void	Client::setChannel(Channel *channel)
 }
 
 //FCT MEMBRES
-void Client::writetosend(const std::string &message) const 
+void	Client::writetosend(const std::string &message) const 
 {
 	std::cout << "---> " << message << std::endl;
 
@@ -107,13 +107,6 @@ void	Client::reply(const std::string &reply)
 	writetosend(":" + getPrefix() + " " + reply);
 	//std::cout << ":" << getPrefix() << " " << reply << std::endl;
 }
-
-
-// void Client::join(Channel * channel)
-// {
-//     channel->addClient(this); //add client to the channem
-
-// }
 
 void	Client::join_channel(Channel *channel)
 {
