@@ -1,6 +1,6 @@
 #include "../../Includes/command_list.hpp"
 
-// hello isa
+// hello isa!
 
 JoinCommand::JoinCommand(Server *server) : Command(server)
 {
