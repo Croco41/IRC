@@ -180,7 +180,7 @@ void		Server::start_epoll()
 				else
 				{
 					onClientMessage(fd, buffer, n);
-					break;
+					//break;
 				}
 			}
 		}
