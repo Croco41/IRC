@@ -57,6 +57,8 @@ void PrivMsgCommand::execute(Client *client, std::vector<std::string> arg)
 			client->reply(ERR_CANNOTSENDTOCHAN(client->getNickname(), target));
 			return;
 		}
+		channel->sendall(message, client);
+		return;
 	}
 	dest->writetosend(RPL_PRIVMSG(client->getPrefix(), target, message));
 }

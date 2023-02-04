@@ -79,12 +79,26 @@ void		Channel::addClient(Client *client)
 
 void		Channel::sendall(const std::string& message)
 {
-  // Iterate over the list of clients in the channel
-  for (std::vector<Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
-  {
-    // Send the message to each client
-	std::cout << GREEN;
-    (*it)->reply(message);
-	std::cout << RESET;
-  }
-} 
+// Iterate over the list of clients in the channel
+	for (std::vector<Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
+	{
+		// Send the message to each client
+		std::cout << GREEN;
+		(*it)->reply(message);
+		std::cout << RESET;
+	}
+}
+
+void		Channel::sendall(const std::string& message, Client *exclude)
+{
+	// Iterate over the list of clients in the channel
+	for (std::vector<Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
+	{
+		// Send the message to each client except one (exclude) !
+		if (*it == exclude)
+			continue;
+		std::cout << GREEN;
+		(*it)->reply(message);
+		std::cout << RESET;
+	}
+}
