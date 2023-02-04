@@ -50,6 +50,8 @@ class Server
 		//partie liée au channel:
 		Channel*	getChannel(const std::string &name);
 		Channel*	createChannel(const std::string &name, const std::string &password, Client *client);
+		//pour avoir accès au client
+		Client*		getClient(const std::string &nickname);
 
 	private:
 		Server(Server const &copy);

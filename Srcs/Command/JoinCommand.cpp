@@ -16,9 +16,9 @@ void JoinCommand::execute(Client *client, std::vector<std::string> arg)
 	// channel sont correctes, et ensuite on laisse le client join le channel
 	
 	// verif si le tableau d'arg est bien rempli
-	if (arg.empty())
+	if (arg.size() < 2)
 	{
-		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "PASS"));
+		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "PRIVMSG"));
 		return;
 	}
 	// on établit le mot de passe (soit arg 2, soit rien)
