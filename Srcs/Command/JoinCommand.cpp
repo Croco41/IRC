@@ -16,6 +16,7 @@ void JoinCommand::execute(Client *client, std::vector<std::string> arg)
 	// channel sont correctes, et ensuite on laisse le client join le channel
 	
 	// verif si le tableau d'arg est bien rempli
+	std::cout << "on est dans le execute de JOIN" << std::endl;
 	if (arg.empty())
 	{
 		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "PASS"));
@@ -50,6 +51,8 @@ void JoinCommand::execute(Client *client, std::vector<std::string> arg)
 		client->reply(ERR_BADCHANNELKEY(client->getNickname(), chan_name));
 		return;
 	}
-
+	std::cout << "on est à la fin du execute de JOIN avant client->join_channel" << std::endl;
 	client->join_channel(channel);
+	std::cout << "on est à la fin du execute de Join APRES client->join_channel" << std::endl;
+	
 }

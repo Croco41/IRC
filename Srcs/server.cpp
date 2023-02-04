@@ -284,9 +284,11 @@ std::cout << "ON ENTRE ICI ?" << std::endl;
 		int r = recv(fd, tmp, 100, 0);
 		if (r < 0)
 		{
+			std::cout << "dans r < 0 on Server::Clientmessage" << std::endl; 
 			if (errno != EWOULDBLOCK)
 				throw std::runtime_error("Error while receiving message from client.");			
 		}
+		std::cout << r << std::endl;
 		message.append(tmp, r);
 	}
 	std::cout << "message = " << message << std::endl;

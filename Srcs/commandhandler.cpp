@@ -17,6 +17,7 @@ void	CommandHandler::recup_msg(Client *client, std::string message)
 	std::stringstream	ssMsg(message);
 	std::string			msg_parse;
 
+	std::cout << "on est dans recup_msg au début " << std::endl;
 	while(std::getline(ssMsg, msg_parse))
 	{
 		int len = msg_parse.length();
@@ -42,7 +43,7 @@ void	CommandHandler::recup_msg(Client *client, std::string message)
 			// 	client->reply(ERR_NOTREGISTERED(client->getNickname()));
 			// 	return;
 			// }
-
+			std::cout << "on est dans recup_msg juste avant execute " << std::endl;
 			command->execute(client, arguments);
 		}
 		catch (const std::out_of_range &e)
