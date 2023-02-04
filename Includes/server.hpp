@@ -46,11 +46,7 @@ class Server
 		void		start_epoll();
 		void		onClientConnect(sockaddr_in connect_serv_socket, int socket_client);
 		void		onClientDisconnect(int fd, int epoll_fd);
-<<<<<<< HEAD
-		void		onClientMessage(int fd, char * tmp, size_t r);
-=======
 		void		onClientMessage(int fd, char *tmp, size_t r);
->>>>>>> 23136cbaa51abf82143d92ec850e08214cf9ccfa
 		std::string	recvMessage(int socket_client, char *tmp, size_t r);
 		//partie liée au channel:
 		Channel*	getChannel(const std::string &name);

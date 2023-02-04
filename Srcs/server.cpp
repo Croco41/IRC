@@ -300,10 +300,6 @@ void		Server::onClientDisconnect(int fd, int epoll_fd)
 	std::cout << "Client n°" << fd << " s'est déconnecté." << std::endl;
 }
 
-<<<<<<< HEAD
-// std::string	Server::onClientMessage(int fd)
-=======
->>>>>>> 23136cbaa51abf82143d92ec850e08214cf9ccfa
 void	Server::onClientMessage(int fd, char *tmp, size_t r)
 {
 	try
