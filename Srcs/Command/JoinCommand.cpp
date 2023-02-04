@@ -1,5 +1,7 @@
 #include "../../Includes/command_list.hpp"
 
+// hello isa!
+
 JoinCommand::JoinCommand(Server *server) : Command(server)
 {
 	return;
