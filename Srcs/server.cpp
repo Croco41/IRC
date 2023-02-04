@@ -283,7 +283,7 @@ void		Server::onClientDisconnect(int fd, int epoll_fd)
 	std::cout << "Client n°" << fd << " s'est déconnecté." << std::endl;
 }
 
-void	Server::onClientMessage(int fd)
+void	Server::onClientMessage(int fd, char *tmp, size_t r)
 {
 	std::string message;
 	char tmp[100] = {0};
