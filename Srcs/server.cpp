@@ -49,7 +49,17 @@ Channel*	Server::getChannel(const std::string &name)
 	return NULL;
 }
 
-void handleSignal(int sigint)
+Client*		Server::getClient(const std::string &nickname)
+{
+	for (std::map<int, Client *>::iterator it = _clients.begin(); it != _clients.end(); it++)
+	{
+		if (!nickname.compare(it->second->getNickname()))
+			return (it->second);
+	}
+	return NULL;
+}
+
+void		handleSignal(int sigint)
 {
 	std::cout << std::endl;
 	std::cout << "Exiting server..." << std::endl;
@@ -290,7 +300,10 @@ void		Server::onClientDisconnect(int fd, int epoll_fd)
 	std::cout << "Client n°" << fd << " s'est déconnecté." << std::endl;
 }
 
+<<<<<<< HEAD
 // std::string	Server::onClientMessage(int fd)
+=======
+>>>>>>> 23136cbaa51abf82143d92ec850e08214cf9ccfa
 void	Server::onClientMessage(int fd, char *tmp, size_t r)
 {
 	try
@@ -305,6 +318,7 @@ void	Server::onClientMessage(int fd, char *tmp, size_t r)
 		std::cerr << e.what() << '\n';
 	}
 }
+
 
 // void    ParsingonClientConnect(std::string message, Client *client)
 // {

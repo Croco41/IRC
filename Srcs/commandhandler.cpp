@@ -6,6 +6,7 @@ CommandHandler::CommandHandler(Server *server)
 	_commands["JOIN"] = new JoinCommand(_server);
 	_commands["PING"] = new PingCommand(_server);
 	_commands["PONG"] = new PongCommand(_server);
+	_commands["PRIVMSG"] = new PrivMsgCommand(_server);
 }
 
 CommandHandler::~CommandHandler()
