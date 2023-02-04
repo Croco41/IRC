@@ -32,7 +32,7 @@ class Server; // on déclare la class Server avant de la définir complètement,
 
 extern int	Run;
 
-// class Channel;
+// class Channel; hello ISA
 
 class Server
 {
