@@ -14,10 +14,6 @@ JoinCommand::~JoinCommand()
 
 void JoinCommand::execute(Client *client, std::vector<std::string> arg)
 {
-<<<<<<< HEAD
-
-
-=======
 	// on va d'abord vérifier si les info de creation ou de connexion au
 	// channel sont correctes, et ensuite on laisse le client join le channel
 	
@@ -59,4 +55,3 @@ void JoinCommand::execute(Client *client, std::vector<std::string> arg)
 	}
 	client->join_channel(channel);	
 }
->>>>>>> f0c8cb7f3cee635cbee9a1348002cc2ccc1d88b1
