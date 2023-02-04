@@ -158,14 +158,14 @@ void		Server::start_epoll()
 				{
 					std::cout << "Client n°" << server_ev.data.fd << " s'est connecté !" << std::endl;
 					onClientConnect(connect_serv_socket, connect_sockfd);
-					
+					break;
 					//continue;
 				}
 			}
 			else
 			{
-//std::cout << "On arrive la" << std::endl;
 				char buffer[1024];
+				bzero(buffer, 1024);
 				ssize_t n = recv(fd, buffer, sizeof buffer, 0);
 				if(n == -1)
 				{
@@ -179,9 +179,8 @@ void		Server::start_epoll()
 				}
 				else
 				{
-					onClientMessage(fd);
-					std::cout << "quit ClientMsg ?" << std::endl;
-					continue;
+					onClientMessage(fd, buffer, n);
+					break;
 				}
 			}
 		}
@@ -219,6 +218,24 @@ std::string	ParsingonClientConnect(std::string message, std::string word, Client
 		else
 			newword = "";
 		return(newword);
+}
+
+std::string	Server::recvMessage(int socket_client, char *tmp, size_t r)
+{
+	std::string message;
+	message.append(tmp, r);
+	while ((message.find("\r\n") == std::string::npos) || (message.find("\n") == std::string::npos))
+	{
+		bzero(tmp, 100);
+		int r = recv(socket_client, tmp, 1024, 0);
+		if (r < 0)
+		{
+			if (errno != EWOULDBLOCK)
+				throw std::runtime_error("Error while receiving message from client.");			
+		}
+		message.append(tmp, r);
+	}
+	return (message);	
 }
 
 void		Server::onClientConnect(sockaddr_in connect_serv_socket, int socket_client)
@@ -274,37 +291,19 @@ void		Server::onClientDisconnect(int fd, int epoll_fd)
 }
 
 // std::string	Server::onClientMessage(int fd)
-void	Server::onClientMessage(int fd)
+void	Server::onClientMessage(int fd, char *tmp, size_t r)
 {
-	std::string message;
-	char tmp[100] = {0};
-std::cout << GREEN << "ON ENTRE Dans Server::OnClientMessage !" << RESET << std::endl;
-	while (message.find("\r\n") == std::string::npos)
-	{
-		std::cout << LIMEGREEN << "boucle while, ici tmp = " << tmp << RESET << std::endl;
-		int r = recv(fd, tmp, 100, 0);
-		std::cout << FORESTGREEN << "after recv" << RESET << std::endl;
-		if (r < 0)
-		{
-			std::cout << "dans r < 0 on Server::Clientmessage" << std::endl; 
-			if (errno != EWOULDBLOCK)
-				throw std::runtime_error("Error while receiving message from client.");			
-		}
-		std::cout << r << std::endl;
-		message.append(tmp, r);
-	}
-	std::cout << FUCHSIA << "message = " << message << RESET << std::endl;
 	try
 	{
+		std::string message = recvMessage(fd, tmp, r);
+		std::cout << FUCHSIA << "message = " << message << RESET << std::endl;
 		Client	*client = _clients.at(fd);
-		std::cout << "on est dans le try-catch de onClientMessage !" << std::endl;
 		_commandHandler->recup_msg(client, message);
 	}
 	catch(const std::exception& e)
 	{
 		std::cerr << e.what() << '\n';
 	}
-	return;
 }
 
 // void    ParsingonClientConnect(std::string message, Client *client)
