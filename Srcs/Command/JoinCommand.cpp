@@ -26,7 +26,6 @@ void JoinCommand::execute(Client *client, std::vector<std::string> arg)
 	// on établit le mot de passe (soit arg 2, soit rien)
 	std::string	chan_name = arg[0]; 
 	std::string	password;
-	//bon...
 	if (arg.size() > 1)
 		password = arg[1];
 	else

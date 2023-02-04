@@ -3,6 +3,7 @@
 Channel::Channel(const std::string &name, const std::string &password)
 	: _name(name), _password(password)
 {
+	setMaxclients(10);
 	return;
 }
 
