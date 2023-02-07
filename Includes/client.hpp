@@ -42,6 +42,7 @@ class Client
 		void			reply(const std::string &reply);
 		void 			writetosend(const std::string &message) const;
 		void			join_channel(Channel *channel);
+		void			leave_channel();
 
 	private:
 		// variables initialisées lors de la construction

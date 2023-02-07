@@ -1,7 +1,7 @@
 #include "../Includes/client.hpp"
 
 Client::Client(const std::string &hostname, int fd, int port)
-    : _hostname(hostname), _fd(fd), _port(port)
+	: _hostname(hostname), _fd(fd), _port(port), _realname(""), _username(""), _nickname(""), _password(""), _channel(NULL)  
 {
 	if (_hostname.size() > 63)
 	{
@@ -9,49 +9,48 @@ Client::Client(const std::string &hostname, int fd, int port)
 		ss << port;
 		_hostname = ss.str();
 	}
-    return;
+	return;
 }
 
 Client::~Client()
 {
-    return;
+	return;
 }
 
 // GETTERS
-
 std::string    Client::getHostname() const
 {
-    return(_hostname);
+	return(_hostname);
 }
 
 int            Client::getFd() const
 {
-    return(_fd);
+	return(_fd);
 }
 
 int            Client::getPort() const
 {
-    return(_port);
+	return(_port);
 }
 
 std::string    Client::getRealname() const
 {
-    return(this->_realname);
+	return(this->_realname);
 }
 
 std::string    Client::getUsername() const
 {
-    return(this->_username);
+	return(this->_username);
 }
 
 std::string    Client::getNickname() const
 {
-    return(this->_nickname);
+	return(this->_nickname);
 }
 
 std::string    Client::getPassword() const
 {
-    return(this->_password);
+	return(this->_password);
 }
 
 Channel*		Client::getChannel() const
@@ -62,22 +61,22 @@ Channel*		Client::getChannel() const
 // SETTERS
 void    Client::setRealname(const std::string &realname) 
 {
-    _realname = realname;
+	_realname = realname;
 }
 
 void    Client::setUsername(const std::string &username) 
 {
-    _username = username;
+	_username = username;
 }
 
 void    Client::setNickname(const std::string &nickname) 
 {
-    _nickname = nickname;
+	_nickname = nickname;
 }
 
 void    Client::setPassword(const std::string &password) 
 {
-    _password = password;
+	_password = password;
 }
 
 void	Client::setChannel(Channel *channel)
@@ -111,7 +110,10 @@ void	Client::reply(const std::string &reply)
 void	Client::join_channel(Channel *channel)
 {
 	std::cout << "Il va falloir coder la fonction qui permet au client de join le channel " << channel->getName() << std::endl;
-	channel->addClient(this);
+	if (channel->getNbclients() != 0)
+		channel->addClient(this);
+	else
+		channel->setNbclients(1);
 	std::cout << "client : " << getNickname() << " has been added to channel : " << channel->getName() << std::endl; 
 	_channel = channel; // Store a reference to the channel the client has joined
 
@@ -125,8 +127,24 @@ void	Client::join_channel(Channel *channel)
 	reply(RPL_NAMREPLY(_nickname, channel->getName(), users));
 	//Send another reply indicating the end of the list of nicknames
 	reply(RPL_ENDOFNAMES(_nickname, channel->getName()));
-	//Send a message to all clients in the channel to notify them of the new client joining
+	//Send a message to all clients in the channel to notify them of the current client joining
 	channel->sendall(RPL_JOIN(getPrefix(), channel->getName()));
 	
 	std::cout << _nickname << " has joined channel " << channel->getName() << std::endl; 
+}
+
+void	Client::leave_channel()
+{
+	if (!_channel)
+		return;
+	std::cout << ORANGE << "leave_channel du Client !" << RESET << std::endl;
+	// std::string chan_name = _channel->getName();
+
+	std::string message;
+	message.append(_nickname);
+	message.append(" has left channel ");
+	message.append(_channel->getName());
+
+	_channel->sendall(RPL_PART(getPrefix(), _channel->getName(), message));
+	_channel->removeClient(this);
 }

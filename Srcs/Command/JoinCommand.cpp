@@ -42,7 +42,7 @@ void JoinCommand::execute(Client *client, std::vector<std::string> arg)
 	channel = _server->getChannel(chan_name);
 	if (!channel)
 		channel = _server->createChannel(chan_name, password, client);
-	if (channel->getMaxclients() > 0 && channel->getNbclients())
+	if (channel->getMaxclients() > 0 && channel->getNbclients() >= channel->getMaxclients())
 	{
 		client->reply(ERR_CHANNELISFULL(client->getNickname(), chan_name));
 		return;
@@ -53,5 +53,6 @@ void JoinCommand::execute(Client *client, std::vector<std::string> arg)
 		client->reply(ERR_BADCHANNELKEY(client->getNickname(), chan_name));
 		return;
 	}
-	client->join_channel(channel);	
+	client->join_channel(channel);
+	std::cout << "nb de clients dans notre channel (JOIN) " << channel->getNbclients() << std::endl;
 }

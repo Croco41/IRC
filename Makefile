@@ -21,6 +21,7 @@ SRC		=	Srcs/main.cpp \
 			Srcs/Command/PingCommand.cpp \
 			Srcs/Command/PongCommand.cpp \
 			Srcs/Command/PrivMsgCommand.cpp \
+			Srcs/Command/PartCommand.cpp \
 
 OBJ		=	$(SRC:Srcs/%.cpp=Objs/%.o)
 DEP		=	$(SRC:Srcs/%.cpp=Objs/%.d)
