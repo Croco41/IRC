@@ -51,6 +51,15 @@ class JoinCommand : public Command
 		void execute(Client *client, std::vector<std::string> arg);
 };
 
+class PartCommand : public Command
+{
+	public:
+		PartCommand(Server *server);
+		~PartCommand();
+
+		void execute(Client *client, std::vector<std::string> arg);
+};
+
 class PrivMsgCommand : public Command
 {
 	public:

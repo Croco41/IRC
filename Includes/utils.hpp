@@ -15,6 +15,7 @@
 #define ERR_NOSUCHNICK(source, target)			"401 " + source + " " + target + " :No such nickname / channel"
 #define ERR_NOSUCHCHANNEL(source, target)		"403 " + source + " " + target + " :Channel name is invalid, or does not exist"
 #define ERR_CANNOTSENDTOCHAN(source, target)	"404 " + source + " " + target + " :Cannot send a message to channel"
+#define ERR_NOTONCHANNEL(source, channel)		"442 " + source + " " + channel + " :Client is not a member of this channel"
 
 //Réponses du server
 #define RPL_WELCOME(source)						"001 " + source + " :Welcome to the ft_irc network " + source
@@ -25,5 +26,6 @@
 #define RPL_JOIN(source, channel)				":" + source + " JOIN :" + channel	
 #define RPL_PING(source, command)				":" + source + " PONG :" + command
 #define RPL_PRIVMSG(source, target, message)	":" + source + " PRIVMSG " + target + " :" + message
+#define RPL_PART(source, channel, message)				":" + source + " PART " + channel + " :" + message
 
 #endif

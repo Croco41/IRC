@@ -1,15 +1,18 @@
 #include "../Includes/channel.hpp"
 
-Channel::Channel(const std::string &name, const std::string &password)
-	: _name(name), _password(password)
-{
-	setMaxclients(10);
-	return;
-}
+// Channel::Channel(const std::string &name, const std::string &password)
+// 	: _name(name), _password(password), _admin(NULL), _clients()
+// {
+// 	setMaxclients(10);
+// 	return;
+// }
 
 Channel::Channel(const std::string &name, const std::string &password, Client *admin)
-	: _name(name), _password(password), _admin(admin)
+	: _name(name), _password(password), _admin(admin), _clients()
 {
+	addClient(admin);
+	setMaxclients(10);
+	setNbclients(0);
 	return;
 }
 
@@ -76,6 +79,49 @@ void		Channel::setNbclients(const size_t nbclients)
 void		Channel::addClient(Client *client)
 {
 	_clients.push_back(client);
+	setNbclients(_clients.size());
+}
+
+void		Channel::removeClient(Client *client)
+{
+	std::cout << FIREBRICK << "removeClient du Channel !" << RESET << std::endl;
+	std::cout << FIREBRICK << "Client name = " << client->getNickname() << RESET << std::endl;
+	std::cout << FIREBRICK << "Admin name = " << _admin->getNickname() << RESET << std::endl;
+	std::cout << "YOUHOU REMOVE CLIENT DEBUT !!" << client->getChannel()->getName() << std::endl;
+	if (_clients.size() == 1)
+	{
+		if (!_clients.empty())
+		{
+			_clients.clear();
+			client->setChannel(NULL);
+		}
+		
+		// delete this;
+		return;
+	}
+	// si le client qui veut partir est l'admin : on set un nouvel admin
+	if (_admin == client) // && _clients.size() > 1)
+	{
+		for (std::vector<Client*>::iterator ita = _clients.begin(); ita != _clients.end(); ++ita)
+		{
+			if (*ita != _admin)
+			{
+				_admin = *ita;
+				std::cout << _admin->getNickname() << " is now admin of channel " << this->_name << std::endl;
+				break;
+			}
+		}
+	}
+	// on trouve le client dans notre vector et si on le trouve, on erase !
+	for (std::vector<Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
+	{
+		if (*it == client)
+			_clients.erase(it);
+		client->setChannel(NULL);
+	}
+	std::cout << PURPLE << "fin de la fonction CHANNEL : removeClient ! " << client->getChannel()->getName() << RESET << std::endl;
+	std::cout << PURPLE << client->getChannel()->getName() << RESET << std::endl;
+	
 }
 
 void		Channel::sendall(const std::string& message)

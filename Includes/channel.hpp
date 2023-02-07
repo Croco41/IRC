@@ -29,6 +29,7 @@ class Channel
 	
 		// FCT MEMBRES
 		void			addClient(Client *client);
+		void			removeClient(Client *client);
 		void			sendall(const std::string& message);
 		void			sendall(const std::string& message, Client *exclude);
 

@@ -7,6 +7,9 @@ CommandHandler::CommandHandler(Server *server)
 	_commands["PING"] = new PingCommand(_server);
 	_commands["PONG"] = new PongCommand(_server);
 	_commands["PRIVMSG"] = new PrivMsgCommand(_server);
+	_commands["PART"] = new PartCommand(_server);
+	for (std::map<std::string, Command*>::iterator it = _commands.begin(); it != _commands.end(); it++)
+		std::cout << BLUE << it.operator*().first << RESET << std::endl;
 }
 
 CommandHandler::~CommandHandler()

@@ -2,13 +2,12 @@
 
 int Run;
 
-// hello ISA!!!
 Server::Server(const std::string &port, const std::string &password)
 	: _port(port), _password(password)
 {
 	Run = 1;
 	_socket = launch_socket();
-	_commandHandler = new CommandHandler(this);
+	_commandHandler = new CommandHandler(this); 
 }
 
 Server::~Server(void)
@@ -120,7 +119,7 @@ int			Server::launch_socket()
 
 void		Server::start_epoll()
 {
-	int epoll_fd = epoll_create1(0); // create a new epoll instance
+	int epoll_fd = epoll_create1(0); // create an epoll instance
 	if (epoll_fd < 0)
 		throw std::runtime_error("Error while creating epoll file descriptor.\n");
 	// if (epoll_fd == -1) 
@@ -154,7 +153,7 @@ void		Server::start_epoll()
 			if (fd == _socket)
 			{
 				int connect_sockfd;
-				sockaddr_in connect_serv_socket = {AF_INET, 0, {0}, {0}}; // new structure pour une new connection ! (et mise à 0 de ses variables)
+				sockaddr_in connect_serv_socket = {AF_INET, 0, {0}, {0}}; // nouvelle structure pour une nouvelle connection ! (et mise à 0 de ses variables)
 				socklen_t connectsize = sizeof connect_serv_socket;
 				connect_sockfd = accept(_socket, (struct sockaddr *) &connect_serv_socket, &connectsize); //accepter la connection d'un client : accept() renvoie un nouveau socket qu'on stocke dans une nvle struct !
 				if (connect_sockfd < 0)
@@ -202,42 +201,41 @@ void		Server::start_epoll()
 
 std::string	Server::ParsingonClientConnect(std::string message, std::string word, Client *client)
 {
-		std::string newword;
-		size_t found = message.find(word);
-		size_t start;
-		size_t end;
+	std::string newword;
+	size_t found = message.find(word);
+	size_t start;
+	size_t end;
 
-
-		if (word == "USER")
-		{
-			if (found != std::string::npos)
-			{
-				start = message.find_first_not_of("\t\n", found + word.length() + 1);
-				end = message.find_first_of(" ", start);
-				newword = message.substr(start, end - start);
-				client->setUsername(newword);
-				start = message.find(":");
-				end = message.find_first_of("\t\n", start);
-				newword = message.substr(start + 1, end - start -1);
-			}
-		}
-		else if (found != std::string::npos)
+	if (word == "USER")
+	{
+		if (found != std::string::npos)
 		{
 			start = message.find_first_not_of("\t\n", found + word.length() + 1);
+			end = message.find_first_of(" ", start);
+			newword = message.substr(start, end - start);
+			client->setUsername(newword);
+			start = message.find(":");
 			end = message.find_first_of("\t\n", start);
-			newword = message.substr(start, end - start -1);
+			newword = message.substr(start + 1, end - start -1);
 		}
-		else
-			newword = "";
-		if (word == "NICK")
+	}
+	else if (found != std::string::npos)
+	{
+		start = message.find_first_not_of("\t\n", found + word.length() + 1);
+		end = message.find_first_of("\t\n", start);
+		newword = message.substr(start, end - start -1);
+	}
+	else
+		newword = "";
+	if (word == "NICK")
+	{
+		for (std::map<int, Client *>::iterator it = _clients.begin(); it != _clients.end(); it++)
 		{
-			for (std::map<int, Client *>::iterator it = _clients.begin(); it != _clients.end(); it++)
-			{
-				if (newword == it.operator*().second->getNickname())
-					newword.push_back('_');
-			}
+			if (newword == it.operator*().second->getNickname())
+				newword.push_back('_');
 		}
-		return(newword);
+	}
+	return(newword);
 }
 
 std::string	Server::recvMessage(int socket_client, char *tmp, size_t r)
@@ -360,10 +358,20 @@ Channel*	Server::createChannel(const std::string &name, const std::string &passw
 	// 	Channel *channel = new Channel(name, password);
 	// else
 	Channel *channel = new Channel(name, password, client);
+	client->setChannel(channel);
+	std::cout << "YOUHOU YOUHOU !!" << client->getChannel()->getName() << std::endl;
 	_channels.push_back(channel);
 	std::cout << "creation de notre premier channel !" << std::endl;
 	std::cout << "name of the channel = " << _channels.front()->getName() << std::endl;
 	std::cout << "password = " << _channels.front()->getPassword() << std::endl;
 	std::cout << "nom du Client = " << _channels.front()->getAdmin()->getNickname() << std::endl;
 	return (channel);
+}
+
+void	Server::destroyChannel(Channel *channel)
+{
+	for (std::vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++)
+		if (*it == channel)
+			_channels.erase(it);
+	// delete channel;
 }

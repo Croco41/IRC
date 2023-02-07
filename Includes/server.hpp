@@ -49,9 +49,11 @@ class Server
 		void		onClientDisconnect(int fd, int epoll_fd);
 		void		onClientMessage(int fd, char *tmp, size_t r);
 		std::string	recvMessage(int socket_client, char *tmp, size_t r);
+		std::string	ParsingonClientConnect(std::string message, std::string word, Client *client);
 		//partie liée au channel:
 		Channel*	getChannel(const std::string &name);
 		Channel*	createChannel(const std::string &name, const std::string &password, Client *client);
+		void		destroyChannel(Channel *channel);
 		//pour avoir accès au client
 		Client*		getClient(const std::string &nickname);
 
