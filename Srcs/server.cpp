@@ -200,12 +200,13 @@ void		Server::start_epoll()
 		throw std::runtime_error("Error while closing epoll file descriptor.\n");
 }
 
-std::string	ParsingonClientConnect(std::string message, std::string word, Client *client)
+std::string	Server::ParsingonClientConnect(std::string message, std::string word, Client *client)
 {
 		std::string newword;
 		size_t found = message.find(word);
 		size_t start;
 		size_t end;
+
 
 		if (word == "USER")
 		{
@@ -228,6 +229,14 @@ std::string	ParsingonClientConnect(std::string message, std::string word, Client
 		}
 		else
 			newword = "";
+		if (word == "NICK")
+		{
+			for (std::map<int, Client *>::iterator it = _clients.begin(); it != _clients.end(); it++)
+			{
+				if (newword == it.operator*().second->getNickname())
+					newword.push_back('_');
+			}
+		}
 		return(newword);
 }
 
