@@ -15,7 +15,7 @@ PartCommand::~PartCommand()
 void PartCommand::execute(Client *client, std::vector<std::string> arg)
 {
 	std::cout << INDIANRED << "execute PART Cmd" << RESET << std::endl;
-	std::cout << "YOUHOU PART !!" << client->getChannel()->getName() << std::endl;
+	std::cout << "YOUHOU PART !!" << client->getChannel() << std::endl;
 	// Au moins un paramètre obligatoire : le channel qu'on veut quitter !
 	if (arg.empty())
 	{
@@ -39,13 +39,15 @@ void PartCommand::execute(Client *client, std::vector<std::string> arg)
 		return;
 	}
 	// Si le channel existe et le client est bien membre : on le quitte !
-	client->leave_channel();
+	client->leave_channel(channel, arg[1]);
 	channel->setNbclients(channel->getNbclients() - 1);
 	std::cout << "YOUHOU PART FIN !!" << client->getChannel() << std::endl;
 	if (_server->getChannel(chan_name)->getNbclients() == 0)
 		_server->destroyChannel(channel);
 	else
+	{
 		std::cout << "nb de clients dans notre channel (PART) " << channel->getNbclients() << std::endl;
+	}
 }
 
 

@@ -116,11 +116,14 @@ void		Channel::removeClient(Client *client)
 	for (std::vector<Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
 	{
 		if (*it == client)
+		{
 			_clients.erase(it);
-		client->setChannel(NULL);
+			client->setChannel(NULL);
+			break;
+		}		
 	}
-	std::cout << PURPLE << "fin de la fonction CHANNEL : removeClient ! " << client->getChannel()->getName() << RESET << std::endl;
-	std::cout << PURPLE << client->getChannel()->getName() << RESET << std::endl;
+	std::cout << PURPLE << "fin de la fonction CHANNEL : removeClient ! " << client->getChannel() << RESET << std::endl;
+	std::cout << PURPLE << client->getChannel() << RESET << std::endl;
 	
 }
 
@@ -131,8 +134,8 @@ void		Channel::sendall(const std::string& message)
 	{
 		// Send the message to each client
 		std::cout << GREEN;
-		(*it)->reply(message);
-		std::cout << RESET;
+		(*it)->reply_command(message);
+		std::cout << RESET << std::endl;
 	}
 }
 
@@ -145,7 +148,7 @@ void		Channel::sendall(const std::string& message, Client *exclude)
 		if (*it == exclude)
 			continue;
 		std::cout << GREEN;
-		(*it)->reply(message);
+		(*it)->reply_command(message);
 		std::cout << RESET;
 	}
 }

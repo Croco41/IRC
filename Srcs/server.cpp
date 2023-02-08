@@ -3,7 +3,7 @@
 int Run;
 
 Server::Server(const std::string &port, const std::string &password)
-	: _port(port), _password(password)
+	: _port(port), _password(password), _channels()  
 {
 	Run = 1;
 	_socket = launch_socket();
@@ -370,8 +370,17 @@ Channel*	Server::createChannel(const std::string &name, const std::string &passw
 
 void	Server::destroyChannel(Channel *channel)
 {
+	std::cout << "je suis dans destroy Channel" << std::endl;
 	for (std::vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++)
+	{
+		std::cout << "Nom du chan: " << channel->getName() << std::endl;
+		std::cout << "Nom du chan pointé par it: " << it.operator*()->getName() << std::endl;
 		if (*it == channel)
+		{
+			delete channel;
 			_channels.erase(it);
+			break;
+		}
+	}
 	// delete channel;
 }

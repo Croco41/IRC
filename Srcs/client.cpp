@@ -104,6 +104,14 @@ std::string Client::getPrefix() const
 void	Client::reply(const std::string &reply)
 {
 	writetosend(":" + getPrefix() + " " + reply);
+	//writetosend(":" + reply);
+	//std::cout << ":" << getPrefix() << " " << reply << std::endl;
+}
+
+void	Client::reply_command(const std::string &reply)
+{
+	//writetosend(":" + getPrefix() + " " + reply);
+	writetosend(reply);
 	//std::cout << ":" << getPrefix() << " " << reply << std::endl;
 }
 
@@ -133,18 +141,19 @@ void	Client::join_channel(Channel *channel)
 	std::cout << _nickname << " has joined channel " << channel->getName() << std::endl; 
 }
 
-void	Client::leave_channel()
+void	Client::leave_channel(Channel *channel, std::string message)
 {
-	if (!_channel)
+	if (!channel)
 		return;
 	std::cout << ORANGE << "leave_channel du Client !" << RESET << std::endl;
 	// std::string chan_name = _channel->getName();
 
-	std::string message;
-	message.append(_nickname);
-	message.append(" has left channel ");
-	message.append(_channel->getName());
-
-	_channel->sendall(RPL_PART(getPrefix(), _channel->getName(), message));
-	_channel->removeClient(this);
+	// std::string message;
+	// message.append(_nickname);
+	// message.append(" has left channel ");
+	// message.append(_channel->getName());
+	std::cout << PURPLE << "Send reply message is: " << message << std::endl;
+	std::cout << GREEN << "Rpl sent to socket: " << _fd << std::endl;
+	channel->sendall(RPL_PART(getPrefix(), _channel->getName(), message));
+	channel->removeClient(this);
 }

@@ -40,9 +40,10 @@ class Client
 
 		// FONCTIONS MEMBRES
 		void			reply(const std::string &reply);
+		void			reply_command(const std::string &reply);
 		void 			writetosend(const std::string &message) const;
 		void			join_channel(Channel *channel);
-		void			leave_channel();
+		void			leave_channel(Channel *channel, std::string message);
 
 	private:
 		// variables initialisées lors de la construction
