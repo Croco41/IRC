@@ -1,7 +1,7 @@
 #include "../Includes/client.hpp"
 
 Client::Client(const std::string &hostname, int fd, int port)
-	: _hostname(hostname), _fd(fd), _port(port), _realname(""), _username(""), _nickname(""), _password(""), _channel(NULL)  
+	: _hostname(hostname), _fd(fd), _port(port), _realname(""), _username(""), _nickname(""), _password(""), _Cchannels()  
 {
 	if (_hostname.size() > 63)
 	{
@@ -53,9 +53,26 @@ std::string    Client::getPassword() const
 	return(this->_password);
 }
 
-Channel*		Client::getChannel() const
+// Channel*		Client::getChannel() const
+// {
+// 	return(_channel);
+// }
+
+std::vector<Channel *>		Client::getChannel() const
 {
-	return(_channel);
+	return(_Cchannels);
+}
+
+bool			Client::findChannel(std::string chan_name)
+{
+	std::cout << RED << "CLIENT : findChannel - start" << RESET << std::endl;
+	for (std::vector<Channel *>::iterator it = _Cchannels.begin(); it != _Cchannels.end(); it++)
+	{
+		std::cout << "on entre dans le for ?" << chan_name << std::endl;
+		if (it.operator*()->getName() == chan_name)
+			return(true);
+	}
+	return (false);
 }
 
 // SETTERS
@@ -79,9 +96,14 @@ void    Client::setPassword(const std::string &password)
 	_password = password;
 }
 
+// void	Client::setChannel(Channel *channel)
+// {
+// 	_channel = channel;
+// }
+
 void	Client::setChannel(Channel *channel)
 {
-	_channel = channel;
+	_Cchannels.push_back(channel);
 }
 
 //FCT MEMBRES
@@ -109,13 +131,14 @@ void	Client::reply(const std::string &reply)
 
 void	Client::join_channel(Channel *channel)
 {
-	std::cout << "Il va falloir coder la fonction qui permet au client de join le channel " << channel->getName() << std::endl;
+	std::cout << GREEN << "\nCLIENT : join_channel - start " << channel->getName() << RESET << std::endl;
 	if (channel->getNbclients() != 0)
 		channel->addClient(this);
 	else
 		channel->setNbclients(1);
 	std::cout << "client : " << getNickname() << " has been added to channel : " << channel->getName() << std::endl; 
-	_channel = channel; // Store a reference to the channel the client has joined
+	// _channel = channel; // Store a reference to the channel the client has joined
+	setChannel(channel);
 
 	// Get a list of nicknames of clients in the channel
 	const std::vector<std::string>& nicknames = channel->getNicknames();
@@ -130,21 +153,41 @@ void	Client::join_channel(Channel *channel)
 	//Send a message to all clients in the channel to notify them of the current client joining
 	channel->sendall(RPL_JOIN(getPrefix(), channel->getName()));
 	
-	std::cout << _nickname << " has joined channel " << channel->getName() << std::endl; 
+	std::cout << _nickname << " has joined channel " << channel->getName() << std::endl;
+	std::cout << GREEN << "CLIENT : join_channel - end " << channel->getName() << RESET << std::endl;
 }
 
-void	Client::leave_channel()
+void	Client::leave_channel(std::string chan_name)
 {
-	if (!_channel)
+	std::cout << ORANGE << "\nCLIENT : leave_channel - start" << RESET << std::endl;
+	if (findChannel(chan_name) == false)
 		return;
-	std::cout << ORANGE << "leave_channel du Client !" << RESET << std::endl;
 	// std::string chan_name = _channel->getName();
 
 	std::string message;
 	message.append(_nickname);
 	message.append(" has left channel ");
-	message.append(_channel->getName());
+	// message.append(_channel->getName());
+	message.append(chan_name);
 
-	_channel->sendall(RPL_PART(getPrefix(), _channel->getName(), message));
-	_channel->removeClient(this);
+	// _channel->sendall(RPL_PART(getPrefix(), _channel->getName(), message));
+	// _channel->removeClient(this);
+
+	std::vector<Channel *>::iterator	it;
+	for (it = _Cchannels.begin(); it != _Cchannels.end(); it++)
+	{
+		if (it.operator*()->getName() == chan_name)
+		{
+			std::cout << ROYALBLUE << "taille du vector de channels : " << _Cchannels.size() << RESET << std::endl;
+			it.operator*()->sendall(RPL_PART(getPrefix(), chan_name, message));
+			it.operator*()->removeClient(this);
+			_Cchannels.erase(it);
+			std::cout << ROYALBLUE << "taille du vector de channels apres erase : " << _Cchannels.size() << RESET << std::endl;
+
+			// if (_Cchannels.size() == 0);
+			// 	_Cchannels.push_back("");
+			break;
+		}
+	}
+	std::cout << ORANGE << "CLIENT : leave_channel - end" << RESET << std::endl;
 }
