@@ -20,14 +20,15 @@ class Client
 		~Client();
 
 		// GETTERS
-		std::string		getHostname() const;
-		int				getFd() const;
-		int				getPort() const;
-		std::string		getRealname() const;
-		std::string		getUsername() const;
-		std::string		getNickname() const;
-		std::string		getPassword() const;
-		Channel			*getChannel() const;
+		std::string				getHostname() const;
+		int						getFd() const;
+		int						getPort() const;
+		std::string				getRealname() const;
+		std::string				getUsername() const;
+		std::string				getNickname() const;
+		std::string				getPassword() const;
+		std::vector<Channel *>	getChannel() const;
+
 		//fonctions pour les messages
 		std::string		getPrefix() const;
 
@@ -39,6 +40,7 @@ class Client
 		void			setChannel(Channel *channel);
 
 		// FONCTIONS MEMBRES
+		bool			findChannel(std::string chan_name);
 		void			reply(const std::string &reply);
 		void			reply_command(const std::string &reply);
 		void 			writetosend(const std::string &message) const;
@@ -47,15 +49,16 @@ class Client
 
 	private:
 		// variables initialisées lors de la construction
-		std::string		_hostname;
-		int				_fd;
-		int				_port;
+		std::string				_hostname;
+		int						_fd;
+		int						_port;
 		// variables initialisées via setters
-		std::string		_realname;
-		std::string		_username;
-		std::string		_nickname;
-		std::string		_password;
-		Channel			*_channel;
+		std::string				_realname;
+		std::string				_username;
+		std::string				_nickname;
+		std::string				_password;
+		// Channel					*_channel; // il faut un vecteur de channel !!
+		std::vector<Channel *>	_Cchannels; // le client peut se connecter à pls channels !
 };
 
 #endif

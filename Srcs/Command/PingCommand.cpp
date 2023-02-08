@@ -12,9 +12,9 @@ PingCommand::~PingCommand()
 
 void PingCommand::execute(Client *client, std::vector<std::string> arg)
 {
-	std::cout << DARKMAGENTA << "On arrive dans Ping execute ?" << RESET << std::endl;
+	std::cout << FUCHSIA << "\nPINGCOMMAND : execute - start" << RESET << std::endl;
 	std::string message = arg.at(0);
 
-	// client->writetosend(message);
 	client->reply(RPL_PING(client->getPrefix(), message));
+	std::cout << FUCHSIA << "PINGCOMMAND : execute - end" << RESET << std::endl;
 }

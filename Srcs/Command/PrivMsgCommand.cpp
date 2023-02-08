@@ -43,29 +43,35 @@ void PrivMsgCommand::execute(Client *client, std::vector<std::string> arg)
 	// On vérifie si le message est envoyé sur un channel (commence par #)
 	if (target.at(0) == '#')
 	{
-		// on récupère le channel via le Client !
-		Channel *channel = client->getChannel();
-		// on vérifie d'abord si le channel existe
-		if (!channel)
+		// on récupère le channel via le Client et on vérifie qu'il existe !
+		std::vector<Channel *>::iterator	it;
+		for (it = client->getChannel().begin(); it != client->getChannel().end(); it++)
 		{
-			client->reply(ERR_NOSUCHCHANNEL(client->getNickname(), target));
-			return;
-		}
-		// on cherche le bon destinataire dans la liste des clients connectés à ce channel
-		std::vector<std::string>			nicknames(channel->getNicknames());
-		std::vector<std::string>::iterator	it;
+			if (it.operator*()->getName() == target)
+			{
+				Channel *channel = *it;
+				if (!channel)
+				{
+					client->reply(ERR_NOSUCHCHANNEL(client->getNickname(), target));
+					return;
+				}
+				// on cherche le bon destinataire dans la liste des clients connectés à ce channel
+				std::vector<std::string>			nicknames(channel->getNicknames());
+				std::vector<std::string>::iterator	it;
 
-		for (it = nicknames.begin(); it != nicknames.end(); it++)
-			if (*it == client->getNickname())
-				break;
-		// si on ne trouve pas de correspondant :
-		if (it == nicknames.end())
-		{
-			client->reply(ERR_CANNOTSENDTOCHAN(client->getNickname(), target));
-			return;
+				for (it = nicknames.begin(); it != nicknames.end(); it++)
+					if (*it == client->getNickname())
+						break;
+				// si on ne trouve pas de correspondant :
+				if (it == nicknames.end())
+				{
+					client->reply(ERR_CANNOTSENDTOCHAN(client->getNickname(), target));
+					return;
+				}
+				channel->sendall(message, client);
+				return;
+			}
 		}
-		channel->sendall(message, client);
-		return;
 	}
 	std::cout << "target= " << target << std::endl;
 	std::cout << "message= " << message << std::endl;

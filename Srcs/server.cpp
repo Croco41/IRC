@@ -313,7 +313,7 @@ void	Server::onClientMessage(int fd, char *tmp, size_t r)
 	try
 	{
 		std::string message = recvMessage(fd, tmp, r);
-		std::cout << FUCHSIA << "message = " << message << RESET << std::endl;
+		std::cout << RED << "\nmessage = " << message << RESET;
 		Client	*client = _clients.at(fd);
 		_commandHandler->recup_msg(client, message);
 	}
@@ -323,58 +323,31 @@ void	Server::onClientMessage(int fd, char *tmp, size_t r)
 	}
 }
 
-
-// void    ParsingonClientConnect(std::string message, Client *client)
-// {
-
-// 	std::cout << "dans la boucle message principale" <<std::endl;
-// 	size_t pos = message.find("PASS") + 5;
-// 	std::cout << pos << std::endl;
-
-// 	if(pos <= message.length())
-// 	{
-// 		std::cout << "dans la boucle message.at" <<std::endl;
-// 		std::cout << pos << message[pos] << std::endl;
-
-// 		std::string content;
-// 		int end = pos;
-// 		while(message[end] != '\n')
-// 		{
-// 			end++;
-// 		}
-// 		client->setPassword(content.append(message, pos, end));
-
-// 		// while(!message.find("\n"))
-// 		// {
-// 		//     std::cout << "dans la boucle setpassword" <<std::endl;
-// 		//     client->setPassword(message);
-// 		// }
-//         }
-// }
-
 Channel*	Server::createChannel(const std::string &name, const std::string &password, Client *client)
 {
-	// if (client == NULL)
-	// 	Channel *channel = new Channel(name, password);
-	// else
+	std::cout << PURPLE << "\nSERVER : createChannel - start" << RESET << std::endl;
 	Channel *channel = new Channel(name, password, client);
 	client->setChannel(channel);
-	std::cout << "YOUHOU YOUHOU !!" << client->getChannel()->getName() << std::endl;
+	// std::cout << "Nom du channel auquel est lié le client :" << client->getChannel(channel)->getName() << std::endl;
 	_channels.push_back(channel);
-	std::cout << "creation de notre premier channel !" << std::endl;
-	std::cout << "name of the channel = " << _channels.front()->getName() << std::endl;
-	std::cout << "password = " << _channels.front()->getPassword() << std::endl;
-	std::cout << "nom du Client = " << _channels.front()->getAdmin()->getNickname() << std::endl;
+	std::cout << "channel name = " << _channels.front()->getName() << std::endl;
+	std::cout << "password = ";
+	if (_channels.front()->getPassword() == "")
+		std::cout << "no password registered" << std::endl;
+	else
+		std::cout << _channels.front()->getPassword() << std::endl;
+	std::cout << "client nickname = " << _channels.front()->getAdmin()->getNickname() << std::endl;
+	std::cout << PURPLE << "SERVER : createChannel - end" << RESET << std::endl;
 	return (channel);
 }
 
 void	Server::destroyChannel(Channel *channel)
 {
-	std::cout << "je suis dans destroy Channel" << std::endl;
+	std::cout << YELLOW << "\nSERVER : destroyChannel - start" << RESET << std::endl;
 	for (std::vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++)
 	{
-		std::cout << "Nom du chan: " << channel->getName() << std::endl;
-		std::cout << "Nom du chan pointé par it: " << it.operator*()->getName() << std::endl;
+		std::cout << it.operator*()->getName() << std::endl;
+		std::cout << ROYALBLUE << "taille du vector de channels dans server : " << _channels.size() << RESET << std::endl;
 		if (*it == channel)
 		{
 			delete channel;
@@ -382,5 +355,5 @@ void	Server::destroyChannel(Channel *channel)
 			break;
 		}
 	}
-	// delete channel;
+	std::cout << YELLOW << "SERVER : destroyChannel - end" << RESET << std::endl;
 }

@@ -84,19 +84,18 @@ void		Channel::addClient(Client *client)
 
 void		Channel::removeClient(Client *client)
 {
-	std::cout << FIREBRICK << "removeClient du Channel !" << RESET << std::endl;
-	std::cout << FIREBRICK << "Client name = " << client->getNickname() << RESET << std::endl;
-	std::cout << FIREBRICK << "Admin name = " << _admin->getNickname() << RESET << std::endl;
-	std::cout << "YOUHOU REMOVE CLIENT DEBUT !!" << client->getChannel()->getName() << std::endl;
+	std::cout << FIREBRICK << "\nCHANNEL : removeClient - start" << RESET << std::endl;
+	std::cout << "Client name = " << client->getNickname() << std::endl;
+	std::cout << "Admin name = " << _admin->getNickname() << std::endl;
+	std::cout << "nb de clients = " << _clients.size() << std::endl;
 	if (_clients.size() == 1)
 	{
 		if (!_clients.empty())
 		{
 			_clients.clear();
-			client->setChannel(NULL);
+			// client->setChannel(NULL);
 		}
-		
-		// delete this;
+		std::cout << FIREBRICK << "CHANNEL : removeClient - end" << RESET << std::endl;
 		return;
 	}
 	// si le client qui veut partir est l'admin : on set un nouvel admin
@@ -115,16 +114,16 @@ void		Channel::removeClient(Client *client)
 	// on trouve le client dans notre vector et si on le trouve, on erase !
 	for (std::vector<Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
 	{
+		std::cout << "client : " << it.operator*()->getNickname() << std::endl;
 		if (*it == client)
 		{
 			_clients.erase(it);
-			client->setChannel(NULL);
+			// client->setChannel(NULL);
 			break;
-		}		
+		}
 	}
-	std::cout << PURPLE << "fin de la fonction CHANNEL : removeClient ! " << client->getChannel() << RESET << std::endl;
-	std::cout << PURPLE << client->getChannel() << RESET << std::endl;
-	
+	// std::cout << "état du channel du client qu'on vient de remove : "  << client->getChannel() << RESET << std::endl;
+	std::cout << FIREBRICK << "CHANNEL : removeClient - end" << RESET << std::endl;
 }
 
 void		Channel::sendall(const std::string& message)

@@ -14,8 +14,10 @@ PartCommand::~PartCommand()
 // Cette commande permet de quitter un channel (1er arg) et d'envoyer un message de départ (2e arg)
 void PartCommand::execute(Client *client, std::vector<std::string> arg)
 {
-	std::cout << INDIANRED << "execute PART Cmd" << RESET << std::endl;
-	std::cout << "YOUHOU PART !!" << client->getChannel() << std::endl;
+	std::cout << FUCHSIA << "\nPARTCOMMAND : execute - start" << RESET << std::endl;
+	// std::cout << "YOUHOU PART !!" << client->getChannel()->getName() << std::endl;
+	for (std::vector<std::string>::iterator it = arg.begin(); it != arg.end(); it++)
+		std::cout << "arg[" << *it << "]" << std::endl;
 	// Au moins un paramètre obligatoire : le channel qu'on veut quitter !
 	if (arg.empty())
 	{
@@ -36,22 +38,22 @@ void PartCommand::execute(Client *client, std::vector<std::string> arg)
 		return;
 	}
 	// si le client n'est pas sur le channel : error
-	if (!client->getChannel() || client->getChannel()->getName() != chan_name)
+	if (!client->findChannel(chan_name))// || client->getChannel()->getName() != chan_name)
 	{
 		client->reply(ERR_NOTONCHANNEL(client->getNickname(), chan_name));
 		return;
 	}
+
 	// Si le channel existe et le client est bien membre : on le quitte !
 //	std::cout << ORANGE << "arg[1] = chan message: " << chan_message << RESET << std::endl;
 	client->leave_channel(channel, chan_message);
 	channel->setNbclients(channel->getNbclients() - 1);
-	std::cout << "YOUHOU PART FIN !!" << client->getChannel() << std::endl;
+	// std::cout << "YOUHOU PART FIN !!" << client->getChannel() << std::endl;
 	if (_server->getChannel(chan_name)->getNbclients() == 0)
 		_server->destroyChannel(channel);
 	else
-	{
 		std::cout << "nb de clients dans notre channel (PART) " << channel->getNbclients() << std::endl;
-	}
+	std::cout << FUCHSIA << "PARTCOMMAND : execute - end" << RESET << std::endl;
 }
 
 
