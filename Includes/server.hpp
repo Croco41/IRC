@@ -64,7 +64,7 @@ class Server
 		const std::string		_password;
 		int						_socket;
 		std::map<int, Client *>	_clients; // nos clients seront enregistrés dans une map associant clé = fd, valeur = objet Client
-		std::vector<Channel*>	_channels; // nos channels seront enregistrés dans un tableau
+		std::vector<Channel *>	_channels; // nos channels seront enregistrés dans un tableau
 		CommandHandler			*_commandHandler;
 };
 
