@@ -28,6 +28,6 @@
 #define RPL_PING(source, command)				":" + source + " PONG :" + command
 #define RPL_PRIVMSG(source, target, message)	":" + source + " PRIVMSG " + target + " :" + message
 #define RPL_PART(source, channel, message)				":" + source + " PART " + channel + " " + message
-
+#define RPL_NOTICE(source, target, message)		":" + source + " NOTICE " + target + " :" + message
 
 #endif

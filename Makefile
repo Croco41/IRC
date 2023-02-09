@@ -21,6 +21,7 @@ SRC		=	Srcs/main.cpp \
 			Srcs/Command/PingCommand.cpp \
 			Srcs/Command/PongCommand.cpp \
 			Srcs/Command/PrivMsgCommand.cpp \
+			Srcs/Command/NoticeCommand.cpp \
 			Srcs/Command/PartCommand.cpp \
 			Srcs/Command/UserCommand.cpp \
 

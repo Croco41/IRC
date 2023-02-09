@@ -10,6 +10,10 @@ PrivMsgCommand::~PrivMsgCommand()
 	return;
 }
 
+// ATTENTION !!!!!!!!!!! Si tu modifies ! 
+// sur privmsg verifié que tous les cas fonctionent -> c'est dans le sujet de correc			
+// PENSEZ a mettre à jour NOTICE si PRIVMSG modifié			
+
 void PrivMsgCommand::execute(Client *client, std::vector<std::string> arg)
 {
 	std::cout << "je rentre dans execute privmes" << std::endl;
