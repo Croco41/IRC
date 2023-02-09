@@ -37,7 +37,7 @@ void JoinCommand::execute(Client *client, std::vector<std::string> arg)
 	else
 		password = "";
 	// on verifie si le client est déjà connecté
-	std::cout << KHAKI << "client déjà connecté ?" << client->findChannel(chan_name) << RESET << std::endl;
+	std::cout << KHAKI << "client déjà connecté ?" << RESET << std::endl;
 
 	if (client->findChannel(chan_name) == true)
 	{

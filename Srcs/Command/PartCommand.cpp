@@ -26,6 +26,9 @@ void PartCommand::execute(Client *client, std::vector<std::string> arg)
 	}
 
 	std::string	chan_name = arg[0];
+	std::string	chan_message = "";
+	if (arg.size() == 2)
+		chan_message = arg[1];
 	Channel		*channel = _server->getChannel(chan_name);
 	// si on ne trouve pas le channel que l'on veut quitter : error
 	if (!channel)
@@ -42,7 +45,8 @@ void PartCommand::execute(Client *client, std::vector<std::string> arg)
 	}
 
 	// Si le channel existe et le client est bien membre : on le quitte !
-	client->leave_channel(chan_name);
+//	std::cout << ORANGE << "arg[1] = chan message: " << chan_message << RESET << std::endl;
+	client->leave_channel(channel, chan_message);
 	channel->setNbclients(channel->getNbclients() - 1);
 	// std::cout << "YOUHOU PART FIN !!" << client->getChannel() << std::endl;
 	if (_server->getChannel(chan_name)->getNbclients() == 0)

@@ -26,6 +26,7 @@
 #define RPL_JOIN(source, channel)				":" + source + " JOIN :" + channel	
 #define RPL_PING(source, command)				":" + source + " PONG :" + command
 #define RPL_PRIVMSG(source, target, message)	":" + source + " PRIVMSG " + target + " :" + message
-#define RPL_PART(source, channel, message)				":" + source + " PART " + channel + " :" + message
+#define RPL_PART(source, channel, message)				":" + source + " PART " + channel + " " + message
+
 
 #endif

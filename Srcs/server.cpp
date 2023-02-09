@@ -3,7 +3,7 @@
 int Run;
 
 Server::Server(const std::string &port, const std::string &password)
-	: _port(port), _password(password)
+	: _port(port), _password(password), _channels()  
 {
 	Run = 1;
 	_socket = launch_socket();
@@ -347,6 +347,7 @@ void	Server::destroyChannel(Channel *channel)
 	for (std::vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++)
 	{
 		std::cout << it.operator*()->getName() << std::endl;
+		std::cout << ROYALBLUE << "taille du vector de channels dans server : " << _channels.size() << RESET << std::endl;
 		if (*it == channel)
 		{
 			delete channel;

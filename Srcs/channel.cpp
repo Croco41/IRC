@@ -133,8 +133,8 @@ void		Channel::sendall(const std::string& message)
 	{
 		// Send the message to each client
 		std::cout << GREEN;
-		(*it)->reply(message);
-		std::cout << RESET;
+		(*it)->reply_command(message);
+		std::cout << RESET << std::endl;
 	}
 }
 
@@ -147,7 +147,7 @@ void		Channel::sendall(const std::string& message, Client *exclude)
 		if (*it == exclude)
 			continue;
 		std::cout << GREEN;
-		(*it)->reply(message);
+		(*it)->reply_command(message);
 		std::cout << RESET;
 	}
 }
