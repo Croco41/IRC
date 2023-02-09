@@ -12,7 +12,12 @@ Server::Server(const std::string &port, const std::string &password)
 
 Server::~Server(void)
 {
-	std::cout << "on passe par ici" << std::endl;
+    std::cout << RED << "SERVER : Destructor !" << RESET << std::endl;
+    // ---------- delete Clients ---------- //
+    std::cout << INDIANRED << "nos clients à deleter : " << RESET << std::endl;
+    for (std::map<int, Client *>::iterator it = _clients.begin(); it != _clients.end(); ++it)
+        std::cout << "    client " << it->second->getNickname() << std::endl;
+
     if (_clients.size())
     {
         typename std::map<int, Client *>::iterator it;
@@ -23,8 +28,20 @@ Server::~Server(void)
         }
         _clients.clear();
     }
-	delete _commandHandler;
-	std::cout << "Server closed." <<std::endl;
+    // ---------- delete Channels ---------- //
+    std::cout << INDIANRED << "nos channels à deleter : " << RESET << std::endl;
+    for (std::vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); ++it)
+        std::cout << "    channel " << it.operator*()->getName() << std::endl;
+
+    if (_channels.size())
+    {
+        typename std::vector<Channel *>::iterator it;
+        for (it = _channels.begin(); it != _channels.end(); ++it)
+            delete *it;
+        _channels.clear();
+    }
+    delete _commandHandler;
+    std::cout << "Server closed." <<std::endl;
     return;
 }
 
@@ -289,6 +306,7 @@ void		Server::onClientConnect(sockaddr_in connect_serv_socket, int socket_client
 	std::cout << "realname: " << client->getRealname() << std::endl;
 
 	std::cout << YELLOW;
+	client->setRegistered(1);
 	client->reply(RPL_WELCOME(client->getNickname()));
 	std::cout << RESET;
 

@@ -1,7 +1,7 @@
 #include "../Includes/client.hpp"
 
 Client::Client(const std::string &hostname, int fd, int port)
-	: _hostname(hostname), _fd(fd), _port(port), _realname(""), _username(""), _nickname(""), _password(""), _Cchannels()  
+	: _hostname(hostname), _fd(fd), _port(port), _realname(""), _username(""), _nickname(""), _password(""), _isregistered(0), _Cchannels()  
 {
 	if (_hostname.size() > 63)
 	{
@@ -54,6 +54,11 @@ std::string    Client::getPassword() const
 	return(this->_password);
 }
 
+bool    Client::getRegistered() const
+{
+	return(this->_isregistered);
+}
+
 std::vector<Channel *>	Client::getChannel() const
 {
 	return(_Cchannels);
@@ -92,6 +97,11 @@ void    Client::setNickname(const std::string &nickname)
 void    Client::setPassword(const std::string &password) 
 {
 	_password = password;
+}
+
+void    Client::setRegistered(const bool &isregistered) 
+{
+	_isregistered = isregistered;
 }
 
 // void	Client::setChannel(Channel *channel)
