@@ -306,6 +306,7 @@ void		Server::onClientConnect(sockaddr_in connect_serv_socket, int socket_client
 	std::cout << "realname: " << client->getRealname() << std::endl;
 
 	std::cout << YELLOW;
+	client->setRegistered(1);
 	client->reply(RPL_WELCOME(client->getNickname()));
 	std::cout << RESET;
 

@@ -24,6 +24,15 @@ class Command
 
 // ici on aura toutes les classes dérivées de Command : join, quit, user, nick...
 
+class UserCommand : public Command
+{
+	public:
+		UserCommand(Server *server);
+		~UserCommand();
+
+		void execute(Client *client, std::vector<std::string> arg);
+};
+
 class PingCommand : public Command
 {
 	public:

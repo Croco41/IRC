@@ -27,6 +27,7 @@ class Client
 		std::string				getUsername() const;
 		std::string				getNickname() const;
 		std::string				getPassword() const;
+		bool				getRegistered() const;
 		std::vector<Channel *>	getChannel() const;
 
 		//fonctions pour les messages
@@ -37,6 +38,7 @@ class Client
 		void			setUsername(const std::string &username);
 		void			setNickname(const std::string &nickname);
 		void			setPassword(const std::string &password);
+		void			setRegistered(const bool &isregistered);
 		void			setChannel(Channel *channel);
 
 		// FONCTIONS MEMBRES
@@ -57,6 +59,7 @@ class Client
 		std::string				_username;
 		std::string				_nickname;
 		std::string				_password;
+		bool				_isregistered;
 		// Channel					*_channel; // il faut un vecteur de channel !!
 		std::vector<Channel *>	_Cchannels; // le client peut se connecter à pls channels !
 };

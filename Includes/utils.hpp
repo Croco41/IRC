@@ -8,14 +8,15 @@
 
 //Messages d'erreur
 #define ERR_NOSUCHNICK(source, target)			"401 " + source + " " + target + " :No such nickname / channel"
-#define ERR_TOOMANYCHANNELS(source, channel)	"405 " + source + " " + channel + " :You have joined too many channels"
-#define ERR_UNKNOWNCOMMAND(source, command)		"421 " + source + " " + command + " :Command unknown"
-#define ERR_NEEDMOREPARAMS(source, command)		"461 " + source + " " + command + " :Not enough parameters"
-#define ERR_CHANNELISFULL(source, channel)		"471 " + source + " " + channel + " :This channel can't accept more clients"
-#define ERR_BADCHANNELKEY(source, channel)		"475 " + source + " " + channel + " :Cannot join channel, please verify your password"
 #define ERR_NOSUCHCHANNEL(source, target)		"403 " + source + " " + target + " :Channel name is invalid, or does not exist"
 #define ERR_CANNOTSENDTOCHAN(source, target)	"404 " + source + " " + target + " :Cannot send a message to channel"
+#define ERR_TOOMANYCHANNELS(source, channel)	"405 " + source + " " + channel + " :You have joined too many channels"
+#define ERR_UNKNOWNCOMMAND(source, command)		"421 " + source + " " + command + " :Command unknown"
 #define ERR_NOTONCHANNEL(source, channel)		"442 " + source + " " + channel + " :Client is not a member of this channel"
+#define ERR_NEEDMOREPARAMS(source, command)		"461 " + source + " " + command + " :Not enough parameters"
+#define ERR_ALREADYREGISTERED(source)			"462 " + source + " :You may not reregister, you already have!"
+#define ERR_CHANNELISFULL(source, channel)		"471 " + source + " " + channel + " :This channel can't accept more clients"
+#define ERR_BADCHANNELKEY(source, channel)		"475 " + source + " " + channel + " :Cannot join channel, please verify your password"
 
 //Réponses du server
 #define RPL_WELCOME(source)						"001 " + source + " :Welcome to the ft_irc network " + source
