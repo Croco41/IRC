@@ -16,5 +16,6 @@ void PongCommand::execute(Client *client, std::vector<std::string> arg)
 	std::string message = arg.at(0);
 
 	// client->writetosend(message);
-	client->reply(RPL_PING(client->getPrefix(), message));
+	//client->reply(RPL_PING(client->getPrefix(), message));
+	client->reply_command(RPL_PING(client->getPrefix(), message));
 }

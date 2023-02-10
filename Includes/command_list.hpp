@@ -8,6 +8,8 @@ class Command;
 #include "client.hpp"
 #include "utils.hpp"
 
+#define NICK_VALID_CHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-^_[]{}\\|"
+
 // Command est ici une classe interface qui donne le patron de chaque commande
 
 class Command

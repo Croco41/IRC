@@ -55,6 +55,8 @@ std::vector<std::string>	Channel::getNicknames()
 	{
 		Client *client = it.operator*();
 		nicknames.push_back((_admin == client ? "@" : "") + (*it)->getNickname());
+		// 	// a supprimer apres debug:
+		// std::cout << YELLOW << (*it)->getNickname() << RESET << std::endl;
 	}
 	return (nicknames);
 }
@@ -80,6 +82,8 @@ void		Channel::addClient(Client *client)
 {
 	_clients.push_back(client);
 	setNbclients(_clients.size());
+// 	// a supprimer apres debug:
+// 	getNicknames();
 }
 
 void		Channel::removeClient(Client *client)

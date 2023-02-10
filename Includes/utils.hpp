@@ -13,6 +13,7 @@
 #define ERR_TOOMANYCHANNELS(source, channel)	"405 " + source + " " + channel + " :You have joined too many channels"
 #define ERR_UNKNOWNCOMMAND(source, command)		"421 " + source + " " + command + " :Command unknown"
 #define ERR_NONICKNAMEGIVEN(source, command)	"431 " + source + " " + command + " :No new nickname has been given"
+#define ERR_ERRONEUSNICKNAME(source)			"432 " + source + " :This nickname is Invalid" 
 #define ERR_NICKNAMEINUSE(source)				"433 " + source + " :This nickname is already in use"
 #define ERR_NOTONCHANNEL(source, channel)		"442 " + source + " " + channel + " :Client is not a member of this channel"
 #define ERR_NEEDMOREPARAMS(source, command)		"461 " + source + " " + command + " :Not enough parameters"
@@ -32,5 +33,6 @@
 #define RPL_PRIVMSG(source, target, message)	":" + source + " PRIVMSG " + target + " :" + message
 #define RPL_PART(source, channel, message)		":" + source + " PART " + channel + " " + message
 #define RPL_NOTICE(source, target, message)		":" + source + " NOTICE " + target + " :" + message
+#define RPL_NICK(source, newnick)				":" + source + " NICK :" + newnick
 
 #endif
