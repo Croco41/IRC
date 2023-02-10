@@ -87,4 +87,13 @@ class PrivMsgCommand : public Command
 		void execute(Client *client, std::vector<std::string> arg);
 };
 
+class NoticeCommand : public Command
+{
+	public:
+		NoticeCommand(Server *server);
+		~NoticeCommand();
+
+		void execute(Client *client, std::vector<std::string> arg);
+};
+
 #endif

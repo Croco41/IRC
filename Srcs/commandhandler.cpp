@@ -7,6 +7,7 @@ CommandHandler::CommandHandler(Server *server)
 	_commands["PING"] = new PingCommand(_server);
 	_commands["PONG"] = new PongCommand(_server);
 	_commands["PRIVMSG"] = new PrivMsgCommand(_server);
+	_commands["NOTICE"] = new NoticeCommand(_server);
 	_commands["PART"] = new PartCommand(_server);
 	_commands["userhost"] = new UserCommand(_server);
 	_commands["NICK"] = new NickCommand(_server);
