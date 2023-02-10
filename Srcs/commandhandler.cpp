@@ -11,6 +11,7 @@ CommandHandler::CommandHandler(Server *server)
 	_commands["PART"] = new PartCommand(_server);
 	_commands["userhost"] = new UserCommand(_server);
 	_commands["NICK"] = new NickCommand(_server);
+	_commands["MODE"] = new ModeCommand(_server);
 
 	for (std::map<std::string, Command*>::iterator it = _commands.begin(); it != _commands.end(); it++)
 		std::cout << BLUE << it.operator*().first << RESET << std::endl;
