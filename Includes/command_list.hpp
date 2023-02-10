@@ -98,4 +98,13 @@ class NoticeCommand : public Command
 		void execute(Client *client, std::vector<std::string> arg);
 };
 
+class ModeCommand : public Command
+{
+	public:
+		ModeCommand(Server *server);
+		~ModeCommand();
+
+		void execute(Client *client, std::vector<std::string> arg);
+};
+
 #endif
