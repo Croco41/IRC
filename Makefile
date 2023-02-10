@@ -24,6 +24,7 @@ SRC		=	Srcs/main.cpp \
 			Srcs/Command/NoticeCommand.cpp \
 			Srcs/Command/PartCommand.cpp \
 			Srcs/Command/UserCommand.cpp \
+			Srcs/Command/NickCommand.cpp \
 
 OBJ		=	$(SRC:Srcs/%.cpp=Objs/%.o)
 DEP		=	$(SRC:Srcs/%.cpp=Objs/%.d)

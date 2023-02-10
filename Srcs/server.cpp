@@ -12,37 +12,37 @@ Server::Server(const std::string &port, const std::string &password)
 
 Server::~Server(void)
 {
-    std::cout << RED << "SERVER : Destructor !" << RESET << std::endl;
-    // ---------- delete Clients ---------- //
-    std::cout << INDIANRED << "nos clients à deleter : " << RESET << std::endl;
-    for (std::map<int, Client *>::iterator it = _clients.begin(); it != _clients.end(); ++it)
-        std::cout << "    client " << it->second->getNickname() << std::endl;
+	std::cout << RED << "SERVER : Destructor !" << RESET << std::endl;
+	// ---------- delete Clients ---------- //
+	std::cout << INDIANRED << "nos clients à deleter : " << RESET << std::endl;
+	for (std::map<int, Client *>::iterator it = _clients.begin(); it != _clients.end(); ++it)
+		std::cout << "	client " << it->second->getNickname() << std::endl;
 
-    if (_clients.size())
-    {
-        typename std::map<int, Client *>::iterator it;
-        for (it = _clients.begin(); it != _clients.end(); ++it)
-        {
-            close(it->first);
-            delete it->second;
-        }
-        _clients.clear();
-    }
-    // ---------- delete Channels ---------- //
-    std::cout << INDIANRED << "nos channels à deleter : " << RESET << std::endl;
-    for (std::vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); ++it)
-        std::cout << "    channel " << it.operator*()->getName() << std::endl;
+	if (_clients.size())
+	{
+		typename std::map<int, Client *>::iterator it;
+		for (it = _clients.begin(); it != _clients.end(); ++it)
+		{
+			close(it->first);
+			delete it->second;
+		}
+		_clients.clear();
+	}
+	// ---------- delete Channels ---------- //
+	std::cout << INDIANRED << "nos channels à deleter : " << RESET << std::endl;
+	for (std::vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); ++it)
+		std::cout << "	channel " << it.operator*()->getName() << std::endl;
 
-    if (_channels.size())
-    {
-        typename std::vector<Channel *>::iterator it;
-        for (it = _channels.begin(); it != _channels.end(); ++it)
-            delete *it;
-        _channels.clear();
-    }
-    delete _commandHandler;
-    std::cout << "Server closed." <<std::endl;
-    return;
+	if (_channels.size())
+	{
+		typename std::vector<Channel *>::iterator it;
+		for (it = _channels.begin(); it != _channels.end(); ++it)
+			delete *it;
+		_channels.clear();
+	}
+	delete _commandHandler;
+	std::cout << "Server closed." <<std::endl;
+	return;
 }
 
 std::string	Server::getPassword() const
@@ -141,9 +141,9 @@ void		Server::start_epoll()
 		throw std::runtime_error("Error while creating epoll file descriptor.\n");
 	// if (epoll_fd == -1) 
 	// {
-    //     perror("epoll_create1");
-    //     exit(EXIT_FAILURE);
-    // }
+	//     perror("epoll_create1");
+	//     exit(EXIT_FAILURE);
+	// }
 	struct epoll_event server_ev;
 	memset(&server_ev, 0, sizeof(server_ev)); // Initialiser tous les octets de event à zéro
 	server_ev.data.fd = _socket;

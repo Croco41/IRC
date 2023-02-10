@@ -33,6 +33,15 @@ class UserCommand : public Command
 		void execute(Client *client, std::vector<std::string> arg);
 };
 
+class NickCommand : public Command
+{
+	public:
+		NickCommand(Server *server);
+		~NickCommand();
+
+		void execute(Client *client, std::vector<std::string> arg);
+};
+
 class PingCommand : public Command
 {
 	public:
