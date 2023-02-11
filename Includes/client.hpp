@@ -27,7 +27,9 @@ class Client
 		std::string				getUsername() const;
 		std::string				getNickname() const;
 		std::string				getPassword() const;
-		bool				getRegistered() const;
+		std::string				getModes() const;
+		bool					getOperator() const; //ok
+		bool					getRegistered() const;
 		std::vector<Channel *>	getChannel() const;
 
 		//fonctions pour les messages
@@ -38,6 +40,8 @@ class Client
 		void			setUsername(const std::string &username);
 		void			setNickname(const std::string &nickname);
 		void			setPassword(const std::string &password);
+		void			setModes(const std::string &modes);
+		void			setOperator(const bool &isoperator); //ok
 		void			setRegistered(const bool &isregistered);
 		void			setChannel(Channel *channel);
 
@@ -59,6 +63,10 @@ class Client
 		std::string				_username;
 		std::string				_nickname;
 		std::string				_password;
+		//pour la gestion des modes:
+		std::string 			_modes;
+		bool					_isoperator;	// ATTENTION !!! A mettre à jour dans oper	
+		// en fonction USER du début à l'enregistrement
 		bool				_isregistered;
 		// Channel					*_channel; // il faut un vecteur de channel !!
 		std::vector<Channel *>	_Cchannels; // le client peut se connecter à pls channels !

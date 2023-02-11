@@ -53,6 +53,7 @@ void JoinCommand::execute(Client *client, std::vector<std::string> arg)
 		{
 			std::cout << GREEN << "ON ENTRE ICI # ?" << it.operator*().at(0) << RESET << std::endl;
 			std::string	tmp = *it;
+			std::cout << PURPLE << tmp << RESET << std::endl;
 			*it = "#";
 			it.operator*().append(tmp);
 			std::cout << GREEN << *it << RESET << std::endl;

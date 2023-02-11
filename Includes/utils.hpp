@@ -20,10 +20,14 @@
 #define ERR_ALREADYREGISTERED(source)			"462 " + source + " :You may not reregister, you already have!"
 #define ERR_CHANNELISFULL(source, channel)		"471 " + source + " " + channel + " :This channel can't accept more clients"
 #define ERR_BADCHANNELKEY(source, channel)		"475 " + source + " " + channel + " :Cannot join channel, please verify your password"
-
+#define ERR_UMODEUNKNOWNFLAG()					"501 : Mode flag was not recognised"
+#define ERR_USERSDONTMATCH()					"502 : Cannot change mode for other users"
 
 //Réponses du server
 #define RPL_WELCOME(source)						"001 " + source + " :Welcome to the ft_irc network " + source
+#define RPL_UMODEIS(target, modes)				"221 " + target + " " + modes
+//faudra rajouter <mode_params> si on code des modes avec apram dans chan.
+#define RPL_CHANNELMODEIS(target, modes)		"324 " + target + " " + modes
 #define RPL_NAMREPLY(source, channel, users)    "353 " + source + " = " + channel + " :" + users
 #define RPL_ENDOFNAMES(source, channel)			"366 " + source + " " + channel + " :End of /NAMES list."
 
@@ -34,5 +38,7 @@
 #define RPL_PART(source, channel, message)		":" + source + " PART " + channel + " " + message
 #define RPL_NOTICE(source, target, message)		":" + source + " NOTICE " + target + " :" + message
 #define RPL_NICK(source, newnick)				":" + source + " NICK :" + newnick
+#define RPL_MODE_NORIGHT(source, target, message)  ":" + source + " MODE " + target + " :" + message
+#define RPL_MODE(source, target, modes)         ":" + source + " MODE " + target + " :" + modes
 
 #endif

@@ -13,6 +13,7 @@ Channel::Channel(const std::string &name, const std::string &password, Client *a
 	addClient(admin);
 	setMaxclients(10);
 	setNbclients(0);
+	setModes("");
 	return;
 }
 
@@ -47,18 +48,44 @@ size_t		Channel::getNbclients() const
 	return (_nbclients);
 }
 
-std::vector<std::string>	Channel::getNicknames()
+size_t		Channel::getNboperators() const
 {
+	return (_nboperators);
+}
+
+std::vector<std::string>	Channel::getNicknames()
+{ 
 	std::vector<std::string>	nicknames;
 
 	for(std::vector<Client *>::iterator it = _clients.begin(); it != _clients.end(); it++)
 	{
 		Client *client = it.operator*();
+		//on a vraiment fait un ternaire??^^
 		nicknames.push_back((_admin == client ? "@" : "") + (*it)->getNickname());
 		// 	// a supprimer apres debug:
 		// std::cout << YELLOW << (*it)->getNickname() << RESET << std::endl;
 	}
 	return (nicknames);
+}
+
+std::vector<std::string>	Channel::getNicknamesOpe()
+{
+	std::vector<std::string>	nicknamesope;
+
+	for(std::vector<Client *>::iterator it = _operators.begin(); it != _operators.end(); it++)
+	{
+		Client *operators = it.operator*();
+		//on a vraiment fait un ternaire??^^
+		nicknamesope.push_back((_admin == operators ? "@" : "") + (*it)->getNickname());
+		// 	// a supprimer apres debug:
+		// std::cout << YELLOW << (*it)->getNickname() << RESET << std::endl;
+	}
+	return (nicknamesope);
+}
+
+std::string    Channel::getModes() const
+{
+	return(this->_modes);
 }
 
 // SETTERS
@@ -77,6 +104,16 @@ void		Channel::setNbclients(const size_t nbclients)
 	_nbclients = nbclients;
 }
 
+void		Channel::setNboperators(const size_t nboperators)
+{
+	_nboperators = nboperators;
+}
+
+void    Channel::setModes(const std::string &modes) 
+{
+	_modes = modes;
+}
+
 // FCT MEMBRES
 void		Channel::addClient(Client *client)
 {
@@ -86,12 +123,55 @@ void		Channel::addClient(Client *client)
 // 	getNicknames();
 }
 
+void		Channel::addOperator(Client *operators)
+{
+	_operators.push_back(operators);
+	setNboperators(_operators.size());
+// 	// a supprimer apres debug:
+// 	getNicknames();
+}
+
+void		Channel::removeOperator(Client *operators)
+{
+	std::cout << FIREBRICK << "\nCHANNEL : removeOperator - start" << RESET << std::endl;
+	std::cout << "Client name = " << operators->getNickname() << std::endl;
+	std::cout << "Admin name = " << _admin->getNickname() << std::endl;
+	std::cout << "nb doperators = " << _operators.size() << std::endl;
+	if (_operators.size() == 1)
+	{
+		if (!_operators.empty())
+		{
+			_operators.clear();
+		}
+		std::cout << FIREBRICK << "CHANNEL : remove Operators - end" << RESET << std::endl;
+		return;
+	}
+	// on trouve le client dans notre vector et si on le trouve, on erase !
+	for (std::vector<Client*>::iterator it = _operators.begin(); it != _operators.end(); ++it)
+	{
+		std::cout << "operators : " << it.operator*()->getNickname() << std::endl;
+		if (*it == operators)
+		{
+			_operators.erase(it);
+			break;
+		}
+	}
+	setNboperators(_operators.size());
+	// std::cout << "état du channel du client qu'on vient de remove : "  << client->getChannel() << RESET << std::endl;
+	std::cout << FIREBRICK << "CHANNEL : removeOperators - end" << RESET << std::endl;
+}
+
 void		Channel::removeClient(Client *client)
 {
 	std::cout << FIREBRICK << "\nCHANNEL : removeClient - start" << RESET << std::endl;
 	std::cout << "Client name = " << client->getNickname() << std::endl;
 	std::cout << "Admin name = " << _admin->getNickname() << std::endl;
 	std::cout << "nb de clients = " << _clients.size() << std::endl;
+	if (client->getOperator() == true)
+	{
+		removeOperator(client);
+		std::cout << "operators size ?" << getNboperators() << std::endl; 
+	}
 	if (_clients.size() == 1)
 	{
 		if (!_clients.empty())

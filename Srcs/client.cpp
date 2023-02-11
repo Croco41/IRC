@@ -1,7 +1,7 @@
 #include "../Includes/client.hpp"
 
 Client::Client(const std::string &hostname, int fd, int port)
-	: _hostname(hostname), _fd(fd), _port(port), _realname(""), _username(""), _nickname(""), _password(""), _isregistered(0), _Cchannels()  
+	: _hostname(hostname), _fd(fd), _port(port), _realname(""), _username(""), _nickname(""), _password(""), _modes(""), _isoperator(0), _isregistered(0), _Cchannels()  
 {
 	if (_hostname.size() > 63)
 	{
@@ -54,6 +54,16 @@ std::string    Client::getPassword() const
 	return(this->_password);
 }
 
+std::string    Client::getModes() const
+{
+	return(this->_modes);
+}
+
+bool    Client::getOperator() const
+{
+	return(this->_isoperator);
+}
+
 bool    Client::getRegistered() const
 {
 	return(this->_isregistered);
@@ -97,6 +107,41 @@ void    Client::setNickname(const std::string &nickname)
 void    Client::setPassword(const std::string &password) 
 {
 	_password = password;
+}
+
+void    Client::setModes(const std::string &modes) 
+{
+	_modes = modes;
+}
+
+void    Client::setOperator(const bool &isoperator) 
+{
+	_isoperator = isoperator;
+	std::vector<Channel *>::iterator	it;
+	std::string nickname = getNickname();
+	for (it = _Cchannels.begin(); it != _Cchannels.end(); it++)
+	{
+		Channel *channel = it.operator*();
+		std::vector<std::string> nickope = channel->getNicknamesOpe();
+		if (isoperator == false)
+		{
+			if(std::find(nickope.begin(), nickope.end(), nickname) != nickope.end())
+			{
+					channel->removeOperator(this);
+					continue;
+					//si on change un droit, faut l'enlever dans les operateurs des chans
+					//verifier si à la création d'un chan on check les droits du creatoeurs ou pendant join
+			}
+		}
+		if (isoperator == true)
+		{
+			if(std::find(nickope.begin(), nickope.end(), nickname) != nickope.end())
+			{
+					channel->addOperator(this);
+					continue;
+			}
+		}
+	}
 }
 
 void    Client::setRegistered(const bool &isregistered) 

@@ -20,26 +20,37 @@ class Channel
 		Client	 					*getAdmin();
 		size_t						getMaxclients() const;
 		size_t						getNbclients() const;
+		size_t						getNboperators() const; //ok
 		std::vector<std::string>	getNicknames();
+		std::vector<std::string>	getNicknamesOpe(); //en cours
+		std::string					getModes() const;
 
 		// SETTERS
 		void			setPassword(const std::string password);
 		void			setMaxclients(const size_t maxclients);
 		void			setNbclients(const size_t nbclients);
+		void			setNboperators(const size_t nboperators); //ok
+		void			setModes(const std::string &modes);
 	
 		// FCT MEMBRES
 		void			addClient(Client *client);
 		void			removeClient(Client *client);
+		void			addOperator(Client *operators); //ok àtester
+		void			removeOperator(Client *operators); //ok à tester +ajout quand -o à faire
 		void			sendall(const std::string& message);
 		void			sendall(const std::string& message, Client *exclude);
 
-	private:
+	private: 
 		std::string				_name;
 		std::string				_password;
 		Client					*_admin;
 		std::vector<Client *>	_clients;
+		std::vector<Client *>	_operators;
 		size_t					_maxclients;
 		size_t					_nbclients;
+		size_t					_nboperators; //ok
+		//pour la gestion des modes:
+		std::string _modes;
 };
 
 #endif

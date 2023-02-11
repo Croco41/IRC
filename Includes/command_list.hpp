@@ -7,8 +7,26 @@ class Command;
 #include "server.hpp"
 #include "client.hpp"
 #include "utils.hpp"
+#include <string>
+#include <algorithm>
 
 #define NICK_VALID_CHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-^_[]{}\\|"
+#define MODES_USER "aiwro"
+#define CHANNEL_MODES "tilo" //
+// CHANNEL MODES :
+// for users :
+//     - o : channel operator
+// for channels :
+//     - i : invite only
+//     - t : topic locked
+//     - l : user limit
+// USER MODES :
+// - a : away
+// - i : invisible
+// - w : wallops
+// - r : restricted
+// - o : operator
+
 
 // Command est ici une classe interface qui donne le patron de chaque commande
 
@@ -105,6 +123,8 @@ class ModeCommand : public Command
 		~ModeCommand();
 
 		void execute(Client *client, std::vector<std::string> arg);
+		void mode_user(Client *client, std::vector<std::string> arg);
+		void mode_channel(Client *client, Channel *channel, std::vector<std::string> arg);
 };
 
 #endif
