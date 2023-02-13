@@ -28,6 +28,7 @@ SRC		=	Srcs/main.cpp \
 			Srcs/Command/ModeCommand.cpp \
 			Srcs/Command/QuitCommand.cpp \
 			Srcs/Command/WhoCommand.cpp \
+			Srcs/Command/OperCommand.cpp \
 
 OBJ		=	$(SRC:Srcs/%.cpp=Objs/%.o)
 DEP		=	$(SRC:Srcs/%.cpp=Objs/%.d)

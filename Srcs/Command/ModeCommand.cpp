@@ -153,7 +153,7 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
 				if(sign == true && chan_modes_save.find((it.operator*().at(1))) == std::string::npos)
 				{
 					std::cout << "add mode t (restrict usage of the TOPIC)" << std::endl;
-					channel->setModes(channel->getModes() + "t");
+					channel->setModes(channel->getModes() + "+t");
 					std::cout << YELLOW << channel->getModes() << RESET << std::endl;
 				}
 				else if (sign == false)
@@ -166,7 +166,7 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
 						std::size_t pos = chan_modes_save.find(needle);
 						std::cout << YELLOW << "chan_modes: " << chan_modes_save << " mode sauv dans chan: " << channel->getModes() << RESET <<std::endl; 
 						std::cout << "pour test si on enleve alors qu'y a pas pos= " << pos << std::endl;
-						chan_modes_save.erase(pos, 1);
+						chan_modes_save.erase(pos -1, 2);
 						std::cout << YELLOW << "DEBUG: newchanmod after delete: " << chan_modes_save << RESET << std::endl;
 						channel->setModes(chan_modes_save);
 					}
@@ -182,7 +182,7 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
 					if (chan_modes_save.find(needle) != std::string::npos)
 					{
 						std::size_t pos = chan_modes_save.find(needle);
-						chan_modes_save.erase(pos, 1);
+						chan_modes_save.erase(pos -1, 2);
 						std::cout << YELLOW << "DEBUG: new chan_mode after delete: " << chan_modes_save << RESET << std::endl;
 						channel->setModes(chan_modes_save);
 						channel->setMaxclients(50); //(la valeur max qu'on a fixé sans limite)
@@ -251,7 +251,7 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
 					std::cout << RED << "je suis dans le +l apres ++it: " << (*it) << RESET << std::endl;
 					size = (*it);
 					std::cout << "size transmis pour le mode l dans chan" << size << std::endl;
-					channel->setModes(channel->getModes() + "l");
+					channel->setModes(channel->getModes() + "+l");
 
 					// std::stringstream sstream(size);
 					// size_t result = std::stoi(size);

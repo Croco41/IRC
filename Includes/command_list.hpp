@@ -146,11 +146,19 @@ class ModeCommand : public Command
 		void mode_channel(Client *client, Channel *channel, std::vector<std::string> arg);
 };
 
+<<<<<<< HEAD
 class QuitCommand : public Command
 {
 	public:
 		QuitCommand(Server *server);
 		~QuitCommand();
+=======
+class OperCommand : public Command
+{
+	public:
+		OperCommand(Server *server);
+		~OperCommand();
+>>>>>>> 992e1cf151d1b89fab7d267a6b1ee134225eee80
 
 		void execute(Client *client, std::vector<std::string> arg);
 };
