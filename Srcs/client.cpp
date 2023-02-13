@@ -211,6 +211,8 @@ void	Client::join_channel(Channel *channel)
 	if (channel->getNbclients() != 0)
 	{
 		channel->addClient(this);
+		if (channel->client_is_operator(this) == true)
+			channel->addOperator(this);
 		setChannel(channel);
 	}
 	else

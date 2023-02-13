@@ -19,6 +19,7 @@
 #define ERR_NOTONCHANNEL(source, channel)		"442 " + source + " " + channel + " :This user is not a member of this channel"
 #define ERR_NEEDMOREPARAMS(source, command)		"461 " + source + " " + command + " :Not enough parameters"
 #define ERR_ALREADYREGISTERED(source)			"462 " + source + " :You may not reregister, you already have!"
+#define ERR_PASSWDMISMATCH(source)				"464 " + source + " :Is NOT the correct password for the given name."
 #define ERR_CHANNELISFULL(source, channel)		"471 " + source + " " + channel + " :This channel can't accept more clients"
 #define ERR_UNKNOWNMODE(source, unkmode)		"472 " + source + " " + unkmode + " :The mode is unknown"
 #define ERR_BADCHANNELKEY(source, channel)		"475 " + source + " " + channel + " :Cannot join channel, please verify your password"
@@ -33,6 +34,7 @@
 #define RPL_CHANNELMODEIS(target, modes, param)		"324 MODE " + target + " " + modes + " " + param
 #define RPL_NAMREPLY(source, channel, users)    "353 " + source + " = " + channel + " :" + users
 #define RPL_ENDOFNAMES(source, channel)			"366 " + source + " " + channel + " :End of /NAMES list."
+#define RPL_YOUREOPER(source)					"381 " + source + " ::You are now an IRC operator"
 
 //Réponses suite aux commandes (custom)
 #define RPL_JOIN(source, channel)				":" + source + " JOIN :" + channel	

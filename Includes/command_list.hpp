@@ -137,4 +137,13 @@ class ModeCommand : public Command
 		void mode_channel(Client *client, Channel *channel, std::vector<std::string> arg);
 };
 
+class OperCommand : public Command
+{
+	public:
+		OperCommand(Server *server);
+		~OperCommand();
+
+		void execute(Client *client, std::vector<std::string> arg);
+};
+
 #endif
