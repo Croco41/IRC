@@ -14,6 +14,7 @@ Channel::Channel(const std::string &name, const std::string &password, Client *a
 	setMaxclients(50);
 	setNbclients(0);
 	setModes("");
+	setTopic("");
 	return;
 }
 
@@ -88,6 +89,11 @@ std::string    Channel::getModes() const
 	return(this->_modes);
 }
 
+std::string    Channel::getTopic() const
+{
+	return(this->_topic);
+}
+
 // SETTERS
 void		Channel::setPassword(const std::string password)
 {
@@ -112,6 +118,11 @@ void		Channel::setNboperators(const size_t nboperators)
 void    Channel::setModes(const std::string &modes) 
 {
 	_modes = modes;
+}
+
+void    Channel::setTopic(const std::string &topic) 
+{
+	_topic = topic;
 }
 
 // FCT MEMBRES

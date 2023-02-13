@@ -233,7 +233,14 @@ void	Client::join_channel(Channel *channel)
 	reply(RPL_ENDOFNAMES(_nickname, channel->getName()));
 	//Send a message to all clients in the channel to notify them of the current client joining
 	channel->sendall(RPL_JOIN(getPrefix(), channel->getName()));
-	
+	if(channel->getTopic() == "")
+	{
+		reply(RPL_NOTOPIC(getNickname(), channel->getName()));
+	}
+	else
+	{
+		reply(RPL_TOPIC(getNickname(), channel->getName(), channel->getTopic()));
+	}	
 	std::cout << _nickname << " has joined channel " << channel->getName() << std::endl;
 	std::cout << YELLOW << _nickname << "estdans les channel suivants: " << getListChannel() << RESET << std::endl;
 	std::cout << GREEN << "CLIENT : join_channel - end " << channel->getName() << RESET << std::endl;

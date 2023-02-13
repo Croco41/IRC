@@ -32,6 +32,8 @@
 #define RPL_UMODEIS(target, modes)				"221 " + target + " " + modes
 //faudra rajouter <mode_params> si on code des modes avec apram dans chan.
 #define RPL_CHANNELMODEIS(target, modes, param)		"324 MODE " + target + " " + modes + " " + param
+#define RPL_NOTOPIC(source, channel)			"331 " + source + " " + channel + " :No topic is set"
+#define RPL_TOPIC(source, channel, topic)			"332 " + source + " " + channel + " " + topic
 #define RPL_NAMREPLY(source, channel, users)    "353 " + source + " = " + channel + " :" + users
 #define RPL_ENDOFNAMES(source, channel)			"366 " + source + " " + channel + " :End of /NAMES list."
 #define RPL_YOUREOPER(source)					"381 " + source + " ::You are now an IRC operator"
@@ -45,5 +47,6 @@
 #define RPL_NICK(source, newnick)				":" + source + " NICK :" + newnick
 #define RPL_MODE_NORIGHT(source, target, message)  ":" + source + " MODE " + target + " :" + message
 #define RPL_MODE(source, target, modes, param)         ":" + source + " MODE " + target + " :" + modes + " " + param
+#define RPL_TOPICALL(source, channel, topic)         ":" + source + " TOPIC " + channel + " " + topic
 
 #endif

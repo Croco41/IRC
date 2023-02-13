@@ -146,4 +146,13 @@ class OperCommand : public Command
 		void execute(Client *client, std::vector<std::string> arg);
 };
 
+class TopicCommand : public Command
+{
+	public:
+		TopicCommand(Server *server);
+		~TopicCommand();
+
+		void execute(Client *client, std::vector<std::string> arg);
+};
+
 #endif
