@@ -222,7 +222,7 @@ void	Client::join_channel(Channel *channel)
 //	_channel = channel; // Store a reference to the channel the client has joined
 	//setChannel(channel);
 	// Get a list of nicknames of clients in the channel
-	const std::vector<std::string>& nicknames = channel->getNicknames();
+	const std::vector<std::string>& nicknames = channel->getNicknamesClients();
 	// Concatenate the nicknames into a single string, separated by spaces
 	std::string users;
 	for (std::vector<std::string>::const_iterator it = nicknames.begin(); it != nicknames.end(); ++it) 

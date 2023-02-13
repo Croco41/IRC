@@ -54,6 +54,21 @@ size_t		Channel::getNboperators() const
 	return (_nboperators);
 }
 
+std::string	Channel::getNicknamesList()
+{
+	std::string list_clients;
+	
+	for (std::vector<Client *>::iterator it = _clients.begin(); it != _clients.end(); it++)
+	{
+		std::cout << "valeur de it:" << (*it) << "name: " << std::endl;
+		Client *client = it.operator*();
+		std::string name = client->getNickname(); 
+		std::cout << "name it: " << name << std::endl;
+		list_clients.append(name);
+	}
+	return(list_clients);
+}
+
 std::vector<std::string>	Channel::getNicknames()
 { 
 	std::vector<std::string>	nicknames;
@@ -82,6 +97,21 @@ std::vector<std::string>	Channel::getNicknamesOpe()
 		// std::cout << YELLOW << (*it)->getNickname() << RESET << std::endl;
 	}
 	return (nicknamesope);
+}
+
+std::vector<std::string>	Channel::getNicknamesClients()
+{
+	std::vector<std::string>	nicknamesclients;
+
+	for(std::vector<Client *>::iterator it = _clients.begin(); it != _clients.end(); it++)
+	{
+		Client *clients = it.operator*();
+		//on a vraiment fait un ternaire??^^
+		nicknamesclients.push_back((_admin == clients ? "@" : "") + (*it)->getNickname());
+		// 	// a supprimer apres debug:
+		// std::cout << YELLOW << (*it)->getNickname() << RESET << std::endl;
+	}
+	return (nicknamesclients);
 }
 
 std::string    Channel::getModes() const

@@ -48,5 +48,6 @@
 #define RPL_MODE_NORIGHT(source, target, message)  ":" + source + " MODE " + target + " :" + message
 #define RPL_MODE(source, target, modes, param)         ":" + source + " MODE " + target + " :" + modes + " " + param
 #define RPL_TOPICALL(source, channel, topic)         ":" + source + " TOPIC " + channel + " " + topic
+#define RPL_KICK(source, channel, target, message)         ":" + source + " KICK " + channel + " " + target + " " + message
 
 #endif

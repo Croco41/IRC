@@ -155,4 +155,13 @@ class TopicCommand : public Command
 		void execute(Client *client, std::vector<std::string> arg);
 };
 
+class KickCommand : public Command
+{
+	public:
+		KickCommand(Server *server);
+		~KickCommand();
+
+		void execute(Client *client, std::vector<std::string> arg);
+};
+
 #endif

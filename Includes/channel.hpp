@@ -21,8 +21,10 @@ class Channel
 		size_t						getMaxclients() const;
 		size_t						getNbclients() const;
 		size_t						getNboperators() const; //ok
+		std::string					getNicknamesList();
 		std::vector<std::string>	getNicknames();
 		std::vector<std::string>	getNicknamesOpe(); //en cours ??? pas certaines de ce que je fais
+		std::vector<std::string>	getNicknamesClients(); //en cours ??? pas certaines de ce que je fais
 		std::string					getModes() const;
 		std::string					getTopic() const;
 
