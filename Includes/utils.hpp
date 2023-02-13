@@ -16,7 +16,7 @@
 #define ERR_ERRONEUSNICKNAME(source)			"432 " + source + " :This nickname is Invalid" 
 #define ERR_NICKNAMEINUSE(source)				"433 " + source + " :This nickname is already in use"
 #define ERR_USERNOTINCHANNEL(source, target, channel) "441 " + source + " " + target + " " + channel + " :the target user of the command is not on channel"
-#define ERR_NOTONCHANNEL(source, channel)		"442 " + source + " " + channel + " :Client is not a member of this channel"
+#define ERR_NOTONCHANNEL(source, channel)		"442 " + source + " " + channel + " :This user is not a member of this channel"
 #define ERR_NEEDMOREPARAMS(source, command)		"461 " + source + " " + command + " :Not enough parameters"
 #define ERR_ALREADYREGISTERED(source)			"462 " + source + " :You may not reregister, you already have!"
 #define ERR_CHANNELISFULL(source, channel)		"471 " + source + " " + channel + " :This channel can't accept more clients"

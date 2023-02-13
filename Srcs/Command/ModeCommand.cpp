@@ -79,9 +79,10 @@ void ModeCommand::mode_user(Client *client, std::vector<std::string> arg)
                     else if (sign == false && (client_modes.find((it.operator*().at(1))) != std::string::npos)) //remove mode to user
                     {
                         std::cout << "remove mode" << std::endl;
-						std::string needle = (*it);
+						std::string needle;
+						needle.push_back((it.operator*().at(1)));
 						std::size_t pos = client_modes.find(needle);
-						client_modes.erase(pos, 2);
+						client_modes.erase(pos -1, 2);
 						std::cout << GREEN <<  "remove mode, size de new clientmodes (après erase): " << client_modes << client_modes.size() << RESET << std::endl;
                         client->setModes(client_modes);
                     }
@@ -112,8 +113,6 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
     int arg_size = arg.size();
 	std::string size = "";
 	std::string chan_modes_save = channel->getModes();
-	//std::string target = arg.at(0);
-	// Channel *targetchannel = _server->getChannel();
 	std::cout << PURPLE << channel->getName() << RESET << std::endl;
     if (arg_size == 1) //SI JUSTE LA TARGET
     {
@@ -131,7 +130,7 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
 			client->reply(ERR_CHANOPRIVSNEEDED(client->getNickname(), channel->getName()));
 			return;
 		}
-		else if(channel->client_is_inchannel(client) == false)
+		else if(channel->client_is_inchannel(client) == false) //a tester
 		{
 			client->reply(ERR_NOTONCHANNEL(client->getNickname(), channel->getName()));
 			return;
@@ -144,22 +143,14 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
             else if ((it.operator*().at(0) ==  '+'))
                 sign = true;
 			std::cout << "value cherchée après + -: " << it.operator*().at(1) << std::endl;
-			//std::string chan_modes_save = channel->getModes();
-			// if(channel->client_is_operator(client) == false)
-			// {
-			// 		client->reply(ERR_CHANOPRIVSNEEDED(client->getNickname(), channel->getName()));	
-			// } //else if
             if (modes.find((it.operator*().at(1))) != std::string::npos && ((it.operator*().at(1)) == 't'))
             {
                 // t =>   The channel flag 't' is used to restrict the usage of the TOPIC
-   					//command to channel operators.(pour nous channel operators= admin ou operator)
-				//1-check si le user est operateur et à les droits de faire ça
 				if(sign == true && chan_modes_save.find((it.operator*().at(1))) == std::string::npos)
 				{
 					std::cout << "add mode t (restrict usage of the TOPIC)" << std::endl;
 					channel->setModes(channel->getModes() + "t");
 					std::cout << YELLOW << channel->getModes() << RESET << std::endl;
-					//channel->sendall(RPL_MODE(client->getPrefix(), channel->getName(), channel->getModes()));
 				}
 				else if (sign == false)
 				{
@@ -190,6 +181,10 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
 					channel->setModes(chan_modes_save);
 					channel->setMaxclients(50); //(la valeur max qu'on a fixé sans limite)
 				}
+			}
+			else if (sign == true && chan_modes_save.find((it.operator*().at(1))) != std::string::npos && ((it.operator*().at(1)) == 'l'))
+			{
+				std::cout << "mode +l => besoin d'un parametre " << std::endl;
 			}
 			else if ((it.operator*().at(1)) == 'o')
 			{
@@ -224,6 +219,7 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
 	}
 	else if (arg_size == 3)
 	{
+		std::cout << "je suis dans channel mode arg3" << std::endl;
 		bool sign = true;
 		//bool unknown_mode = false;
         std::string modes(CHANNEL_MODES);
@@ -246,11 +242,14 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
                 sign = true;
 			if ((it.operator*().at(1)) == 'l')
 			{
-				++it;
+				std::cout << RED << "je suis dans le +l: " << (*it) << RESET << std::endl;
+				//++it;
 				if (sign == false)
 					std::cout << "ERROR: chan mode -l prend pas de param (rien renvoyé)" << std::endl;
 				else if (sign == true && chan_modes_save.find((it.operator*().at(1))) == std::string::npos)
 				{
+					++it;
+					std::cout << RED << "je suis dans le +l apres ++it: " << (*it) << RESET << std::endl;
 					size = (*it);
 					std::cout << "size transmis pour le mode l dans chan" << size << std::endl;
 					channel->setModes(channel->getModes() + "l");

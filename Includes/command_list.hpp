@@ -22,7 +22,7 @@ class Command;
 // more RPL_INVITELIST (336) numerics, followed by one RPL_ENDOFINVITELIST (337) numeric.
 // l => Type C: Modes that change a setting on a channel. These modes MUST have a parameter when being set
 //, and MUST NOT have a parameter when being unset.
-#define CHANNEL_MODES "tilo" //
+#define CHANNEL_MODES "tlo" //ki//
 // CHANNEL MODES :
 // for users :
 //     - o : channel operator

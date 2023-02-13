@@ -69,6 +69,20 @@ bool    Client::getRegistered() const
 	return(this->_isregistered);
 }
 
+std::string	Client::getListChannel()
+{
+	std::string list_channel;
+	for (std::vector<Channel *>::iterator it = _Cchannels.begin(); it != _Cchannels.end(); it++)
+	{
+		std::cout << "valeur de it:" << (*it) << "name: " << std::endl;
+		Channel *channel = it.operator*();
+		std::string name = channel->getName(); 
+		std::cout << "name it: " << name << std::endl;
+		list_channel.append(name);
+	}
+	return(list_channel);
+}
+
 std::vector<Channel *>	Client::getChannel() const
 {
 	return(_Cchannels);
@@ -195,9 +209,13 @@ void	Client::join_channel(Channel *channel)
 {
 	std::cout << GREEN << "\nCLIENT : join_channel - start " << channel->getName() << RESET << std::endl;
 	if (channel->getNbclients() != 0)
+	{
 		channel->addClient(this);
+		setChannel(channel);
+	}
 	else
 		channel->setNbclients(1);
+	
 	std::cout << "client : " << getNickname() << " has been added to channel : " << channel->getName() << std::endl; 
 //	_channel = channel; // Store a reference to the channel the client has joined
 	//setChannel(channel);
@@ -214,7 +232,8 @@ void	Client::join_channel(Channel *channel)
 	//Send a message to all clients in the channel to notify them of the current client joining
 	channel->sendall(RPL_JOIN(getPrefix(), channel->getName()));
 	
-	std::cout << _nickname << " has joined channel " << channel->getName() << std::endl; 
+	std::cout << _nickname << " has joined channel " << channel->getName() << std::endl;
+	std::cout << YELLOW << _nickname << "estdans les channel suivants: " << getListChannel() << RESET << std::endl;
 	std::cout << GREEN << "CLIENT : join_channel - end " << channel->getName() << RESET << std::endl;
 }
 

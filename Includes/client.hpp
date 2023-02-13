@@ -31,6 +31,7 @@ class Client
 		bool					getOperator() const; //ok
 		bool					getRegistered() const;
 		std::vector<Channel *>	getChannel() const;
+		std::string				getListChannel();
 
 		//fonctions pour les messages
 		std::string		getPrefix() const;
