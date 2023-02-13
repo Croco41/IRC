@@ -10,11 +10,7 @@ ModeCommand::~ModeCommand()
 	return;
 }
 
-// 		- a : away
-// - i : invisible
-// - w : wallops
-// - r : restricted
-// - o : operator
+// 		- a : away// - i : invisible// - w : wallops// - r : restricted// - o : operator
 void ModeCommand::mode_user(Client *client, std::vector<std::string> arg)
 {
     int arg_size = arg.size();
@@ -62,12 +58,18 @@ void ModeCommand::mode_user(Client *client, std::vector<std::string> arg)
                     //if (sign == true && (client_modes.find((*it)) == std::string::npos))
 					if (((it.operator*().at(1)) == 'a'))
 					{
-						std::cout << RED << "The flag 'a' SHALL NOT be toggled using the MODE command,instead use of the AWAY command is REQUIRED" << RESET << std::endl;
+						std::string reply = "The flag 'a' SHALL NOT be toggled using the MODE command,instead use of the AWAY command is REQUIRED";
+						client->reply(reply);
+						std::cout << RED << reply << RESET << std::endl;
 						//client->writetosend(RPL_MODE_AWAY(client->getPrefix(), message));
 						//client->reply_command(RPL_MODE_NORIGHT(client->getPrefix(), client->getNickname(), message));
 					}
 					else if (sign == true && ((it.operator*().at(1)) == 'o' || (it.operator*().at(1)) == 'O'))
-						std::cout << RED << "You need to use OPER command to make an operator" << RESET << std::endl;
+					{
+						std::string reply = "You need to use OPER command to make an operator";
+						client->reply(reply);
+						std::cout << RED << reply << RESET << std::endl;
+					}
 					else if (sign == true && (client_modes.find((it.operator*().at(1))) == std::string::npos)) //add mode to user
                     {
                         std::cout << "add mode" << std::endl;
@@ -75,7 +77,11 @@ void ModeCommand::mode_user(Client *client, std::vector<std::string> arg)
 						//client->setModes(client->getModes() + (it.operator*().at(0)) + (it.operator*().at(1)));
                     }
 					else if (sign == false && ((it.operator*().at(1)) == 'r'))
-						std::cout << RED << "You can't make yourself unrestricted" << RESET << std::endl;
+					{
+						std::string reply = "You can't make yourself unrestricted";
+						client->reply(reply);
+						std::cout << RED << reply << RESET << std::endl;
+					}
                     else if (sign == false && (client_modes.find((it.operator*().at(1))) != std::string::npos)) //remove mode to user
                     {
                         std::cout << "remove mode" << std::endl;
@@ -122,8 +128,6 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
     else if (arg_size == 2) //SI TARGET + MODES TO CHANGE
     {
         bool sign = true;
-		
-		//bool unknown_mode = false;
         std::string modes(CHANNEL_MODES);
 		if(channel->client_is_operator(client) == false)
 		{
@@ -168,48 +172,33 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
 					}
 				}
 			}
-			else if (sign == false && chan_modes_save.find((it.operator*().at(1))) != std::string::npos && ((it.operator*().at(1)) == 'l'))
+			else if (sign == false && ((it.operator*().at(1)) == 'l'))
 			{
-				std::cout << "remove mode l (limite of users in this chan)" << std::endl;
-				std::string needle;
-				needle.push_back((it.operator*().at(1)));
-				if (chan_modes_save.find(needle) != std::string::npos)
+				if (chan_modes_save.find((it.operator*().at(1))) != std::string::npos)
 				{
-					std::size_t pos = chan_modes_save.find(needle);
-					chan_modes_save.erase(pos, 1);
-					std::cout << YELLOW << "DEBUG: newchanmod after delete: " << chan_modes_save << RESET << std::endl;
-					channel->setModes(chan_modes_save);
-					channel->setMaxclients(50); //(la valeur max qu'on a fixé sans limite)
+					std::cout << "remove mode l (limite of users in this chan)" << std::endl;
+					std::string needle;
+					needle.push_back((it.operator*().at(1)));
+					if (chan_modes_save.find(needle) != std::string::npos)
+					{
+						std::size_t pos = chan_modes_save.find(needle);
+						chan_modes_save.erase(pos, 1);
+						std::cout << YELLOW << "DEBUG: new chan_mode after delete: " << chan_modes_save << RESET << std::endl;
+						channel->setModes(chan_modes_save);
+						channel->setMaxclients(50); //(la valeur max qu'on a fixé sans limite)
+					}
 				}
 			}
-			else if (sign == true && chan_modes_save.find((it.operator*().at(1))) != std::string::npos && ((it.operator*().at(1)) == 'l'))
+			else if (sign == true && ((it.operator*().at(1)) == 'l'))
 			{
-				std::cout << "mode +l => besoin d'un parametre " << std::endl;
+				std::string reply = "mode +l => besoin d'un parametre: nombre d'utilisateur ";
+				client->reply(reply);
+				std::cout << RED << reply << RESET << std::endl;
 			}
 			else if ((it.operator*().at(1)) == 'o')
 			{
 				std::string reply = "You need to use OPER command to make an operator or Mode user to do -o";
 				client->reply(reply);
-				// if(sign == true)
-				// {
-				// 	reply = "You need to use OPER command to make an operator";
-				// 	std::cout << RED << reply << RESET << std::endl;
-				// 	client->reply(reply);
-				// }
-				// if (sign == false)
-				// {
-				// 	if(client->getOperator() == true)
-				// 	{
-				// 		client->setOperator(0);
-				// 		//client target??
-				// 		client->reply_command(RPL_MODE(client->getPrefix(), client->getNickname(), client->getModes()));
-				// 	}
-				// 	else
-				// 	{
-				// 		std::cout << RED << "You need to be an operator to do -o(not only admin or standard user)" << RESET << std::endl;	
-				// 	}
-					
-				// }
 			}
 			else 
 			{
@@ -240,12 +229,22 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
                 sign = false;
             else if ((it.operator*().at(0) ==  '+'))
                 sign = true;
-			if ((it.operator*().at(1)) == 'l')
+			if ((it.operator*().at(1)) == 'o')
+			{
+				std::string reply = "You need to use OPER command to make an operator (or Mode user to do -o)";
+				client->reply(reply);
+				break;
+			}
+			else if ((it.operator*().at(1)) == 'l')
 			{
 				std::cout << RED << "je suis dans le +l: " << (*it) << RESET << std::endl;
 				//++it;
 				if (sign == false)
-					std::cout << "ERROR: chan mode -l prend pas de param (rien renvoyé)" << std::endl;
+				{
+					std::string reply = "ERROR: chan mode -l ne prend pas de paramètre";
+					client->reply(reply);
+					std::cout << RED << reply << RESET << std::endl;
+				}
 				else if (sign == true && chan_modes_save.find((it.operator*().at(1))) == std::string::npos)
 				{
 					++it;
