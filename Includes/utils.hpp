@@ -15,11 +15,14 @@
 #define ERR_NONICKNAMEGIVEN(source, command)	"431 " + source + " " + command + " :No new nickname has been given"
 #define ERR_ERRONEUSNICKNAME(source)			"432 " + source + " :This nickname is Invalid" 
 #define ERR_NICKNAMEINUSE(source)				"433 " + source + " :This nickname is already in use"
+#define ERR_USERNOTINCHANNEL(source, target, channel) "441 " + source + " " + target + " " + channel + " :the target user of the command is not on channel"
 #define ERR_NOTONCHANNEL(source, channel)		"442 " + source + " " + channel + " :Client is not a member of this channel"
 #define ERR_NEEDMOREPARAMS(source, command)		"461 " + source + " " + command + " :Not enough parameters"
 #define ERR_ALREADYREGISTERED(source)			"462 " + source + " :You may not reregister, you already have!"
 #define ERR_CHANNELISFULL(source, channel)		"471 " + source + " " + channel + " :This channel can't accept more clients"
+#define ERR_UNKNOWNMODE(source, unkmode)		"472 " + source + " " + unkmode + " :The mode is unknown"
 #define ERR_BADCHANNELKEY(source, channel)		"475 " + source + " " + channel + " :Cannot join channel, please verify your password"
+#define ERR_CHANOPRIVSNEEDED(source, channel)   "482 " + source + " " + channel + " :You're not channel creator or operator"
 #define ERR_UMODEUNKNOWNFLAG()					"501 : Mode flag was not recognised"
 #define ERR_USERSDONTMATCH()					"502 : Cannot change mode for other users"
 
@@ -27,7 +30,7 @@
 #define RPL_WELCOME(source)						"001 " + source + " :Welcome to the ft_irc network " + source
 #define RPL_UMODEIS(target, modes)				"221 " + target + " " + modes
 //faudra rajouter <mode_params> si on code des modes avec apram dans chan.
-#define RPL_CHANNELMODEIS(target, modes)		"324 " + target + " " + modes
+#define RPL_CHANNELMODEIS(target, modes, param)		"324 MODE " + target + " " + modes + " " + param
 #define RPL_NAMREPLY(source, channel, users)    "353 " + source + " = " + channel + " :" + users
 #define RPL_ENDOFNAMES(source, channel)			"366 " + source + " " + channel + " :End of /NAMES list."
 
@@ -39,6 +42,6 @@
 #define RPL_NOTICE(source, target, message)		":" + source + " NOTICE " + target + " :" + message
 #define RPL_NICK(source, newnick)				":" + source + " NICK :" + newnick
 #define RPL_MODE_NORIGHT(source, target, message)  ":" + source + " MODE " + target + " :" + message
-#define RPL_MODE(source, target, modes)         ":" + source + " MODE " + target + " :" + modes
+#define RPL_MODE(source, target, modes, param)         ":" + source + " MODE " + target + " :" + modes + " " + param
 
 #endif

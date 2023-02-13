@@ -22,7 +22,7 @@ class Channel
 		size_t						getNbclients() const;
 		size_t						getNboperators() const; //ok
 		std::vector<std::string>	getNicknames();
-		std::vector<std::string>	getNicknamesOpe(); //en cours
+		std::vector<std::string>	getNicknamesOpe(); //en cours ??? pas certaines de ce que je fais
 		std::string					getModes() const;
 
 		// SETTERS
@@ -37,6 +37,8 @@ class Channel
 		void			removeClient(Client *client);
 		void			addOperator(Client *operators); //ok àtester
 		void			removeOperator(Client *operators); //ok à tester +ajout quand -o à faire
+		bool			client_is_operator(Client *client); //à faire puis tester;
+		bool			client_is_inchannel(Client *client); // àtester
 		void			sendall(const std::string& message);
 		void			sendall(const std::string& message, Client *exclude);
 

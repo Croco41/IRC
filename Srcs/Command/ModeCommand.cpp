@@ -100,7 +100,7 @@ void ModeCommand::mode_user(Client *client, std::vector<std::string> arg)
             {
                 client->reply(ERR_UMODEUNKNOWNFLAG());
             }
-			client->reply_command(RPL_MODE(client->getPrefix(), client->getNickname(), client->getModes()));
+			client->reply_command(RPL_MODE(client->getPrefix(), client->getNickname(), client->getModes(), ""));
 
 		}
 	}
@@ -110,21 +110,32 @@ void ModeCommand::mode_user(Client *client, std::vector<std::string> arg)
 void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std::string> arg)
 {
     int arg_size = arg.size();
-	std::string modes = channel->getModes();
+	std::string size = "";
+	std::string chan_modes_save = channel->getModes();
 	//std::string target = arg.at(0);
 	// Channel *targetchannel = _server->getChannel();
 	std::cout << PURPLE << channel->getName() << RESET << std::endl;
     if (arg_size == 1) //SI JUSTE LA TARGET
     {
-        client->reply(RPL_CHANNELMODEIS(channel->getName(), modes)); //324 To answer a query about channel's mode
+        client->reply(RPL_CHANNELMODEIS(channel->getName(), channel->getModes(), size)); //324 To answer a query about channel's mode
         return;
     }
     else if (arg_size == 2) //SI TARGET + MODES TO CHANGE
     {
-
         bool sign = true;
-		bool unknown_mode = false;
+		
+		//bool unknown_mode = false;
         std::string modes(CHANNEL_MODES);
+		if(channel->client_is_operator(client) == false)
+		{
+			client->reply(ERR_CHANOPRIVSNEEDED(client->getNickname(), channel->getName()));
+			return;
+		}
+		else if(channel->client_is_inchannel(client) == false)
+		{
+			client->reply(ERR_NOTONCHANNEL(client->getNickname(), channel->getName()));
+			return;
+		}
         for (std::vector<std::string>::iterator it = arg.begin() + 1; it != arg.end(); ++it) 
         {
 			std::cout << "value tested debut: " << (*it) << std::endl;
@@ -133,52 +144,148 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
             else if ((it.operator*().at(0) ==  '+'))
                 sign = true;
 			std::cout << "value cherchée après + -: " << it.operator*().at(1) << std::endl;
-            if (modes.find((it.operator*().at(1))) != std::string::npos)
+			//std::string chan_modes_save = channel->getModes();
+			// if(channel->client_is_operator(client) == false)
+			// {
+			// 		client->reply(ERR_CHANOPRIVSNEEDED(client->getNickname(), channel->getName()));	
+			// } //else if
+            if (modes.find((it.operator*().at(1))) != std::string::npos && ((it.operator*().at(1)) == 't'))
             {
-                std::string client_modes = client->getModes();
-				std::cout << PURPLE << "client_modes: " << client_modes << RESET << std::endl;
-                //if (sign == true && (client_modes.find((*it)) == std::string::npos))
-				if (((it.operator*().at(1)) == 'a'))
+                // t =>   The channel flag 't' is used to restrict the usage of the TOPIC
+   					//command to channel operators.(pour nous channel operators= admin ou operator)
+				//1-check si le user est operateur et à les droits de faire ça
+				if(sign == true && chan_modes_save.find((it.operator*().at(1))) == std::string::npos)
 				{
-					std::cout << RED << "The flag 'a' SHALL NOT be toggled using the MODE command,instead use of the AWAY command is REQUIRED" << RESET << std::endl;
-					//client->writetosend(RPL_MODE_AWAY(client->getPrefix(), message));
-					//client->reply_command(RPL_MODE_NORIGHT(client->getPrefix(), client->getNickname(), message));
+					std::cout << "add mode t (restrict usage of the TOPIC)" << std::endl;
+					channel->setModes(channel->getModes() + "t");
+					std::cout << YELLOW << channel->getModes() << RESET << std::endl;
+					//channel->sendall(RPL_MODE(client->getPrefix(), channel->getName(), channel->getModes()));
 				}
-				else if (sign == true && ((it.operator*().at(1)) == 'o'))
-					std::cout << RED << "You need to use OPER command to make an operator" << RESET << std::endl;
-				else if (sign == true && (client_modes.find((it.operator*().at(1))) == std::string::npos)) //add mode to user
-                {
-                    std::cout << "add mode" << std::endl;
-					client->setModes(client->getModes() + (*it));
-					//client->setModes(client->getModes() + (it.operator*().at(0)) + (it.operator*().at(1)));
-                }
-				else if (sign == false && ((it.operator*().at(1)) == 'r'))
-					std::cout << RED << "You can't make yourself unrestricted" << RESET << std::endl;
-                else if (sign == false && (client_modes.find((it.operator*().at(1))) != std::string::npos)) //remove mode to user
-                {
-                    std::cout << "remove mode" << std::endl;
-					std::string needle = (*it);
-					std::size_t pos = client_modes.find(needle);
-					client_modes.erase(pos, 2);
-					std::cout << GREEN <<  "remove mode, size de new clientmodes (après erase): " << client_modes << client_modes.size() << RESET << std::endl;
-                    client->setModes(client_modes);
-                }
-				if (sign == false && ((it.operator*().at(1)) == 'o'))
-					client->setOperator(0);
-            }
-            else
-			{
-                unknown_mode = true;
-				std::cout << RED << "je rentre ici dans unknow mode?? " << RESET << std::endl;
+				else if (sign == false)
+				{
+					std::cout << "remove mode t (unrestrict usage of the TOPIC)" << std::endl;
+					std::string needle;
+					needle.push_back((it.operator*().at(1)));
+					if (chan_modes_save.find(needle) != std::string::npos)
+					{
+						std::size_t pos = chan_modes_save.find(needle);
+						std::cout << YELLOW << "chan_modes: " << chan_modes_save << " mode sauv dans chan: " << channel->getModes() << RESET <<std::endl; 
+						std::cout << "pour test si on enleve alors qu'y a pas pos= " << pos << std::endl;
+						chan_modes_save.erase(pos, 1);
+						std::cout << YELLOW << "DEBUG: newchanmod after delete: " << chan_modes_save << RESET << std::endl;
+						channel->setModes(chan_modes_save);
+					}
+				}
 			}
-        }
-		if (unknown_mode == true)
+			else if (sign == false && chan_modes_save.find((it.operator*().at(1))) != std::string::npos && ((it.operator*().at(1)) == 'l'))
+			{
+				std::cout << "remove mode l (limite of users in this chan)" << std::endl;
+				std::string needle;
+				needle.push_back((it.operator*().at(1)));
+				if (chan_modes_save.find(needle) != std::string::npos)
+				{
+					std::size_t pos = chan_modes_save.find(needle);
+					chan_modes_save.erase(pos, 1);
+					std::cout << YELLOW << "DEBUG: newchanmod after delete: " << chan_modes_save << RESET << std::endl;
+					channel->setModes(chan_modes_save);
+					channel->setMaxclients(50); //(la valeur max qu'on a fixé sans limite)
+				}
+			}
+			else if ((it.operator*().at(1)) == 'o')
+			{
+				std::string reply = "You need to use OPER command to make an operator or Mode user to do -o";
+				client->reply(reply);
+				// if(sign == true)
+				// {
+				// 	reply = "You need to use OPER command to make an operator";
+				// 	std::cout << RED << reply << RESET << std::endl;
+				// 	client->reply(reply);
+				// }
+				// if (sign == false)
+				// {
+				// 	if(client->getOperator() == true)
+				// 	{
+				// 		client->setOperator(0);
+				// 		//client target??
+				// 		client->reply_command(RPL_MODE(client->getPrefix(), client->getNickname(), client->getModes()));
+				// 	}
+				// 	else
+				// 	{
+				// 		std::cout << RED << "You need to be an operator to do -o(not only admin or standard user)" << RESET << std::endl;	
+				// 	}
+					
+				// }
+			}
+			else 
+			{
+				client->reply(ERR_UNKNOWNMODE(client->getNickname(), (*it)));
+			}
+		}
+	}
+	else if (arg_size == 3)
+	{
+		bool sign = true;
+		//bool unknown_mode = false;
+        std::string modes(CHANNEL_MODES);
+		if(channel->client_is_operator(client) == false)
+		{
+			client->reply(ERR_CHANOPRIVSNEEDED(client->getNickname(), channel->getName()));
+			return;
+		}
+		else if(channel->client_is_inchannel(client) == false)
+		{
+			client->reply(ERR_NOTONCHANNEL(client->getNickname(), channel->getName()));
+			return;
+		}
+        for (std::vector<std::string>::iterator it = arg.begin() + 1; it != arg.end(); ++it) 
         {
-            client->reply(ERR_UMODEUNKNOWNFLAG());
-        }
-		client->reply_command(RPL_MODE(client->getPrefix(), client->getNickname(), client->getModes()));
+			std::cout << "value tested debut: " << (*it) << std::endl;
+            if ((it.operator*().at(0) == '-'))
+                sign = false;
+            else if ((it.operator*().at(0) ==  '+'))
+                sign = true;
+			if ((it.operator*().at(1)) == 'l')
+			{
+				++it;
+				if (sign == false)
+					std::cout << "ERROR: chan mode -l prend pas de param (rien renvoyé)" << std::endl;
+				else if (sign == true && chan_modes_save.find((it.operator*().at(1))) == std::string::npos)
+				{
+					size = (*it);
+					std::cout << "size transmis pour le mode l dans chan" << size << std::endl;
+					channel->setModes(channel->getModes() + "l");
+
+					// std::stringstream sstream(size);
+					// size_t result = std::stoi(size);
+					// sstream >> result;
+					try
+					{
+						size_t result;
+						std::stringstream sstream(size);
+						sstream >> result;
+						std::cout << RED << "size en int pour l" << result << RESET << std::endl;
+						channel->setMaxclients(result);
+						//channel->setModes(channel->getModes()); // faut revoir ça
+						//channel->setParam(channel->getParam() + size);
+					}
+					catch(const std::exception& e)
+					{
+						std::cout << RED << "mauvais argument, pas un int " << RESET << std::endl;
+						std::cerr << e.what() << '\n';
+					}
+					break;
+				}
+				
+			}
+			else 
+			{
+				client->reply(ERR_UNKNOWNMODE(client->getNickname(), (*it)));
+			}
+		}
 
 	}
+	channel->sendall(RPL_MODE(client->getPrefix(), channel->getName(), channel->getModes(), size));
+	std::cout << GREEN << "mode du channel à la fin: " << channel->getModes() << RESET << std::endl;
 }
 
 
@@ -204,7 +311,7 @@ void ModeCommand::execute(Client *client, std::vector<std::string> arg)
 			if (client->getModes().find("o") != std::string::npos)
 			{
 				client->setOperator(1);
-				std::cout << "operator oui non ?" << client->getOperator() << std::endl; 
+				std::cout << "operator oui non ?" << client->getOperator() << std::endl;
 			}
 	}
 	else if (targetchannel)

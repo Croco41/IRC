@@ -11,7 +11,7 @@ Channel::Channel(const std::string &name, const std::string &password, Client *a
 	: _name(name), _password(password), _admin(admin), _clients()
 {
 	addClient(admin);
-	setMaxclients(10);
+	setMaxclients(50);
 	setNbclients(0);
 	setModes("");
 	return;
@@ -208,6 +208,29 @@ void		Channel::removeClient(Client *client)
 	}
 	// std::cout << "état du channel du client qu'on vient de remove : "  << client->getChannel() << RESET << std::endl;
 	std::cout << FIREBRICK << "CHANNEL : removeClient - end" << RESET << std::endl;
+}
+
+bool	Channel::client_is_inchannel(Client *client)
+{
+	for (std::vector<Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
+	{
+		std::cout << "client : " << it.operator*()->getNickname() << std::endl;
+		if (*it == client)
+		{
+			return(true);
+		}
+	}
+	return (false);
+}
+
+bool	Channel::client_is_operator(Client *client)
+{
+	if(client->getOperator() == true || (_admin == client))
+		return(true);
+	else
+	{
+		return(false);
+	}	
 }
 
 void		Channel::sendall(const std::string& message)

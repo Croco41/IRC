@@ -7,11 +7,21 @@ class Command;
 #include "server.hpp"
 #include "client.hpp"
 #include "utils.hpp"
+#include <iostream>
 #include <string>
 #include <algorithm>
 
 #define NICK_VALID_CHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-^_[]{}\\|"
 #define MODES_USER "aiwro"
+// t
+//type A modes are lists that can be viewed:
+// When the channel flag 'i' is set, new members are only accepted if
+  // their mask matches Invite-list (See section 4.3.2) or they have been
+   //invited by a channel operator.
+//Invite-Exception List "+I": Invite-exception lists are returned with zero or
+// more RPL_INVITELIST (336) numerics, followed by one RPL_ENDOFINVITELIST (337) numeric.
+// l => Type C: Modes that change a setting on a channel. These modes MUST have a parameter when being set
+//, and MUST NOT have a parameter when being unset.
 #define CHANNEL_MODES "tilo" //
 // CHANNEL MODES :
 // for users :
