@@ -90,6 +90,15 @@ class PongCommand : public Command
 		void execute(Client *client, std::vector<std::string> arg);
 };
 
+class WhoCommand : public Command
+{
+	public:
+		WhoCommand(Server *server);
+		~WhoCommand();
+
+		void execute(Client *client, std::vector<std::string> arg);
+};
+
 class JoinCommand : public Command
 {
 	public:

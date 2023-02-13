@@ -13,6 +13,7 @@ CommandHandler::CommandHandler(Server *server)
 	_commands["NICK"] = new NickCommand(_server);
 	_commands["MODE"] = new ModeCommand(_server);
 	_commands["QUIT"] = new QuitCommand(_server);
+	_commands["WHO"] = new WhoCommand(_server);
 
 	for (std::map<std::string, Command*>::iterator it = _commands.begin(); it != _commands.end(); it++)
 		std::cout << BLUE << it.operator*().first << RESET << std::endl;

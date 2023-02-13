@@ -33,6 +33,7 @@
 #define RPL_CHANNELMODEIS(target, modes, param)			"324 MODE " + target + " " + modes + " " + param
 #define RPL_NAMREPLY(source, channel, users)    		"353 " + source + " = " + channel + " :" + users
 #define RPL_ENDOFNAMES(source, channel)					"366 " + source + " " + channel + " :End of /NAMES list."
+#define RPL_WHOREPLY(source, channel, message)					"352 " + source + " :Users connected to channel " + channel + " :" + message
 
 //Réponses suite aux commandes (custom)
 #define RPL_JOIN(source, channel)						":" + source + " JOIN :" + channel	
