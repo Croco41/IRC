@@ -20,11 +20,11 @@ Server::~Server(void)
 
 	if (_clients.size())
 	{
-		typename std::map<int, Client *>::iterator it;
-		for (it = _clients.begin(); it != _clients.end(); ++it)
+		std::map<int, Client *>::iterator it_cl;
+		for (it_cl= _clients.begin(); it_cl != _clients.end(); ++it_cl)
 		{
-			close(it->first);
-			delete it->second;
+			close(it_cl->first);
+			delete it_cl->second;
 		}
 		_clients.clear();
 	}
@@ -35,7 +35,7 @@ Server::~Server(void)
 
 	if (_channels.size())
 	{
-		typename std::vector<Channel *>::iterator it;
+		std::vector<Channel *>::iterator it;
 		for (it = _channels.begin(); it != _channels.end(); ++it)
 			delete *it;
 		_channels.clear();

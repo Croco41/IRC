@@ -36,6 +36,9 @@ extern int	Run;
 
 class Server
 {
+	typedef std::map<int, Client *>::iterator it_cl;
+	typedef std::vector<Channel *>::iterator it;
+
 	public:
 		Server(const std::string &port, const std::string &password);
 		~Server(void);

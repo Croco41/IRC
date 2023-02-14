@@ -46,9 +46,9 @@ void ModeCommand::mode_user(Client *client, std::vector<std::string> arg)
             for (std::vector<std::string>::iterator it = arg.begin() + 1; it != arg.end(); ++it) 
             {
 				std::cout << "value tested debut: " << (*it) << std::endl;
-                if ((it.operator*().at(0) == '-'))
+                if (it.operator*().at(0) == '-')
                     sign = false;
-                else if ((it.operator*().at(0) ==  '+'))
+                else if (it.operator*().at(0) ==  '+')
                     sign = true;
 				std::cout << "value cherchée après + -: " << it.operator*().at(1) << std::endl;
                 if (modes.find((it.operator*().at(1))) != std::string::npos)
@@ -56,7 +56,7 @@ void ModeCommand::mode_user(Client *client, std::vector<std::string> arg)
                     std::string client_modes = client->getModes();
 					std::cout << PURPLE << "client_modes: " << client_modes << RESET << std::endl;
                     //if (sign == true && (client_modes.find((*it)) == std::string::npos))
-					if (((it.operator*().at(1)) == 'a'))
+					if ((it.operator*().at(1)) == 'a')
 					{
 						std::string reply = "The flag 'a' SHALL NOT be toggled using the MODE command,instead use of the AWAY command is REQUIRED";
 						client->reply(reply);
@@ -142,9 +142,9 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
         for (std::vector<std::string>::iterator it = arg.begin() + 1; it != arg.end(); ++it) 
         {
 			std::cout << "value tested debut: " << (*it) << std::endl;
-            if ((it.operator*().at(0) == '-'))
+            if (it.operator*().at(0) == '-')
                 sign = false;
-            else if ((it.operator*().at(0) ==  '+'))
+            else if (it.operator*().at(0) ==  '+')
                 sign = true;
 			std::cout << "value cherchée après + -: " << it.operator*().at(1) << std::endl;
             if (modes.find((it.operator*().at(1))) != std::string::npos && ((it.operator*().at(1)) == 't'))
@@ -225,9 +225,9 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
         for (std::vector<std::string>::iterator it = arg.begin() + 1; it != arg.end(); ++it) 
         {
 			std::cout << "value tested debut: " << (*it) << std::endl;
-            if ((it.operator*().at(0) == '-'))
+            if (it.operator*().at(0) == '-')
                 sign = false;
-            else if ((it.operator*().at(0) ==  '+'))
+            else if (it.operator*().at(0) ==  '+')
                 sign = true;
 			if ((it.operator*().at(1)) == 'o')
 			{
