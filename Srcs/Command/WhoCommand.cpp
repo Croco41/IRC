@@ -32,7 +32,8 @@ void WhoCommand::execute(Client *client, std::vector<std::string> arg)
 		for (std::vector<Client *>::iterator it = chan_clients.begin(); it != chan_clients.end(); it++)
 		{
 			if (it.operator*()->getModes().find('i') != std::string::npos)
-				it.operator*()->reply(RPL_WHOREPLY(arg.at(0), it.operator*()->getPrefix(), it.operator*()->getRealname()));
+				continue;
+			it.operator*()->reply(RPL_WHOREPLY(client->getNickname(), arg.at(0), it.operator*()->getPrefix(), it.operator*()->getRealname()));
 		}
 
 	}

@@ -43,6 +43,7 @@ void ModeCommand::mode_user(Client *client, std::vector<std::string> arg)
             bool sign = true;
 			bool unknown_mode = false;
             std::string modes(MODES_USER);
+			std::string readytosent = ""; // pour fix version d'irssi
             for (std::vector<std::string>::iterator it = arg.begin() + 1; it != arg.end(); ++it) 
             {
 				std::cout << "value tested debut: " << (*it) << std::endl;
@@ -86,9 +87,15 @@ void ModeCommand::mode_user(Client *client, std::vector<std::string> arg)
                     {
                         std::cout << "remove mode" << std::endl;
 						std::string needle;
+						std::string tosend; // pour fix mode version irssi
+						tosend = (*it); // pour fix mode version irssi
+						std::cout << "tosend: " << tosend << std::endl;
+						readytosent.append(tosend); // pour fix mode version irssi
+						std::cout << "readytosent: " << readytosent << std::endl;
 						needle.push_back((it.operator*().at(1)));
 						std::size_t pos = client_modes.find(needle);
 						client_modes.erase(pos -1, 2);
+						//client_modes.append("-i");
 						std::cout << GREEN <<  "remove mode, size de new clientmodes (après erase): " << client_modes << client_modes.size() << RESET << std::endl;
                         client->setModes(client_modes);
                     }
@@ -107,7 +114,9 @@ void ModeCommand::mode_user(Client *client, std::vector<std::string> arg)
             {
                 client->reply(ERR_UMODEUNKNOWNFLAG());
             }
-			client->reply_command(RPL_MODE(client->getPrefix(), client->getNickname(), client->getModes(), ""));
+			readytosent.append(client->getModes()); // pour fix version d'irssi
+			std::cout << "readytosent: " << readytosent << std::endl;
+			client->reply_command(RPL_MODE(client->getPrefix(), client->getNickname(), readytosent, ""));
 
 		}
 	}

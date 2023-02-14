@@ -23,6 +23,7 @@
 #define ERR_CHANNELISFULL(source, channel)		"471 " + source + " " + channel + " :This channel can't accept more clients"
 #define ERR_UNKNOWNMODE(source, unkmode)		"472 " + source + " " + unkmode + " :The mode is unknown"
 #define ERR_BADCHANNELKEY(source, channel)		"475 " + source + " " + channel + " :Cannot join channel, please verify your password"
+#define ERR_NOPRIVILEGES(source)				"481 " + source + " :This command requiring special privileges (operator)"
 #define ERR_CHANOPRIVSNEEDED(source, channel)   "482 " + source + " " + channel + " :You're not channel creator or operator"
 #define ERR_UMODEUNKNOWNFLAG()					"501 : Mode flag was not recognised"
 #define ERR_USERSDONTMATCH()					"502 : Cannot change mode for other users"
@@ -34,7 +35,7 @@
 #define RPL_CHANNELMODEIS(target, modes, param)	"324 MODE " + target + " " + modes + " " + param
 #define RPL_NOTOPIC(source, channel)			"331 " + source + " " + channel + " :No topic is set"
 #define RPL_TOPIC(source, channel, topic)		"332 " + source + " " + channel + " " + topic
-#define RPL_WHOREPLY(channel, source, realname)	"352 " + channel + " " + source + " :" + realname
+#define RPL_WHOREPLY(channel, source, realname)	"352 " + channel + " " + source + " :" + "1" + " " + realname
 #define RPL_ENDOFWHO(source)					"315 " + source + " :End of WHO list"
 #define RPL_NAMREPLY(source, channel, users)    "353 " + source + " = " + channel + " :" + users
 #define RPL_ENDOFNAMES(source, channel)			"366 " + source + " " + channel + " :End of /NAMES list."
@@ -48,9 +49,10 @@
 #define RPL_NOTICE(source, target, message)		":" + source + " NOTICE " + target + " :" + message
 #define RPL_NICK(source, newnick)				":" + source + " NICK :" + newnick
 #define RPL_MODE_NORIGHT(source, target, message)	":" + source + " MODE " + target + " :" + message
-#define RPL_MODE(source, target, modes, param)		":" + source + " MODE " + target + " :" + modes + " " + param
-#define RPL_QUIT(source, message)						":" + source + " QUIT " + " :" + message
+#define RPL_MODE(source, target, modes, param)		":" + source + " MODE " + target + " " + modes + " " + param
 #define RPL_TOPICALL(source, channel, topic)		":" + source + " TOPIC " + channel + " " + topic
 #define RPL_KICK(source, channel, target, message)	":" + source + " KICK " + channel + " " + target + " " + message
+#define RPL_KILL(source, target, message)			":" + source + " KILL " + target + " " + message
+#define RPL_QUIT(source, message)						":" + source + " QUIT " + " :" + message
 
 #endif
