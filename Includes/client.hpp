@@ -68,7 +68,7 @@ class Client
 		std::string 			_modes;
 		bool					_isoperator;	// ATTENTION !!! A mettre à jour dans oper	
 		// en fonction USER du début à l'enregistrement
-		bool				_isregistered;
+		bool					_isregistered;
 		// Channel					*_channel; // il faut un vecteur de channel !!
 		std::vector<Channel *>	_Cchannels; // le client peut se connecter à pls channels !
 };

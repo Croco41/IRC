@@ -90,6 +90,15 @@ class PongCommand : public Command
 		void execute(Client *client, std::vector<std::string> arg);
 };
 
+class WhoCommand : public Command
+{
+	public:
+		WhoCommand(Server *server);
+		~WhoCommand();
+
+		void execute(Client *client, std::vector<std::string> arg);
+};
+
 class JoinCommand : public Command
 {
 	public:
@@ -135,6 +144,15 @@ class ModeCommand : public Command
 		void execute(Client *client, std::vector<std::string> arg);
 		void mode_user(Client *client, std::vector<std::string> arg);
 		void mode_channel(Client *client, Channel *channel, std::vector<std::string> arg);
+};
+
+class QuitCommand : public Command
+{
+	public:
+		QuitCommand(Server *server);
+		~QuitCommand();
+	
+		void execute(Client *client, std::vector<std::string> arg);
 };
 
 class OperCommand : public Command

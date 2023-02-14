@@ -12,6 +12,8 @@ CommandHandler::CommandHandler(Server *server)
 	_commands["userhost"] = new UserCommand(_server);
 	_commands["NICK"] = new NickCommand(_server);
 	_commands["MODE"] = new ModeCommand(_server);
+	_commands["QUIT"] = new QuitCommand(_server);
+	_commands["WHO"] = new WhoCommand(_server);
 	_commands["OPER"] = new OperCommand(_server);
 	_commands["TOPIC"] = new TopicCommand(_server);
 	_commands["KICK"] = new KickCommand(_server);
