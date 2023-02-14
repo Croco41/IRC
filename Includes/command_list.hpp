@@ -164,4 +164,13 @@ class KickCommand : public Command
 		void execute(Client *client, std::vector<std::string> arg);
 };
 
+class KillCommand : public Command
+{
+	public:
+		KillCommand(Server *server);
+		~KillCommand();
+
+		void execute(Client *client, std::vector<std::string> arg);
+};
+
 #endif

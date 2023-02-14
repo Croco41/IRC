@@ -247,6 +247,7 @@ void		Channel::removeClient(Client *client)
 			break;
 		}
 	}
+	setNbclients(_clients.size());
 	// std::cout << "état du channel du client qu'on vient de remove : "  << client->getChannel() << RESET << std::endl;
 	std::cout << FIREBRICK << "CHANNEL : removeClient - end" << RESET << std::endl;
 }

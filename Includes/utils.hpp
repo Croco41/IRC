@@ -23,6 +23,7 @@
 #define ERR_CHANNELISFULL(source, channel)		"471 " + source + " " + channel + " :This channel can't accept more clients"
 #define ERR_UNKNOWNMODE(source, unkmode)		"472 " + source + " " + unkmode + " :The mode is unknown"
 #define ERR_BADCHANNELKEY(source, channel)		"475 " + source + " " + channel + " :Cannot join channel, please verify your password"
+#define ERR_NOPRIVILEGES(source)				"481 " + source + " :This command requiring special privileges (operator)"
 #define ERR_CHANOPRIVSNEEDED(source, channel)   "482 " + source + " " + channel + " :You're not channel creator or operator"
 #define ERR_UMODEUNKNOWNFLAG()					"501 : Mode flag was not recognised"
 #define ERR_USERSDONTMATCH()					"502 : Cannot change mode for other users"
@@ -49,5 +50,6 @@
 #define RPL_MODE(source, target, modes, param)         ":" + source + " MODE " + target + " :" + modes + " " + param
 #define RPL_TOPICALL(source, channel, topic)         ":" + source + " TOPIC " + channel + " " + topic
 #define RPL_KICK(source, channel, target, message)         ":" + source + " KICK " + channel + " " + target + " " + message
+#define RPL_KILL(source, target, message)         ":" + source + " KILL " + target + " " + message
 
 #endif
