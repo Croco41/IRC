@@ -222,7 +222,7 @@ void	Client::join_channel(Channel *channel)
 //	_channel = channel; // Store a reference to the channel the client has joined
 	//setChannel(channel);
 	// Get a list of nicknames of clients in the channel
-	const std::vector<std::string>& nicknames = channel->getNicknames();
+	const std::vector<std::string>& nicknames = channel->getNicknamesClients();
 	// Concatenate the nicknames into a single string, separated by spaces
 	std::string users;
 	for (std::vector<std::string>::const_iterator it = nicknames.begin(); it != nicknames.end(); ++it) 
@@ -233,7 +233,14 @@ void	Client::join_channel(Channel *channel)
 	reply(RPL_ENDOFNAMES(_nickname, channel->getName()));
 	//Send a message to all clients in the channel to notify them of the current client joining
 	channel->sendall(RPL_JOIN(getPrefix(), channel->getName()));
-	
+	if(channel->getTopic() == "")
+	{
+		reply(RPL_NOTOPIC(getNickname(), channel->getName()));
+	}
+	else
+	{
+		reply(RPL_TOPIC(getNickname(), channel->getName(), channel->getTopic()));
+	}	
 	std::cout << _nickname << " has joined channel " << channel->getName() << std::endl;
 	std::cout << YELLOW << _nickname << "estdans les channel suivants: " << getListChannel() << RESET << std::endl;
 	std::cout << GREEN << "CLIENT : join_channel - end " << channel->getName() << RESET << std::endl;

@@ -21,9 +21,12 @@ class Channel
 		size_t						getMaxclients() const;
 		size_t						getNbclients() const;
 		size_t						getNboperators() const; //ok
+		std::string					getNicknamesList();
 		std::vector<std::string>	getNicknames();
 		std::vector<std::string>	getNicknamesOpe(); //en cours ??? pas certaines de ce que je fais
+		std::vector<std::string>	getNicknamesClients(); //en cours ??? pas certaines de ce que je fais
 		std::string					getModes() const;
+		std::string					getTopic() const;
 
 		// SETTERS
 		void			setPassword(const std::string password);
@@ -31,6 +34,7 @@ class Channel
 		void			setNbclients(const size_t nbclients);
 		void			setNboperators(const size_t nboperators); //ok
 		void			setModes(const std::string &modes);
+		void			setTopic(const std::string &topic);
 	
 		// FCT MEMBRES
 		void			addClient(Client *client);
@@ -52,7 +56,8 @@ class Channel
 		size_t					_nbclients;
 		size_t					_nboperators; //ok
 		//pour la gestion des modes:
-		std::string _modes;
+		std::string				_modes;
+		std::string				_topic;
 };
 
 #endif

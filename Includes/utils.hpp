@@ -28,24 +28,27 @@
 #define ERR_USERSDONTMATCH()					"502 : Cannot change mode for other users"
 
 //Réponses du server
-#define RPL_WELCOME(source)								"001 " + source + " :Welcome to the ft_irc network " + source
-#define RPL_UMODEIS(target, modes)						"221 " + target + " " + modes
+#define RPL_WELCOME(source)						"001 " + source + " :Welcome to the ft_irc network " + source
+#define RPL_UMODEIS(target, modes)				"221 " + target + " " + modes
 //faudra rajouter <mode_params> si on code des modes avec apram dans chan.
-#define RPL_CHANNELMODEIS(target, modes, param)			"324 MODE " + target + " " + modes + " " + param
-#define RPL_NAMREPLY(source, channel, users)    		"353 " + source + " = " + channel + " :" + users
-#define RPL_ENDOFNAMES(source, channel)					"366 " + source + " " + channel + " :End of /NAMES list."
-#define RPL_YOUREOPER(source)							"381 " + source + " :You are now an IRC operator"
-#define RPL_WHOREPLY(source, channel, message)			"352 " + source + " :Users connected to channel " + channel + " :" + message
+#define RPL_CHANNELMODEIS(target, modes, param)	"324 MODE " + target + " " + modes + " " + param
+#define RPL_NOTOPIC(source, channel)			"331 " + source + " " + channel + " :No topic is set"
+#define RPL_TOPIC(source, channel, topic)		"332 " + source + " " + channel + " " + topic
+#define RPL_WHOREPLY(source, channel, message)	"352 " + source + " :Users connected to channel " + channel + " :" + message
+#define RPL_NAMREPLY(source, channel, users)    "353 " + source + " = " + channel + " :" + users
+#define RPL_ENDOFNAMES(source, channel)			"366 " + source + " " + channel + " :End of /NAMES list."
+#define RPL_YOUREOPER(source)					"381 " + source + " ::You are now an IRC operator"
 
 //Réponses suite aux commandes (custom)
-#define RPL_JOIN(source, channel)						":" + source + " JOIN :" + channel	
-#define RPL_PING(source, command)						":" + source + " PONG :" + command
-#define RPL_PRIVMSG(source, target, message)			":" + source + " PRIVMSG " + target + " :" + message
-#define RPL_PART(source, channel, message)				":" + source + " PART " + channel + " " + message
-#define RPL_NOTICE(source, target, message)				":" + source + " NOTICE " + target + " :" + message
-#define RPL_NICK(source, newnick)						":" + source + " NICK :" + newnick
-#define RPL_MODE_NORIGHT(source, target, message)		":" + source + " MODE " + target + " :" + message
-#define RPL_MODE(source, target, modes, param)			":" + source + " MODE " + target + " :" + modes + " " + param
-#define RPL_QUIT(source, message)						":" + source + " QUIT " + " :" + message
+#define RPL_JOIN(source, channel)				":" + source + " JOIN :" + channel	
+#define RPL_PING(source, command)				":" + source + " PONG :" + command
+#define RPL_PRIVMSG(source, target, message)	":" + source + " PRIVMSG " + target + " :" + message
+#define RPL_PART(source, channel, message)		":" + source + " PART " + channel + " " + message
+#define RPL_NOTICE(source, target, message)		":" + source + " NOTICE " + target + " :" + message
+#define RPL_NICK(source, newnick)				":" + source + " NICK :" + newnick
+#define RPL_MODE_NORIGHT(source, target, message)	":" + source + " MODE " + target + " :" + message
+#define RPL_MODE(source, target, modes, param)		":" + source + " MODE " + target + " :" + modes + " " + param
+#define RPL_TOPICALL(source, channel, topic)		":" + source + " TOPIC " + channel + " " + topic
+#define RPL_KICK(source, channel, target, message)	":" + source + " KICK " + channel + " " + target + " " + message
 
 #endif
