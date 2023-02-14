@@ -48,9 +48,10 @@
 #define RPL_NOTICE(source, target, message)		":" + source + " NOTICE " + target + " :" + message
 #define RPL_NICK(source, newnick)				":" + source + " NICK :" + newnick
 #define RPL_MODE_NORIGHT(source, target, message)	":" + source + " MODE " + target + " :" + message
-#define RPL_MODE(source, target, modes, param)		":" + source + " MODE " + target + " :" + modes + " " + param
+#define RPL_MODE(source, target, modes, param)		":" + source + " MODE " + target + " " + modes + " " + param
 #define RPL_TOPICALL(source, channel, topic)		":" + source + " TOPIC " + channel + " " + topic
 #define RPL_KICK(source, channel, target, message)	":" + source + " KICK " + channel + " " + target + " " + message
 #define RPL_KILL(source, target, message)			":" + source + " KILL " + target + " " + message
+#define RPL_QUIT(source, message)						":" + source + " QUIT " + " :" + message
 
 #endif
