@@ -124,6 +124,11 @@ std::string    Channel::getTopic() const
 	return(this->_topic);
 }
 
+std::vector<Client *>	Channel::getClients() const
+{
+	return(this->_clients);
+}
+
 // SETTERS
 void		Channel::setPassword(const std::string password)
 {

@@ -27,6 +27,7 @@ class Channel
 		std::vector<std::string>	getNicknamesClients(); //en cours ??? pas certaines de ce que je fais
 		std::string					getModes() const;
 		std::string					getTopic() const;
+		std::vector<Client *>		getClients() const;
 
 		// SETTERS
 		void			setPassword(const std::string password);

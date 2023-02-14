@@ -18,26 +18,23 @@ void WhoCommand::execute(Client *client, std::vector<std::string> arg)
 	Tu peux néanmoins spécifier un channel ou un mask pour nickname, usernamer ou hostname.
 	Enfin, tu peux lister les IRCOperators en spécifiant o en deuxième argument.
 	 */
-
-
-
-	// Le premier terme d'arg est par défaut le nom du channel dans lequel on lance /who !
-	// if (arg.size() > 1)
-	// {
-	// 	client->reply_command(RPL_WHOREPLY(client->getPrefix(), arg.at(0), arg.at(0)));
-	// }
+	
 	if (arg.empty() || (arg.size() < 2 && arg.at(0)[0] == '#')) // donner les noms des users du channel !
 	{
-		std::vector<std::string> chan_clients = _server->getChannel(arg.at(0))->getNicknames();
-		std::cout << DARKVIOLET << arg.size() << " | " << _server->getChannel(arg.at(0))->getName() << " | " << _server->getChannel(arg.at(0))->getNicknames().at(0) << RESET << std::endl;
-		std::string chan_users;
-		for (std::vector<std::string>::iterator it = chan_clients.begin(); it != chan_clients.end(); it++)
+		Channel		*channel = _server->getChannel(arg.at(0));
+		if (!channel)
 		{
-			chan_users.append(*it);
-			chan_users.append(" ");
-			std::cout << DARKVIOLET << chan_users << RESET << std::endl;
+			client->reply(ERR_NOSUCHCHANNEL(client->getNickname(), arg.at(0)));
+			return;
 		}
-		client->reply_command(RPL_WHOREPLY(client->getPrefix(), arg.at(0), chan_users));
+		std::vector<Client *> chan_clients = _server->getChannel(arg.at(0))->getClients();
+		std::cout << DARKVIOLET << arg.size() << RESET << std::endl;
+		for (std::vector<Client *>::iterator it = chan_clients.begin(); it != chan_clients.end(); it++)
+		{
+			if (it.operator*()->getModes().find('i') != std::string::npos)
+				it.operator*()->reply(RPL_WHOREPLY(arg.at(0), it.operator*()->getPrefix(), it.operator*()->getRealname()));
+		}
+
 	}
 	else if (arg.size() < 2 && arg.at(0)[0] != '#')
 	{
@@ -47,6 +44,7 @@ void WhoCommand::execute(Client *client, std::vector<std::string> arg)
 			client->reply(ERR_NOSUCHNICK(client->getNickname(), "WHO"));
 			return;
 		}
-		client->reply_command(RPL_WHOREPLY(client->getPrefix(), arg.at(0), client->getRealname()));
+		client->reply_command(RPL_WHOREPLY(arg.at(0), client->getPrefix(), client->getRealname()));
 	}
+	client->reply_command(RPL_ENDOFWHO(client->getRealname()));
 }
