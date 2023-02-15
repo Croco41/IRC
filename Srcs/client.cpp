@@ -214,14 +214,16 @@ void	Client::join_channel(Channel *channel)
 		if (channel->client_is_operator(this) == true)
 		{
 			channel->addOperator(this);
-			std::vector<Client *> _operatorschan = channel->getOperators();
-			size_t sizeop = _operatorschan.size();
-			channel->setNboperators(sizeop);
 		}
 		setChannel(channel);
 	}
 	else
+	{
 		channel->setNbclients(1);
+		// std::vector<Client *> _operatorschan = channel->getOperators();
+		// 	size_t sizeop = _operatorschan.size();
+		// 	channel->setNboperators(sizeop);
+	}
 	
 	std::cout << "client : " << getNickname() << " has been added to channel : " << channel->getName() << std::endl; 
 //	_channel = channel; // Store a reference to the channel the client has joined

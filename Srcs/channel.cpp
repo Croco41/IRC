@@ -346,8 +346,8 @@ void Channel::consolDeBUGchannel()
 	std::cout << GREEN << list_operators << RESET << std::endl;
 	std::cout << YELLOW << "size list_operators sans admin: " << RESET << std::endl;
 	std::cout << GREEN << _operators.size() << RESET << std::endl;
-		std::cout << YELLOW << "size list_operators avec admin: " << RESET << std::endl;
-	std::cout << GREEN << getNboperators() << RESET << std::endl;
+	// 	std::cout << YELLOW << "size list_operators avec admin: " << RESET << std::endl;
+	// std::cout << GREEN << getNboperators() << RESET << std::endl;
 
 //-------------------------------------------------------------------------------------------------
 	std::cout << YELLOW << "-----------------CHECK OTHER--------------" << RESET << std::endl;
