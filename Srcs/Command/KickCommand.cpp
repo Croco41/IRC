@@ -70,7 +70,7 @@ void KickCommand::execute(Client *client, std::vector<std::string> arg)
 						continue;
 					}
 					std::cout << GREEN << "On trouve l'user à kick dans le chan !" << RESET << std::endl;
-					clientkick->leave_channel(channel, "");
+					clientkick->leave_channel(channel, "", 0);
 					//channel->setNbclients(channel->getNbclients() - 1);
 					channel->sendall(RPL_KICK(client->getPrefix(), channel->getName(), kick, kick_message));
 				}

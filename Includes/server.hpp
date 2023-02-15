@@ -45,6 +45,7 @@ class Server
 
 		std::string	getPassword() const;
 		int			getSocket() const;
+		int			getEpollfd() const;
 		int			launch_socket();
 		void		start_epoll();
 		void		onClientConnect(sockaddr_in connect_serv_socket, int socket_client);
@@ -58,11 +59,14 @@ class Server
 		void		destroyChannel(Channel *channel);
 		//pour avoir accès au client
 		Client*		getClient(const std::string &nickname);
+		std::map<int, Client *>    getClients() const;
+		void		consolDeBUGserver();
 
 	private:
 		Server(Server const &copy);
 		Server &operator=(Server const &rhs);
 
+		int						_epollfd;
 		const std::string		_port;
 		const std::string		_password;
 		int						_socket;

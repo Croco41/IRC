@@ -70,8 +70,8 @@ void PartCommand::execute(Client *client, std::vector<std::string> arg)
 
 		// Si le channel existe et le client est bien membre : on le quitte !
 	//	std::cout << ORANGE << "arg[1] = chan message: " << chan_message << RESET << std::endl;
-		client->leave_channel(channel, chan_message);
-		channel->setNbclients(channel->getNbclients() - 1);
+		client->leave_channel(channel, chan_message, 0);
+		//channel->setNbclients(channel->getNbclients() - 1); ?? je crois qu'on le fait deja dans remove clients
 		// std::cout << "YOUHOU PART FIN !!" << client->getChannel() << std::endl;
 		// if (_server->getChannel(chan_name)->getNbclients() == 0)
 		if (_server->getChannel(*it)->getNbclients() == 0)

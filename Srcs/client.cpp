@@ -212,7 +212,12 @@ void	Client::join_channel(Channel *channel)
 	{
 		channel->addClient(this);
 		if (channel->client_is_operator(this) == true)
+		{
 			channel->addOperator(this);
+			std::vector<Client *> _operatorschan = channel->getOperators();
+			size_t sizeop = _operatorschan.size();
+			channel->setNboperators(sizeop);
+		}
 		setChannel(channel);
 	}
 	else
@@ -246,7 +251,7 @@ void	Client::join_channel(Channel *channel)
 	std::cout << GREEN << "CLIENT : join_channel - end " << channel->getName() << RESET << std::endl;
 }
 
-void	Client::leave_channel(Channel *channel, std::string message)
+void	Client::leave_channel(Channel *channel, std::string message, bool kill)
 {
 	std::cout << ORANGE << "\nCLIENT : leave_channel - start" << RESET << std::endl;
 	if (!channel)
@@ -254,7 +259,8 @@ void	Client::leave_channel(Channel *channel, std::string message)
 	std::cout << ORANGE << "leave_channel du Client !" << RESET << std::endl;
 	std::cout << PURPLE << "Send reply message is: " << message << std::endl;
 	std::cout << GREEN << "Rpl sent to socket: " << _fd << std::endl;
-	channel->sendall(RPL_PART(getPrefix(), channel->getName(), message));
+	if (kill == 0)
+		channel->sendall(RPL_PART(getPrefix(), channel->getName(), message));
 	channel->removeClient(this);
 
 	std::vector<Channel *>::iterator	it;

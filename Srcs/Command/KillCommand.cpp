@@ -46,12 +46,18 @@ void KillCommand::execute(Client *client, std::vector<std::string> arg)
 				for (std::vector<Channel *>::iterator it = channels_userkill.begin(); it != channels_userkill.end(); it++)
 				{	
 					it.operator*()->sendall(RPL_KILL(client->getPrefix(), clientkill->getNickname(), kill_message));
+					clientkill->leave_channel((*it), kill_message, 1);
 				}
-				//else
-				//{
-				//	std::cout << ORANGE << "user " << (*it) << " is not on the chan" << RESET << std::endl;
-				//	client->reply(ERR_USERNOTINCHANNEL(client->getNickname(), (*it), channel->getName()));
-				//}
+				clientkill->reply_command(RPL_KILL(client->getPrefix(), clientkill->getNickname(), kill_message));
+				std::cout << "Client n°" << clientkill->getFd() << " username via serveur: " << clientkill->getNickname() << " va se déconnecter." << std::endl;
+				int fd = clientkill->getFd();
+				_server->onClientDisconnect(fd, _server->getEpollfd());
+			//	std::map<int, Client *> serv_clients = _server->getClients();
+			//	delete serv_clients.at(fd);
+			//	serv_clients.erase(fd);
+			//	close(fd);
+				// Log the client disconnection
+				std::cout << "Client n°" << fd << " s'est déconnecté." << std::endl;
 
 		}
 	}
@@ -60,6 +66,5 @@ void KillCommand::execute(Client *client, std::vector<std::string> arg)
 		 client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "Kill"));
 		 return;
 	}
-
 	std::cout << FUCHSIA << "KillCOMMAND : execute - end" << RESET << std::endl;
 }

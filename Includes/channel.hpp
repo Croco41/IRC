@@ -21,6 +21,7 @@ class Channel
 		size_t						getMaxclients() const;
 		size_t						getNbclients() const;
 		size_t						getNboperators() const; //ok
+		std::vector<Client *>		getOperators() const;
 		std::string					getNicknamesList();
 		std::vector<std::string>	getNicknames();
 		std::vector<std::string>	getNicknamesOpe(); //en cours ??? pas certaines de ce que je fais
@@ -45,6 +46,7 @@ class Channel
 		bool			client_is_inchannel(Client *client); // àtester
 		void			sendall(const std::string& message);
 		void			sendall(const std::string& message, Client *exclude);
+		void			consolDeBUGchannel();
 
 	private: 
 		std::string				_name;

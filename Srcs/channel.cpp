@@ -54,6 +54,11 @@ size_t		Channel::getNboperators() const
 	return (_nboperators);
 }
 
+std::vector<Client *>		Channel::getOperators() const
+{
+	return (_operators);
+}
+
 std::string	Channel::getNicknamesList()
 {
 	std::string list_clients;
@@ -207,7 +212,7 @@ void		Channel::removeClient(Client *client)
 	std::cout << FIREBRICK << "\nCHANNEL : removeClient - start" << RESET << std::endl;
 	std::cout << "Client name = " << client->getNickname() << std::endl;
 	std::cout << "Admin name = " << _admin->getNickname() << std::endl;
-	std::cout << "nb de clients = " << _clients.size() << std::endl;
+	std::cout << "nb de clients begin= " << _clients.size() << std::endl;
 	if (client->getOperator() == true)
 	{
 		removeOperator(client);
@@ -220,7 +225,9 @@ void		Channel::removeClient(Client *client)
 			_clients.clear();
 			// client->setChannel(NULL);
 		}
-		std::cout << FIREBRICK << "CHANNEL : removeClient - end" << RESET << std::endl;
+		setNbclients(_clients.size());
+		std::cout << "nombre de client end1: " << _clients.size() << std::endl; 
+		std::cout << FIREBRICK << "CHANNEL : removeClient - end1" << RESET << std::endl;
 		return;
 	}
 	// si le client qui veut partir est l'admin : on set un nouvel admin
@@ -248,8 +255,8 @@ void		Channel::removeClient(Client *client)
 		}
 	}
 	setNbclients(_clients.size());
-	// std::cout << "état du channel du client qu'on vient de remove : "  << client->getChannel() << RESET << std::endl;
-	std::cout << FIREBRICK << "CHANNEL : removeClient - end" << RESET << std::endl;
+	std::cout << "nombre de client end2: " << _clients.size() << std::endl; 
+	std::cout << FIREBRICK << "CHANNEL : removeClient - end2" << RESET << std::endl;
 }
 
 bool	Channel::client_is_inchannel(Client *client)
@@ -299,4 +306,55 @@ void		Channel::sendall(const std::string& message, Client *exclude)
 		(*it)->reply_command(message);
 		std::cout << RESET;
 	}
+}
+
+
+void Channel::consolDeBUGchannel()
+{
+	std::cout << RED << "-----------------START CONSOL DEBUG CHANNEL-------------" << RESET << std::endl << std::endl;
+
+//-------------------------------------------------------------------------------------------------
+	std::cout << YELLOW << "-----------------CHECK CLIENTS--------------" << RESET << std::endl;
+
+	std::string list_clients;
+	
+	for (std::vector<Client *>::iterator it = _clients.begin(); it != _clients.end(); it++)
+	{
+		Client *client = it.operator*();
+		std::string name = client->getNickname(); 
+		list_clients.append(name);
+		list_clients.append(" ");
+	}
+	std::cout << YELLOW << "list_clients dans le channel: " << RESET << this->getName() << std::endl;
+	std::cout << GREEN << list_clients << RESET << std::endl;
+	std::cout << YELLOW << "size list_clients: " << RESET << std::endl;
+	std::cout << GREEN << _clients.size() << RESET << std::endl;
+
+//-------------------------------------------------------------------------------------------------
+	std::cout << YELLOW << "-----------------CHECK OPERATORS--------------" << RESET << std::endl;
+
+	std::string list_operators;
+	
+	for (std::vector<Client *>::iterator it = _clients.begin(); it != _clients.end(); it++)
+	{
+		Client *client = it.operator*();
+		std::string name = client->getNickname(); 
+		list_operators.append(name);
+		list_operators.append(" ");
+	}
+	std::cout << YELLOW << "list_operators dans le channel: " << RESET << this->getName()  << std::endl;
+	std::cout << GREEN << list_operators << RESET << std::endl;
+	std::cout << YELLOW << "size list_operators sans admin: " << RESET << std::endl;
+	std::cout << GREEN << _operators.size() << RESET << std::endl;
+		std::cout << YELLOW << "size list_operators avec admin: " << RESET << std::endl;
+	std::cout << GREEN << getNboperators() << RESET << std::endl;
+
+//-------------------------------------------------------------------------------------------------
+	std::cout << YELLOW << "-----------------CHECK OTHER--------------" << RESET << std::endl;
+
+	std::cout << YELLOW << "liste des modes dans le channel: " << RESET << this->getName() << std::endl;
+	std::cout << GREEN <<_modes << RESET << std::endl;
+	std::cout << YELLOW << "a completer " << RESET << std::endl;
+
+std::cout << RED << "-----------------END CONSOL DEBUG CHANNEL-------------" << RESET << std::endl << std::endl;
 }
