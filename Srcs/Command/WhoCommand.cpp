@@ -10,16 +10,30 @@ WhoCommand::~WhoCommand()
 	return;
 }
 
+// syntax : /WHO <mask>
 void WhoCommand::execute(Client *client, std::vector<std::string> arg)
 {
 	/*
 	/La commande /who permet d'afficher des informations sur les utilisateurs. 
 	Sans argument, cela retourne la liste des personnes connectées sur le réseau. 
-	Tu peux néanmoins spécifier un channel ou un mask pour nickname, usernamer ou hostname.
-	Enfin, tu peux lister les IRCOperators en spécifiant o en deuxième argument.
+	Si arg = channel : liste les user non invisibles du channel !
+	si arg = user : donne les info sur le user !
 	 */
-	
-	if (arg.empty() || (arg.size() < 2 && arg.at(0)[0] == '#')) // donner les noms des users du channel !
+	// std::cout << DARKVIOLET << "contenu du vecteur arg : " << std::endl;
+	// for(std::vector<std::string>::iterator it = arg.begin(); it != arg.end(); it++)
+	// 	std::cout << *it << std::endl;
+	// std::cout << RESET << std::endl;
+	if (arg.empty()) // donner les noms des users du serveur !
+	{
+		std::map<int, Client *>	serv_clients = _server->getClients();
+		for (std::map<int, Client *>::iterator it = serv_clients.begin(); it != serv_clients.end(); it++)
+			it.operator*().second->reply_command(RPL_WHOREPLY(_server->getServname(), "1", it.operator*().second->getUsername())); // ici : serveur, nb de serveurs intermediaires, nom du client sur le serveur
+	}
+	else if (arg.size() > 1)
+	{
+		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "WHO"));
+	}
+	else if (arg.size() < 2 && arg.at(0)[0] == '#') // donner les noms des users du channel !
 	{
 		Channel		*channel = _server->getChannel(arg.at(0));
 		if (!channel)
@@ -33,19 +47,19 @@ void WhoCommand::execute(Client *client, std::vector<std::string> arg)
 		{
 			if (it.operator*()->getModes().find('i') != std::string::npos)
 				continue;
-			it.operator*()->reply(RPL_WHOREPLY(client->getNickname(), arg.at(0), it.operator*()->getPrefix(), it.operator*()->getRealname()));
+			it.operator*()->reply_command(RPL_WHOREPLY(arg.at(0), "1", it.operator*()->getNickname())); // ici : channel, nb de serveurs, nom du client
 		}
-
 	}
 	else if (arg.size() < 2 && arg.at(0)[0] != '#')
 	{
-		Client *client = _server->getClient(arg.at(0));
-		if (!client)
+		std::cout << DARKVIOLET << "On entre ici ?" << RESET << std::endl;
+		Client *target = _server->getClient(arg.at(0));
+		if (!target)
 		{
 			client->reply(ERR_NOSUCHNICK(client->getNickname(), "WHO"));
 			return;
 		}
-		client->reply_command(RPL_WHOREPLY(arg.at(0), client->getPrefix(), client->getRealname()));
+		client->reply_command(RPL_WHOREPLY(client->getUsername(), "1", target->getUsername())); // ici :user, nb de serveurs, nom du client
 	}
 	client->reply_command(RPL_ENDOFWHO(client->getRealname()));
 }

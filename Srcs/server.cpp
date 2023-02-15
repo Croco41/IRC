@@ -3,7 +3,7 @@
 int Run;
 
 Server::Server(const std::string &port, const std::string &password)
-	: _port(port), _password(password), _channels()  
+	: _port(port), _password(password), _servname("ircserv"), _channels()  
 {
 	Run = 1;
 	_socket = launch_socket();
@@ -41,6 +41,7 @@ Server::~Server(void)
 		_channels.clear();
 	}
 	delete _commandHandler;
+	close(_socket);
 	std::cout << "Server closed." <<std::endl;
 	return;
 }
@@ -53,6 +54,11 @@ std::string	Server::getPassword() const
 int			Server::getSocket() const
 {
 	return (_socket);
+}
+
+std::string	Server::getServname() const
+{
+	return (_servname);
 }
 
 Channel*	Server::getChannel(const std::string &name)
@@ -74,6 +80,11 @@ Client*		Server::getClient(const std::string &nickname)
 			return (it->second);
 	}
 	return NULL;
+}
+
+std::map<int, Client *>	Server::getClients() const
+{
+	return (_clients);
 }
 
 void		handleSignal(int sigint)

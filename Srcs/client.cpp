@@ -19,65 +19,65 @@ Client::~Client()
 }
 
 // GETTERS
-std::string    Client::getHostname() const
+std::string		Client::getHostname() const
 {
 	return(_hostname);
 }
 
-int            Client::getFd() const
+int				Client::getFd() const
 {
 	return(_fd);
 }
 
-int            Client::getPort() const
+int				Client::getPort() const
 {
 	return(_port);
 }
 
-std::string    Client::getRealname() const
+std::string		Client::getRealname() const
 {
 	return(this->_realname);
 }
 
-std::string    Client::getUsername() const
+std::string		Client::getUsername() const
 {
 	return(this->_username);
 }
 
-std::string    Client::getNickname() const
+std::string		Client::getNickname() const
 {
 	return(this->_nickname);
 }
 
-std::string    Client::getPassword() const
+std::string		Client::getPassword() const
 {
 	return(this->_password);
 }
 
-std::string    Client::getModes() const
+std::string		Client::getModes() const
 {
 	return(this->_modes);
 }
 
-bool    Client::getOperator() const
+bool			Client::getOperator() const
 {
 	return(this->_isoperator);
 }
 
-bool    Client::getRegistered() const
+bool			Client::getRegistered() const
 {
 	return(this->_isregistered);
 }
 
-std::string	Client::getListChannel()
+std::string		Client::getListChannel()
 {
 	std::string list_channel;
 	for (std::vector<Channel *>::iterator it = _Cchannels.begin(); it != _Cchannels.end(); it++)
 	{
-		std::cout << "valeur de it:" << (*it) << "name: " << std::endl;
+		// std::cout << "valeur de it:" << (*it) << "name: " << std::endl;
 		Channel *channel = it.operator*();
 		std::string name = channel->getName(); 
-		std::cout << "name it: " << name << std::endl;
+		// std::cout << "name it: " << name << std::endl;
 		list_channel.append(name);
 	}
 	return(list_channel);

@@ -14,6 +14,7 @@ CommandHandler::CommandHandler(Server *server)
 	_commands["MODE"] = new ModeCommand(_server);
 	_commands["QUIT"] = new QuitCommand(_server);
 	_commands["WHO"] = new WhoCommand(_server);
+	_commands["WHOIS"] = new WhoisCommand(_server);
 	_commands["OPER"] = new OperCommand(_server);
 	_commands["TOPIC"] = new TopicCommand(_server);
 	_commands["KICK"] = new KickCommand(_server);
@@ -51,6 +52,7 @@ void	CommandHandler::recup_msg(Client *client, std::string message)
 			std::string 				buf;
 			std::stringstream 			ssArg(msg_parse.substr(cde_name.length(), msg_parse.length()));
 
+			buf.clear();
 			while (ssArg >> buf)
 			{
 				arguments.push_back(buf);
