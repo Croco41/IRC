@@ -34,7 +34,7 @@ class Client
 		std::string				getListChannel();
 
 		//fonctions pour les messages
-		std::string		getPrefix() const;
+		std::string				getPrefix() const;
 
 		// SETTERS
 		void			setRealname(const std::string &realname);

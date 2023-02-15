@@ -10,6 +10,7 @@ UserCommand::~UserCommand()
 	return;
 }
 
+// syntax : /USER <username> <nickname> <hostname> <realname>
 void UserCommand::execute(Client *client, std::vector<std::string> arg)
 {
 	std::cout << FUCHSIA << "\nUSERCOMMAND : execute - start" << RESET << std::endl;

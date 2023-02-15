@@ -99,6 +99,15 @@ class WhoCommand : public Command
 		void execute(Client *client, std::vector<std::string> arg);
 };
 
+class WhoisCommand : public Command
+{
+	public:
+		WhoisCommand(Server *server);
+		~WhoisCommand();
+
+		void execute(Client *client, std::vector<std::string> arg);
+};
+
 class JoinCommand : public Command
 {
 	public:
