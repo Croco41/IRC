@@ -22,4 +22,5 @@ void QuitCommand::execute(Client *client, std::vector<std::string> arg)
 			leave = leave.substr(1);
 	}
 	client->reply(RPL_QUIT(client->getPrefix(), leave));
+	//_server->~Server();
 }

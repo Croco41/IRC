@@ -52,7 +52,7 @@ class Client
 		void			reply_command(const std::string &reply);
 		void 			writetosend(const std::string &message) const;
 		void			join_channel(Channel *channel);
-		void			leave_channel(Channel *channel, std::string message);
+		void			leave_channel(Channel *channel, std::string message, bool kill);
 
 	private:
 		// variables initialisées lors de la construction

@@ -18,7 +18,7 @@ CommandHandler::CommandHandler(Server *server)
 	_commands["OPER"] = new OperCommand(_server);
 	_commands["TOPIC"] = new TopicCommand(_server);
 	_commands["KICK"] = new KickCommand(_server);
-	_commands["KILL"] = new KillCommand(_server);
+	_commands["kill"] = new KillCommand(_server);
 
 	for (std::map<std::string, Command*>::iterator it = _commands.begin(); it != _commands.end(); it++)
 		std::cout << BLUE << it.operator*().first << RESET << std::endl;

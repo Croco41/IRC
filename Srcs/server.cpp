@@ -61,6 +61,11 @@ std::string	Server::getServname() const
 	return (_servname);
 }
 
+int			Server::getEpollfd() const
+{
+	return (_epollfd);
+}
+
 Channel*	Server::getChannel(const std::string &name)
 {
 	typedef std::vector<Channel *>::iterator chan_iterator;
@@ -148,6 +153,7 @@ int			Server::launch_socket()
 void		Server::start_epoll()
 {
 	int epoll_fd = epoll_create1(0); // create an epoll instance
+	_epollfd = epoll_fd;
 	if (epoll_fd < 0)
 		throw std::runtime_error("Error while creating epoll file descriptor.\n");
 	// if (epoll_fd == -1) 
@@ -221,6 +227,7 @@ void		Server::start_epoll()
 					//break;
 				}
 			}
+			consolDeBUGserver();
 		}
 	}
 	if (close(epoll_fd))
@@ -377,12 +384,48 @@ void	Server::destroyChannel(Channel *channel)
 	{
 		std::cout << it.operator*()->getName() << std::endl;
 		std::cout << ROYALBLUE << "taille du vector de channels dans server : " << _channels.size() << RESET << std::endl;
+
 		if (*it == channel)
 		{
-			delete channel;
+			// delete (*it);
+			// _channels.erase(std::remove(_channels.begin(), _channels.end(), channel), _channels.end());
+			delete (*it);
 			_channels.erase(it);
 			break;
 		}
 	}
 	std::cout << YELLOW << "SERVER : destroyChannel - end" << RESET << std::endl;
+}
+
+void Server::consolDeBUGserver()
+{
+	std::cout << RED << "-----------------START CONSOL DEBUG SERVER--------------" << RESET << std::endl << std::endl;
+
+//-------------------------------------------------------------------------------------------------
+	std::cout << YELLOW << "-----------------CHECK CHANNELS--------------" << RESET << std::endl;
+
+	std::string list_channels;
+	
+	for (std::vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++)
+	{
+		Channel *channel = it.operator*();
+		std::string name = channel->getName(); 
+		list_channels.append(name);
+		channel->consolDeBUGchannel();
+	}
+	std::cout << YELLOW << "list_channels: " << RESET << std::endl;
+	std::cout << GREEN << list_channels << RESET << std::endl;
+
+
+//-------------------------------------------------------------------------------------------------
+	std::cout << YELLOW << "-----------------CHECK CLIENTS--------------" << RESET << std::endl;
+
+	std::cout << YELLOW << "liste des clients avec leurs fds associes: " << RESET << std::endl;
+	for (std::map<int, Client *>::iterator it = _clients.begin(); it != _clients.end(); it++)
+	{
+		Client *client = it->second;
+		std::string name = client->getNickname(); 
+		int fd = it->first;
+		std::cout << GREEN << "-->Nickname: " << name << "-->fd: "<< fd << RESET << std::endl;
+	}
 }

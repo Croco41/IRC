@@ -46,26 +46,30 @@ class Server
 		std::string				getPassword() const;
 		std::map<int, Client *>	getClients() const;
 		int						getSocket() const;
+		int						getEpollfd() const;
+		Client*					getClient(const std::string &nickname);
+		std::string				getServname() const;
+		Channel*				getChannel(const std::string &name);
+
 		int						launch_socket();
 		void					start_epoll();
+
 		void					onClientConnect(sockaddr_in connect_serv_socket, int socket_client);
 		std::string				ParsingonClientConnect(std::string message, std::string word, Client *client);
 		void					onClientDisconnect(int fd, int epoll_fd);
 		void					onClientMessage(int fd, char *tmp, size_t r);
 		std::string				recvMessage(int socket_client, char *tmp, size_t r);
-		//partie liée au channel:
-		Channel*				getChannel(const std::string &name);
+
 		Channel*				createChannel(const std::string &name, const std::string &password, Client *client);
 		void					destroyChannel(Channel *channel);
-		//pour avoir accès au client
-		Client*					getClient(const std::string &nickname);
-		std::string				getServname() const;
 
+		void					consolDeBUGserver();
 
 	private:
 		Server(Server const &copy);
 		Server &operator=(Server const &rhs);
 
+		int						_epollfd;
 		const std::string		_port;
 		const std::string		_password;
 		const std::string		_servname;

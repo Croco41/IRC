@@ -13,50 +13,50 @@ ModeCommand::~ModeCommand()
 // 		- a : away// - i : invisible// - w : wallops// - r : restricted// - o : operator
 void ModeCommand::mode_user(Client *client, std::vector<std::string> arg)
 {
-    int arg_size = arg.size();
+	int arg_size = arg.size();
 	std::string modes = client->getModes();
 	std::string target = arg.at(0);
 	Client *targetclient = _server->getClient(target);
 	std::cout << PURPLE << targetclient->getNickname() << RESET << std::endl;
-    if (arg_size == 1) //SI JUSTE LA TARGET
-    {
-        if (targetclient)
-        {
-            if (client->getNickname() == target)
-            {
-				std::cout << "dans mode sans arg " << modes << std::endl;
-                client->reply(RPL_UMODEIS(client->getNickname(), modes)); //221 To answer a query about a client's own mode, RPL_UMODEIS is sent back.
-            }
-            else
-                client->reply(ERR_USERSDONTMATCH()); 
-        }
-        else
+	if (arg_size == 1) //SI JUSTE LA TARGET
+	{
+		if (targetclient)
 		{
-            client->reply(ERR_NOSUCHNICK(client->getNickname(), target));
+			if (client->getNickname() == target)
+			{
+				std::cout << "dans mode sans arg " << modes << std::endl;
+				client->reply(RPL_UMODEIS(client->getNickname(), modes)); //221 To answer a query about a client's own mode, RPL_UMODEIS is sent back.
+			}
+			else
+				client->reply(ERR_USERSDONTMATCH()); 
 		}
-        return;
-    }
-    else if (arg_size == 2) //SI TARGET + MODES TO CHANGE
-    {
-        if (client->getNickname() == target)
-        {
-            bool sign = true;
+		else
+		{
+			client->reply(ERR_NOSUCHNICK(client->getNickname(), target));
+		}
+		return;
+	}
+	else if (arg_size == 2) //SI TARGET + MODES TO CHANGE
+	{
+		if (client->getNickname() == target)
+		{
+			bool sign = true;
 			bool unknown_mode = false;
-            std::string modes(MODES_USER);
+			std::string modes(MODES_USER);
 			std::string readytosent = ""; // pour fix version d'irssi
-            for (std::vector<std::string>::iterator it = arg.begin() + 1; it != arg.end(); ++it) 
-            {
+			for (std::vector<std::string>::iterator it = arg.begin() + 1; it != arg.end(); ++it) 
+			{
 				std::cout << "value tested debut: " << (*it) << std::endl;
-                if (it.operator*().at(0) == '-')
-                    sign = false;
-                else if (it.operator*().at(0) ==  '+')
-                    sign = true;
+				if (it.operator*().at(0) == '-')
+					sign = false;
+				else if (it.operator*().at(0) ==  '+')
+					sign = true;
 				std::cout << "value cherchée après + -: " << it.operator*().at(1) << std::endl;
-                if (modes.find((it.operator*().at(1))) != std::string::npos)
-                {
-                    std::string client_modes = client->getModes();
+				if (modes.find((it.operator*().at(1))) != std::string::npos)
+				{
+					std::string client_modes = client->getModes();
 					std::cout << PURPLE << "client_modes: " << client_modes << RESET << std::endl;
-                    //if (sign == true && (client_modes.find((*it)) == std::string::npos))
+					//if (sign == true && (client_modes.find((*it)) == std::string::npos))
 					if ((it.operator*().at(1)) == 'a')
 					{
 						std::string reply = "The flag 'a' SHALL NOT be toggled using the MODE command,instead use of the AWAY command is REQUIRED";
@@ -72,20 +72,20 @@ void ModeCommand::mode_user(Client *client, std::vector<std::string> arg)
 						std::cout << RED << reply << RESET << std::endl;
 					}
 					else if (sign == true && (client_modes.find((it.operator*().at(1))) == std::string::npos)) //add mode to user
-                    {
-                        std::cout << "add mode" << std::endl;
+					{
+						std::cout << "add mode" << std::endl;
 						client->setModes(client->getModes() + (*it));
 						//client->setModes(client->getModes() + (it.operator*().at(0)) + (it.operator*().at(1)));
-                    }
+					}
 					else if (sign == false && ((it.operator*().at(1)) == 'r'))
 					{
 						std::string reply = "You can't make yourself unrestricted";
 						client->reply(reply);
 						std::cout << RED << reply << RESET << std::endl;
 					}
-                    else if (sign == false && (client_modes.find((it.operator*().at(1))) != std::string::npos)) //remove mode to user
-                    {
-                        std::cout << "remove mode" << std::endl;
+					else if (sign == false && (client_modes.find((it.operator*().at(1))) != std::string::npos)) //remove mode to user
+					{
+						std::cout << "remove mode" << std::endl;
 						std::string needle;
 						std::string tosend; // pour fix mode version irssi
 						tosend = (*it); // pour fix mode version irssi
@@ -97,23 +97,23 @@ void ModeCommand::mode_user(Client *client, std::vector<std::string> arg)
 						client_modes.erase(pos -1, 2);
 						//client_modes.append("-i");
 						std::cout << GREEN <<  "remove mode, size de new clientmodes (après erase): " << client_modes << client_modes.size() << RESET << std::endl;
-                        client->setModes(client_modes);
-                    }
+						client->setModes(client_modes);
+					}
 					if (sign == false && ((it.operator*().at(1)) == 'o'))
 					{
 						client->setOperator(0);
 					}
-                }
-                else
+				}
+				else
 				{
-                	unknown_mode = true;
+					unknown_mode = true;
 					std::cout << RED << "je rentre ici dans unknow mode?? " << RESET << std::endl;
 				}
-            }
-		    if (unknown_mode == true)
-            {
-                client->reply(ERR_UMODEUNKNOWNFLAG());
-            }
+			}
+			if (unknown_mode == true)
+			{
+				client->reply(ERR_UMODEUNKNOWNFLAG());
+			}
 			readytosent.append(client->getModes()); // pour fix version d'irssi
 			std::cout << "readytosent: " << readytosent << std::endl;
 			client->reply_command(RPL_MODE(client->getPrefix(), client->getNickname(), readytosent, ""));
@@ -125,19 +125,19 @@ void ModeCommand::mode_user(Client *client, std::vector<std::string> arg)
 // ATTENTION !!! A mettre à jour dans oper le -o et isoperator du client
 void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std::string> arg)
 {
-    int arg_size = arg.size();
+	int arg_size = arg.size();
 	std::string size = "";
 	std::string chan_modes_save = channel->getModes();
 	std::cout << PURPLE << channel->getName() << RESET << std::endl;
-    if (arg_size == 1) //SI JUSTE LA TARGET
-    {
-        client->reply(RPL_CHANNELMODEIS(channel->getName(), channel->getModes(), size)); //324 To answer a query about channel's mode
-        return;
-    }
-    else if (arg_size == 2) //SI TARGET + MODES TO CHANGE
-    {
-        bool sign = true;
-        std::string modes(CHANNEL_MODES);
+	if (arg_size == 1) //SI JUSTE LA TARGET
+	{
+		client->reply(RPL_CHANNELMODEIS(channel->getName(), channel->getModes(), size)); //324 To answer a query about channel's mode
+		return;
+	}
+	else if (arg_size == 2) //SI TARGET + MODES TO CHANGE
+	{
+		bool sign = true;
+		std::string modes(CHANNEL_MODES);
 		if(channel->client_is_operator(client) == false)
 		{
 			client->reply(ERR_CHANOPRIVSNEEDED(client->getNickname(), channel->getName()));
@@ -148,17 +148,17 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
 			client->reply(ERR_NOTONCHANNEL(client->getNickname(), channel->getName()));
 			return;
 		}
-        for (std::vector<std::string>::iterator it = arg.begin() + 1; it != arg.end(); ++it) 
-        {
+		for (std::vector<std::string>::iterator it = arg.begin() + 1; it != arg.end(); ++it) 
+		{
 			std::cout << "value tested debut: " << (*it) << std::endl;
-            if (it.operator*().at(0) == '-')
-                sign = false;
-            else if (it.operator*().at(0) ==  '+')
-                sign = true;
+			if (it.operator*().at(0) == '-')
+				sign = false;
+			else if (it.operator*().at(0) ==  '+')
+				sign = true;
 			std::cout << "value cherchée après + -: " << it.operator*().at(1) << std::endl;
-            if (modes.find((it.operator*().at(1))) != std::string::npos && ((it.operator*().at(1)) == 't'))
-            {
-                // t =>   The channel flag 't' is used to restrict the usage of the TOPIC
+			if (modes.find((it.operator*().at(1))) != std::string::npos && ((it.operator*().at(1)) == 't'))
+			{
+				// t =>   The channel flag 't' is used to restrict the usage of the TOPIC
 				if(sign == true && chan_modes_save.find((it.operator*().at(1))) == std::string::npos)
 				{
 					std::cout << "add mode t (restrict usage of the TOPIC)" << std::endl;
@@ -220,7 +220,7 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
 		std::cout << "je suis dans channel mode arg3" << std::endl;
 		bool sign = true;
 		//bool unknown_mode = false;
-        std::string modes(CHANNEL_MODES);
+		std::string modes(CHANNEL_MODES);
 		if(channel->client_is_operator(client) == false)
 		{
 			client->reply(ERR_CHANOPRIVSNEEDED(client->getNickname(), channel->getName()));
@@ -231,13 +231,13 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
 			client->reply(ERR_NOTONCHANNEL(client->getNickname(), channel->getName()));
 			return;
 		}
-        for (std::vector<std::string>::iterator it = arg.begin() + 1; it != arg.end(); ++it) 
-        {
+		for (std::vector<std::string>::iterator it = arg.begin() + 1; it != arg.end(); ++it) 
+		{
 			std::cout << "value tested debut: " << (*it) << std::endl;
-            if (it.operator*().at(0) == '-')
-                sign = false;
-            else if (it.operator*().at(0) ==  '+')
-                sign = true;
+			if (it.operator*().at(0) == '-')
+				sign = false;
+			else if (it.operator*().at(0) ==  '+')
+				sign = true;
 			if ((it.operator*().at(1)) == 'o')
 			{
 				std::string reply = "You need to use OPER command to make an operator (or Mode user to do -o)";
@@ -298,12 +298,14 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
 
 void ModeCommand::execute(Client *client, std::vector<std::string> arg)
 {
+	std::cout << FUCHSIA << "on entre dans MODE ?" << RESET << std::endl;
 	// La commande MODE doit toujours avoir au moins un paramètre !
 	if (arg.size() < 1)
 	{
 		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "MODE"));
 		return;
 	}
+	std::cout << FUCHSIA << "notre argument : " << arg.at(0) << RESET << std::endl;
 	// on aura deux types de paramètres : 
 	//		- soit un nom de client		-> USER MODE
 	//		- soit un nom de channel	-> CHANNEL MODE
@@ -322,7 +324,7 @@ void ModeCommand::execute(Client *client, std::vector<std::string> arg)
 			}
 	}
 	else if (targetchannel)
-	 		mode_channel(client, targetchannel, arg);	
+			mode_channel(client, targetchannel, arg);	
 	else
 	{
 		if (!targetchannel)
@@ -334,66 +336,66 @@ void ModeCommand::execute(Client *client, std::vector<std::string> arg)
 }
 
 /*
- Command: MODE
-   Parameters: <nickname>
-               *( ( "+" / "-" ) *( "i" / "w" / "o" / "O" / "r" ) )
+Command: MODE
+Parameters: <nickname>
+			*( ( "+" / "-" ) *( "i" / "w" / "o" / "O" / "r" ) )
 
-   The user MODE's are typically changes which affect either how the
-   client is seen by others or what 'extra' messages the client is sent.
+The user MODE's are typically changes which affect either how the
+client is seen by others or what 'extra' messages the client is sent.
 
-   A user MODE command MUST only be accepted if both the sender of the
-   message and the nickname given as a parameter are both the same.  If
-   no other parameter is given, then the server will return the current
-   settings for the nick.
+A user MODE command MUST only be accepted if both the sender of the
+message and the nickname given as a parameter are both the same.  If
+no other parameter is given, then the server will return the current
+settings for the nick.
 
-      The available modes are as follows:
+	The available modes are as follows:
 
-           a - user is flagged as away;
-           i - marks a users as invisible;
-           w - user receives wallops;
-           r - restricted user connection;
-           o - operator flag;
-           O - local operator flag;
-           s - marks a user for receipt of server notices.
+		a - user is flagged as away;
+		i - marks a users as invisible;
+		w - user receives wallops;
+		r - restricted user connection;
+		o - operator flag;
+		O - local operator flag;
+		s - marks a user for receipt of server notices.
 
-   Additional modes may be available later on.
+Additional modes may be available later on.
 
 Kalt                         Informational                     [Page 12]
 RFC 2812          Internet Relay Chat: Client Protocol        April 2000
 
-   The flag 'a' SHALL NOT be toggled by the user using the MODE command,
-   instead use of the AWAY command is REQUIRED.
+The flag 'a' SHALL NOT be toggled by the user using the MODE command,
+instead use of the AWAY command is REQUIRED.
 
-   If a user attempts to make themselves an operator using the "+o" or
-   "+O" flag, the attempt SHOULD be ignored as users could bypass the
-   authentication mechanisms of the OPER command.  There is no
-   restriction, however, on anyone `deopping' themselves (using "-o" or
-   "-O").
+If a user attempts to make themselves an operator using the "+o" or
+"+O" flag, the attempt SHOULD be ignored as users could bypass the
+authentication mechanisms of the OPER command.  There is no
+restriction, however, on anyone `deopping' themselves (using "-o" or
+"-O").
 
-   On the other hand, if a user attempts to make themselves unrestricted
-   using the "-r" flag, the attempt SHOULD be ignored.  There is no
-   restriction, however, on anyone `deopping' themselves (using "+r").
-   This flag is typically set by the server upon connection for
-   administrative reasons.  While the restrictions imposed are left up
-   to the implementation, it is typical that a restricted user not be
-   allowed to change nicknames, nor make use of the channel operator
-   status on channels.
+On the other hand, if a user attempts to make themselves unrestricted
+using the "-r" flag, the attempt SHOULD be ignored.  There is no
+restriction, however, on anyone `deopping' themselves (using "+r").
+This flag is typically set by the server upon connection for
+administrative reasons.  While the restrictions imposed are left up
+to the implementation, it is typical that a restricted user not be
+allowed to change nicknames, nor make use of the channel operator
+status on channels.
 
-   The flag 's' is obsolete but MAY still be used.
+The flag 's' is obsolete but MAY still be used.
 
-   Numeric Replies:
+Numeric Replies:
 
-           ERR_NEEDMOREPARAMS              ERR_USERSDONTMATCH
-           ERR_UMODEUNKNOWNFLAG            RPL_UMODEIS
+		ERR_NEEDMOREPARAMS              ERR_USERSDONTMATCH
+		ERR_UMODEUNKNOWNFLAG            RPL_UMODEIS
 
-   Examples:
+Examples:
 
-   MODE WiZ -w                     ; Command by WiZ to turn off
-                                   reception of WALLOPS messages.
+MODE WiZ -w                     ; Command by WiZ to turn off
+								reception of WALLOPS messages.
 
-   MODE Angel +i                   ; Command from Angel to make herself
-                                   invisible.
+MODE Angel +i                   ; Command from Angel to make herself
+								invisible.
 
-   MODE WiZ -o                     ; WiZ 'deopping' (removing operator
-                                   status).
+MODE WiZ -o                     ; WiZ 'deopping' (removing operator
+								status).
 */

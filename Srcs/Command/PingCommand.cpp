@@ -18,4 +18,5 @@ void PingCommand::execute(Client *client, std::vector<std::string> arg)
 	//client->reply(RPL_PING(client->getPrefix(), message));
 	client->reply_command(RPL_PING(client->getPrefix(), message));
 	std::cout << FUCHSIA << "PINGCOMMAND : execute - end" << RESET << std::endl;
+	//_server->consolDeBUGserver();
 }
