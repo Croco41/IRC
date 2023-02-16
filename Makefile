@@ -34,6 +34,8 @@ SRC		=	Srcs/main.cpp \
 			Srcs/Command/TopicCommand.cpp \
 			Srcs/Command/KickCommand.cpp \
 			Srcs/Command/KillCommand.cpp \
+			Srcs/Command/NamesCommand.cpp \
+			Srcs/Command/ListCommand.cpp \
 
 OBJ		=	$(SRC:Srcs/%.cpp=Objs/%.o)
 DEP		=	$(SRC:Srcs/%.cpp=Objs/%.d)

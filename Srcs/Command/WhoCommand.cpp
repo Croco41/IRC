@@ -32,6 +32,7 @@ void WhoCommand::execute(Client *client, std::vector<std::string> arg)
 	else if (arg.size() > 1)
 	{
 		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "WHO"));
+		return;
 	}
 	else if (arg.size() < 2 && arg.at(0)[0] == '#') // donner les noms des users du channel !
 	{
@@ -59,7 +60,7 @@ void WhoCommand::execute(Client *client, std::vector<std::string> arg)
 			client->reply(ERR_NOSUCHNICK(client->getNickname(), "WHO"));
 			return;
 		}
-		client->reply_command(RPL_WHOREPLY(client->getUsername(), "1", target->getUsername())); // ici :user, nb de serveurs, nom du client
+		client->reply_command(RPL_WHOREPLY(client->getNickname(), "1", target->getUsername())); // ici :user, nb de serveurs, nom du client
 	}
 	client->reply_command(RPL_ENDOFWHO(client->getRealname()));
 }

@@ -209,4 +209,22 @@ class KillCommand : public Command
 		void execute(Client *client, std::vector<std::string> arg);
 };
 
+class NamesCommand : public Command
+{
+	public:
+		NamesCommand(Server *server);
+		~NamesCommand();
+
+		void execute(Client *client, std::vector<std::string> arg);
+};
+
+class ListCommand : public Command
+{
+	public:
+		ListCommand(Server *server);
+		~ListCommand();
+
+		void execute(Client *client, std::vector<std::string> arg);
+};
+
 #endif
