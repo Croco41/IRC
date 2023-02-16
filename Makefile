@@ -50,14 +50,14 @@ $(DEP):
 $(NAME)		:	$(OBJ)
 				$(CXC) $(CFLAGS) -o $(NAME) $(SRC)
 
-obj			:	; mkdir -p Objs/Command
-# @if [ ! -d "./Objs" ]; then\
-# 	echo "mkdir -p Objs";\
-# 	mkdir -p Objs;\
-# fi
-# 	@echo ""
+obj			:			
+			@if [ ! -d "./Objs/Command" ]; then\
+				echo "mkdir -p Objs/Command";\
+				mkdir -p Objs/Command;\
+			fi
+				@echo ""
 
-Objs/%.o	:	Srcs/%.cpp Objs/%.d | obj
+Objs/%.o	:	Srcs/%.cpp | obj
 				$(CXC) -o $@ -c $< $(CFLAGS) $(CDEP)
 
 clean		: 
@@ -73,4 +73,4 @@ fsa			:	fclean $(OBJ)
 
 re			:	fclean all
 
-.PHONY		:	all obj clean fclean fsa re
+.PHONY		:	all clean fclean fsa re
