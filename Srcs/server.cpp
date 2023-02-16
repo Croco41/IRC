@@ -1,4 +1,4 @@
-#include "../Includes/server.hpp"
+#include "server.hpp"
 
 int Run;
 

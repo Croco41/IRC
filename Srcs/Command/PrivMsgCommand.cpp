@@ -1,4 +1,4 @@
-#include "../../Includes/command_list.hpp"
+#include "command_list.hpp"
 
 PrivMsgCommand::PrivMsgCommand(Server *server) : Command(server)
 {

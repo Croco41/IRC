@@ -1,4 +1,4 @@
-#include "../../Includes/command_list.hpp"
+#include "command_list.hpp"
 
 ModeCommand::ModeCommand(Server *server) : Command(server)
 {

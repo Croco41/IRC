@@ -225,4 +225,13 @@ class ListCommand : public Command
 		void execute(Client *client, std::vector<std::string> arg);
 };
 
+class CapCommand : public Command
+{
+	public:
+		CapCommand(Server *server);
+		~CapCommand();
+
+		void execute(Client *client, std::vector<std::string> arg);
+};
+
 #endif

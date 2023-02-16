@@ -1,16 +1,17 @@
 NAME	=	ircserv
 
-INC		=	Includes
+INC		=	Includes/
+OBJDIR	=	Objs/
+SRCDIR	=	Srcs/
 
 CXC		=	c++
-CFLAGS	=	-Wall -Wextra -Werror -std=c++98 -I $(INC)
-CDEP	=	-MMD
+CFLAGS	=	-Wall -Wextra -Werror -std=c++98 
+CINC	=	-I $(INC)
+CDEP	=	-MMD -MP
 # -Wshadow : Warn whenever a local variable or type declaration shadows another 
 #             variable, parameter, type or class member
 CFA		=	-fsanitize=address -g3
 RM		=	rm -rf
-
-# vpath %.cpp Srcs Srcs/Command
 
 SRC		=	Srcs/main.cpp \
 			Srcs/server.cpp \
@@ -36,34 +37,25 @@ SRC		=	Srcs/main.cpp \
 			Srcs/Command/KillCommand.cpp \
 			Srcs/Command/NamesCommand.cpp \
 			Srcs/Command/ListCommand.cpp \
-			Srcs/Command/CapCommand.cpp \
+			Srcs/Command/CapCommand.cpp
 
-OBJ		=	$(SRC:Srcs/%.cpp=Objs/%.o)
-DEP		=	$(SRC:Srcs/%.cpp=Objs/%.d)
-
+OBJ		=	$(SRC:$(SRCDIR)%.cpp=$(OBJDIR)%.o)
+DEP		=	$(OBJ:.o=.d)
 
 all			:	$(NAME)
 
-$(DEP):
--include $(DEP)
-
 $(NAME)		:	$(OBJ)
-				$(CXC) $(CFLAGS) -o $(NAME) $(SRC)
+				$(CXC) $(CFLAGS) $^ -o $(NAME)
 
-obj			:	; mkdir -p Objs/Command
-# @if [ ! -d "./Objs" ]; then\
-# 	echo "mkdir -p Objs";\
-# 	mkdir -p Objs;\
-# fi
-# 	@echo ""
+$(OBJDIR)%.o:	$(SRCDIR)%.cpp | $(OBJDIR)
+				$(CXC) $(CDEP) $(CFLAGS) -c $< -o $@ $(CINC)
 
-Objs/%.o	:	Srcs/%.cpp Objs/%.d | obj
-				$(CXC) -o $@ -c $< $(CFLAGS) $(CDEP)
+$(OBJDIR)	:	; mkdir -p $(OBJDIR)Command
 
 clean		: 
 				$(RM) $(OBJ)
 				$(RM) $(DEP)
-				$(RM) Objs
+				$(RM) $(OBJDIR)
 
 fclean		:	clean
 				$(RM) $(NAME)
@@ -73,4 +65,7 @@ fsa			:	fclean $(OBJ)
 
 re			:	fclean all
 
-.PHONY		:	all obj clean fclean fsa re
+$(DEP):
+-include $(DEP)
+
+.PHONY		:	all clean fclean fsa re

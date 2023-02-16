@@ -1,4 +1,4 @@
-#include "../Includes/channel.hpp"
+#include "channel.hpp"
 
 // Channel::Channel(const std::string &name, const std::string &password)
 // 	: _name(name), _password(password), _admin(NULL), _clients()
