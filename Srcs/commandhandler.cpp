@@ -21,6 +21,7 @@ CommandHandler::CommandHandler(Server *server)
 	_commands["kill"] = new KillCommand(_server);
 	_commands["NAMES"] = new NamesCommand(_server);
 	_commands["LIST"] = new ListCommand(_server);
+	_commands["CAP"] = new CapCommand(_server);
 
 	for (std::map<std::string, Command*>::iterator it = _commands.begin(); it != _commands.end(); it++)
 		std::cout << BLUE << it.operator*().first << RESET << std::endl;
