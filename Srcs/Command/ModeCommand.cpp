@@ -59,7 +59,7 @@ void ModeCommand::mode_user(Client *client, std::vector<std::string> arg)
 					//if (sign == true && (client_modes.find((*it)) == std::string::npos))
 					if ((it.operator*().at(1)) == 'a')
 					{
-						std::string reply = "The flag 'a' SHALL NOT be toggled using the MODE command,instead use of the AWAY command is REQUIRED";
+						std::string reply = "The flag 'a' SHALL NOT be toggled using the MODE command,instead use of the AWAY command is REQUIRED but this mode is not implemented";
 						client->reply(reply);
 						std::cout << RED << reply << RESET << std::endl;
 						//client->writetosend(RPL_MODE_AWAY(client->getPrefix(), message));
