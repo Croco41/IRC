@@ -1,4 +1,4 @@
-#include "../../Includes/command_list.hpp"
+#include "command_list.hpp"
 
 NamesCommand::NamesCommand(Server *server) : Command(server)
 {
