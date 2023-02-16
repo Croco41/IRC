@@ -47,22 +47,10 @@ all			:	$(NAME)
 $(NAME)		:	$(OBJ)
 				$(CXC) $(CFLAGS) $^ -o $(NAME)
 
-<<<<<<< HEAD
-obj			:			
-			@if [ ! -d "./Objs/Command" ]; then\
-				echo "mkdir -p Objs/Command";\
-				mkdir -p Objs/Command;\
-			fi
-				@echo ""
-
-Objs/%.o	:	Srcs/%.cpp | obj
-				$(CXC) -o $@ -c $< $(CFLAGS) $(CDEP)
-=======
 $(OBJDIR)%.o:	$(SRCDIR)%.cpp | $(OBJDIR)
 				$(CXC) $(CDEP) $(CFLAGS) -c $< -o $@ $(CINC)
 
 $(OBJDIR)	:	; mkdir -p $(OBJDIR)Command
->>>>>>> 04db12d456b8055381ab46c041fd4fa1bb58691b
 
 clean		: 
 				$(RM) $(OBJ)
@@ -77,11 +65,7 @@ fsa			:	fclean $(OBJ)
 
 re			:	fclean all
 
-<<<<<<< HEAD
-.PHONY		:	all clean fclean fsa re
-=======
 $(DEP):
 -include $(DEP)
 
 .PHONY		:	all clean fclean fsa re
->>>>>>> 04db12d456b8055381ab46c041fd4fa1bb58691b

@@ -354,7 +354,8 @@ void		Server::onClientConnect(sockaddr_in connect_serv_socket, int socket_client
 	else
 	{
 		_errorpass = 0;
-		client->reply_command(RPL_ERROR(client->getNickname()));
+		std::string message = "Server closing client connection->wrong password";
+		client->reply_command(RPL_ERROR(client->getNickname(), message));
 		onClientDisconnect(client->getFd(), getEpollfd());
 	}
 
