@@ -322,37 +322,43 @@ void Channel::consolDeBUGchannel()
 	std::cout << YELLOW << "-----------------CHECK CLIENTS--------------" << RESET << std::endl;
 
 	std::string list_clients;
-	
-	for (std::vector<Client *>::iterator it = _clients.begin(); it != _clients.end(); it++)
+
+	if (_clients.size() != 0)
 	{
-		Client *client = it.operator*();
-		std::string name = client->getNickname(); 
-		list_clients.append(name);
-		list_clients.append(" ");
+		for (std::vector<Client *>::iterator it = _clients.begin(); it != _clients.end(); it++)
+		{
+			Client *client = it.operator*();
+			std::string name = client->getNickname(); 
+			list_clients.append(name);
+			list_clients.append(" ");
+		}
+		std::cout << YELLOW << "list_clients dans le channel: " << RESET << this->getName() << std::endl;
+		std::cout << GREEN << list_clients << RESET << std::endl;
+		std::cout << YELLOW << "size list_clients: " << RESET << std::endl;
+		std::cout << GREEN << _clients.size() << RESET << std::endl;
 	}
-	std::cout << YELLOW << "list_clients dans le channel: " << RESET << this->getName() << std::endl;
-	std::cout << GREEN << list_clients << RESET << std::endl;
-	std::cout << YELLOW << "size list_clients: " << RESET << std::endl;
-	std::cout << GREEN << _clients.size() << RESET << std::endl;
 
 //-------------------------------------------------------------------------------------------------
 	std::cout << YELLOW << "-----------------CHECK OPERATORS--------------" << RESET << std::endl;
 
 	std::string list_operators;
-	
-	for (std::vector<Client *>::iterator it = _clients.begin(); it != _clients.end(); it++)
+
+	if (_operators.size() != 0)
 	{
-		Client *client = it.operator*();
-		std::string name = client->getNickname(); 
-		list_operators.append(name);
-		list_operators.append(" ");
+		for (std::vector<Client *>::iterator it = _operators.begin(); it != _operators.end(); it++)
+		{
+			Client *client = it.operator*();
+			std::string name = client->getNickname(); 
+			list_operators.append(name);
+			list_operators.append(" ");
+		}
+		std::cout << YELLOW << "list_operators dans le channel: " << RESET << this->getName()  << std::endl;
+		std::cout << GREEN << list_operators << RESET << std::endl;
+		std::cout << YELLOW << "size list_operators sans admin: " << RESET << std::endl;
+		std::cout << GREEN << _operators.size() << RESET << std::endl;
+		// 	std::cout << YELLOW << "size list_operators avec admin: " << RESET << std::endl;
+		// std::cout << GREEN << getNboperators() << RESET << std::endl;
 	}
-	std::cout << YELLOW << "list_operators dans le channel: " << RESET << this->getName()  << std::endl;
-	std::cout << GREEN << list_operators << RESET << std::endl;
-	std::cout << YELLOW << "size list_operators sans admin: " << RESET << std::endl;
-	std::cout << GREEN << _operators.size() << RESET << std::endl;
-	// 	std::cout << YELLOW << "size list_operators avec admin: " << RESET << std::endl;
-	// std::cout << GREEN << getNboperators() << RESET << std::endl;
 
 //-------------------------------------------------------------------------------------------------
 	std::cout << YELLOW << "-----------------CHECK OTHER--------------" << RESET << std::endl;

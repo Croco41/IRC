@@ -45,6 +45,7 @@ class Server
 
 		std::string				getPassword() const;
 		std::map<int, Client *>	getClients() const;
+		std::vector<Channel *>	getChannels() const;
 		int						getSocket() const;
 		int						getEpollfd() const;
 		Client*					getClient(const std::string &nickname);

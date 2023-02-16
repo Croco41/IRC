@@ -38,6 +38,8 @@
 #define RPL_WHOISCHANNELS(nick, channel)		"319 " + nick + " is on " + channel
 #define RPL_ENDOFWHO(source)					"315 " + source + " :End of WHO list"
 #define RPL_ENDOFWHOIS(source)					"318 " + source + " :End of WHOIS list"
+#define RPL_LIST(source, channel, count, topic)	"322 " + source + " " + channel + " " + count + " :" + topic
+#define RPL_LISTEND(source)						"323 " + source + " :End of /LIST" 
 #define RPL_CHANNELMODEIS(target, modes, param)	"324 MODE " + target + " " + modes + " " + param
 #define RPL_NOTOPIC(source, channel)			"331 " + source + " " + channel + " :No topic is set"
 #define RPL_TOPIC(source, channel, topic)		"332 " + source + " " + channel + " " + topic

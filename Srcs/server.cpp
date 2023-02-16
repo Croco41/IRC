@@ -92,6 +92,11 @@ std::map<int, Client *>	Server::getClients() const
 	return (_clients);
 }
 
+std::vector<Channel *>	Server::getChannels() const
+{
+	return (_channels);
+}
+
 void		handleSignal(int sigint)
 {
 	std::cout << std::endl;

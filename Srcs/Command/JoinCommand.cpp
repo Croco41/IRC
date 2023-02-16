@@ -58,7 +58,6 @@ void JoinCommand::execute(Client *client, std::vector<std::string> arg)
 			it.operator*().append(tmp);
 			std::cout << GREEN << *it << RESET << std::endl;
 		}
-
 		if (client->findChannel(*it) == true)
 		{
 			std::cout << RED << "On entre ici ?" << RESET << std::endl;
