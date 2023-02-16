@@ -12,7 +12,7 @@ class Command;
 #include <algorithm>
 
 #define NICK_VALID_CHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-^_[]{}\\|"
-#define MODES_USER "aiwro"
+#define MODES_USER "airo"
 // t
 //type A modes are lists that can be viewed:
 // When the channel flag 'i' is set, new members are only accepted if
@@ -27,13 +27,11 @@ class Command;
 // for users :
 //     - o : channel operator
 // for channels :
-//     - i : invite only
 //     - t : topic locked
 //     - l : user limit
 // USER MODES :
 // - a : away
 // - i : invisible
-// - w : wallops
 // - r : restricted
 // - o : operator
 
@@ -223,15 +221,6 @@ class ListCommand : public Command
 	public:
 		ListCommand(Server *server);
 		~ListCommand();
-
-		void execute(Client *client, std::vector<std::string> arg);
-};
-
-class CapCommand : public Command
-{
-	public:
-		CapCommand(Server *server);
-		~CapCommand();
 
 		void execute(Client *client, std::vector<std::string> arg);
 };
