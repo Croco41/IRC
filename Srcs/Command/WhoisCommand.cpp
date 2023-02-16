@@ -33,6 +33,6 @@ void WhoisCommand::execute(Client *client, std::vector<std::string> arg)
 	if (target->getModes().find('o') != std::string::npos)
 		client->reply(RPL_WHOISOPERATOR(target->getNickname()));
 	if (target->getChannel().empty() == false)
-		client->reply(RPL_WHOISCHANNELS(target->getNickname(), target->getListChannel()));
+		client->reply_command(RPL_WHOISCHANNELS(target->getNickname(), target->getListChannel()));
 	client->reply_command(RPL_ENDOFWHOIS(client->getRealname()));
 }

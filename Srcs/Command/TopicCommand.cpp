@@ -32,9 +32,15 @@ void TopicCommand::execute(Client *client, std::vector<std::string> arg)
 				client->reply(RPL_TOPIC(client->getNickname(), channel->getName(), channel->getTopic()));
 			}	
 		}
-		else if (arg.size() == 2)
+		else if (arg.size() >= 2)
 		{
-			std::string topic = arg.at(1);
+			std::string topic;
+			for (std::vector<std::string>::iterator it = arg.begin()++; it != arg.end(); it ++)
+			{
+				topic.append(*it);
+				topic.append(" ");
+			}
+			// std::string topic = arg.at(1);
 			if(modesOn.find("+t") != std::string::npos && (client->getOperator() == false && (client != channel->getAdmin()))) 
 			{
 				client->reply(ERR_CHANOPRIVSNEEDED(client->getNickname(), channel->getName()));

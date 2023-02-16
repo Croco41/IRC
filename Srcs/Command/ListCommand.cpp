@@ -39,6 +39,7 @@ void ListCommand::execute(Client *client, std::vector<std::string> arg)
 			client->reply_command(RPL_LIST(client->getNickname(), it.operator*()->getName(), nbclients, it.operator*()->getTopic()));
 		}
 		client->reply_command(RPL_LISTEND(client->getNickname()));
+		return;
 	}
 	if (arg.at(0)[0] == '#') // affiche une liste des channels specifies (avec parsing)
 	{
@@ -70,6 +71,7 @@ void ListCommand::execute(Client *client, std::vector<std::string> arg)
 			client->reply_command(RPL_LIST(client->getNickname(), channel->getName(), nbclients, channel->getTopic()));
 		}
 		client->reply_command(RPL_LISTEND(client->getNickname()));
+		return;
 	}
 	else // on a un parametre qui est une string, on verifie si on la trouve dans un topic et on liste les channels qui ont ce topic !
 	{
@@ -85,6 +87,7 @@ void ListCommand::execute(Client *client, std::vector<std::string> arg)
 			}
 		}
 		client->reply_command(RPL_LISTEND(client->getNickname()));
+		return;
 	}
 	std::cout << FUCHSIA << "NAMECOMMAND : execute - end" << RESET << std::endl;
 }
