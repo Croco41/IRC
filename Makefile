@@ -47,8 +47,9 @@ all			:	$(NAME)
 $(NAME)		:	$(OBJ)
 				$(CXC) $(CFLAGS) $^ -o $(NAME)
 
-$(OBJDIR)%.o:	$(SRCDIR)%.cpp | $(OBJDIR)
+$(OBJDIR)%.o:	$(SRCDIR)%.cpp $(OBJDIR)%.d | $(OBJDIR)
 				$(CXC) $(CDEP) $(CFLAGS) -c $< -o $@ $(CINC)
+				@touch $@
 
 $(OBJDIR)	:	; mkdir -p $(OBJDIR)Command
 
