@@ -72,6 +72,15 @@ class NickCommand : public Command
 		void execute(Client *client, std::vector<std::string> arg);
 };
 
+class PassCommand : public Command
+{
+	public:
+		PassCommand(Server *server);
+		~PassCommand();
+
+		void execute(Client *client, std::vector<std::string> arg);
+};
+
 class PingCommand : public Command
 {
 	public:

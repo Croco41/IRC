@@ -15,7 +15,7 @@ void UserCommand::execute(Client *client, std::vector<std::string> arg)
 {
 	std::cout << FUCHSIA << "\nUSERCOMMAND : execute - start" << RESET << std::endl;
 	int param_size = arg.size();
-	if (param_size < 4)
+	if (param_size < 3)
 	{
 		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "USER"));
 		return;
@@ -25,15 +25,44 @@ void UserCommand::execute(Client *client, std::vector<std::string> arg)
 		client->reply(ERR_ALREADYREGISTERED(client->getNickname()));
 		return;
 	}
+	// else if (client->getPassword() != _server->getPassword())
+	// {
+	// 	client->reply(ERR_PASSWDMISMATCH(client->getNickname()));
+	// 	//_server->onClientDisconnect(client->getFd(), _server->getEpollfd());
+	// 	_server->setErrorPass(1);
+	// 	return;
+	// }
 	else
 	{
-		std::cout << RED << "ATTENTION: on est dans UserCommand, on set les params!" << RESET << std::endl;
-		//cette partie à utiliser si on enlève le parsing du début
+		std::string message;
+		std::string realname;
 		std::string username = arg[0];
-		//std::string hostname = arg[2]; dans le constructeur
-		std::string realname = arg[3];
 		client->setUsername(username);
-		client->setRealname(realname);	
+		for (std::vector<std::string>::iterator it = arg.begin(); it != arg.end(); ++it) 
+		{
+			std::string tosend; 
+			tosend = (*it); 
+			message.append(" ");
+			message.append(tosend);
+		}
+		message.append("\t\n");
+		std::cout << message << std::endl;
+		size_t start;
+		size_t end;
+		start = message.find(":");
+		if(message.find(":") == std::string::npos)
+		{
+			realname = arg[2];
+			std::cout << start << std::cout;
+		}
+		else
+		{
+			end = message.find_first_of("\t\n", start);
+			realname = message.substr(start + 1, end - start -1);
+		}
+		std::cout << RED << "ATTENTION: on est dans UserCommand, on set les params!" << RESET << std::endl;
+		client->setRealname(realname);
+		client->setRegistered(1);
 	}
 
 	std::cout << FUCHSIA << "USERCOMMAND : execute - end" << RESET << std::endl;

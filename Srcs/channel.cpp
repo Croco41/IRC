@@ -340,7 +340,7 @@ void Channel::consolDeBUGchannel()
 
 	std::string list_operators;
 	
-	for (std::vector<Client *>::iterator it = _clients.begin(); it != _clients.end(); it++)
+	for (std::vector<Client *>::iterator it = _operators.begin(); it != _operators.end(); it++)
 	{
 		Client *client = it.operator*();
 		std::string name = client->getNickname(); 

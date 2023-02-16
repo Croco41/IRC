@@ -3,7 +3,7 @@
 int Run;
 
 Server::Server(const std::string &port, const std::string &password)
-	: _port(port), _password(password), _servname("ircserv"), _channels()  
+	: _port(port), _password(password), _servname("ircserv"), _channels(), _errorpass(0)  
 {
 	Run = 1;
 	_socket = launch_socket();
@@ -85,6 +85,16 @@ Client*		Server::getClient(const std::string &nickname)
 			return (it->second);
 	}
 	return NULL;
+}
+
+bool			Server::getErrorPass()
+{
+	return(this->_errorpass);
+}
+
+void			Server::setErrorPass(bool errorpass)
+{
+	_errorpass = errorpass;
 }
 
 std::map<int, Client *>	Server::getClients() const
@@ -301,7 +311,8 @@ void		Server::onClientConnect(sockaddr_in connect_serv_socket, int socket_client
 	std::cout << hostname << ":" << ntohs(connect_serv_socket.sin_port) << " has connected." << std::endl << std::endl;
 	_clients.insert(std::make_pair(socket_client, client)); // on enregistre l'instance client au niveau de la clé fd (il ne peut y avoir 2x le même fd, donc map parfait !)
 
-	std::string message;
+	//std::string message;
+	std:: string message;
 	char tmp[100] = {0};
 	while (message.find("\r\n") == std::string::npos)
 	{
@@ -314,19 +325,33 @@ void		Server::onClientConnect(sockaddr_in connect_serv_socket, int socket_client
 		message.append(tmp, r);
 	}
 	std::cout << "message = " << message << std::endl;
-	client->setPassword(ParsingonClientConnect(message, "PASS", client));
-	client->setNickname(ParsingonClientConnect(message, "NICK", client));
-	client->setRealname(ParsingonClientConnect(message, "USER", client));
+	// client->setPassword(ParsingonClientConnect(message, "PASS", client));
+	// client->setNickname(ParsingonClientConnect(message, "NICK", client));
+	// client->setRealname(ParsingonClientConnect(message, "USER", client));
 	
-	std::cout << "password: " << client->getPassword() << std::endl;
-	std::cout << "nickname: " << client->getNickname() << std::endl;
-	std::cout << "username: " << client->getUsername() << std::endl;
-	std::cout << "realname: " << client->getRealname() << std::endl;
+	// std::cout << "password: " << client->getPassword() << std::endl;
+	// std::cout << "nickname: " << client->getNickname() << std::endl;
+	// std::cout << "username: " << client->getUsername() << std::endl;
+	// std::cout << "realname: " << client->getRealname() << std::endl;
 
+	_commandHandler->recup_msg(client, message);
 	std::cout << YELLOW;
-	client->setRegistered(1);
-	client->reply(RPL_WELCOME(client->getNickname()));
-	std::cout << RESET;
+	if (_errorpass == 0)
+	{
+		client->setRegistered(1);
+		client->reply(RPL_WELCOME(client->getNickname()));
+		std::cout << "password: " << client->getPassword() << std::endl;
+		std::cout << "nickname: " << client->getNickname() << std::endl;
+		std::cout << "username: " << client->getUsername() << std::endl;
+		std::cout << "realname: " << client->getRealname() << std::endl;
+		std::cout << RESET;
+	}
+	else
+	{
+		_errorpass = 0;
+		client->reply_command(RPL_ERROR(client->getNickname()));
+		onClientDisconnect(client->getFd(), getEpollfd());
+	}
 
 	// createChannel("Fantasy", "Gandalf", client);
 }
@@ -336,7 +361,7 @@ void		Server::onClientDisconnect(int fd, int epoll_fd)
 	// Remove the client from the epoll instance (flag EPOLL_CTL_DEL)
 	epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, 0);
 	// Close the socket for this client
-	std::cout << "Client n°" << fd << " username: " << _clients.at(fd)->getUsername() << " va se déconnecter." << std::endl;
+	std::cout << "Client n°" << fd << " va se déconnecter." << std::endl;
 	delete _clients.at(fd);
 	_clients.erase(fd);
 	close(fd);

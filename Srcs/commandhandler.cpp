@@ -10,6 +10,8 @@ CommandHandler::CommandHandler(Server *server)
 	_commands["NOTICE"] = new NoticeCommand(_server);
 	_commands["PART"] = new PartCommand(_server);
 	_commands["userhost"] = new UserCommand(_server);
+	_commands["USER"] = new UserCommand(_server);
+	_commands["PASS"] = new	PassCommand(_server);
 	_commands["NICK"] = new NickCommand(_server);
 	_commands["MODE"] = new ModeCommand(_server);
 	_commands["QUIT"] = new QuitCommand(_server);

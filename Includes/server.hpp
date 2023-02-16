@@ -50,7 +50,9 @@ class Server
 		Client*					getClient(const std::string &nickname);
 		std::string				getServname() const;
 		Channel*				getChannel(const std::string &name);
+		bool					getErrorPass();
 
+		void					setErrorPass(bool errorpass);
 		int						launch_socket();
 		void					start_epoll();
 
@@ -69,13 +71,15 @@ class Server
 		Server(Server const &copy);
 		Server &operator=(Server const &rhs);
 
+		
 		int						_epollfd;
 		const std::string		_port;
 		const std::string		_password;
 		const std::string		_servname;
 		int						_socket;
 		std::map<int, Client *>	_clients; // nos clients seront enregistrés dans une map associant clé = fd, valeur = objet Client
-		std::vector<Channel *>	_channels; // nos channels seront enregistrés dans un tableau
+		std::vector<Channel *>	_channels;
+		bool					_errorpass; // nos channels seront enregistrés dans un tableau
 		CommandHandler			*_commandHandler;
 };
 

@@ -24,6 +24,7 @@ SRC		=	Srcs/main.cpp \
 			Srcs/Command/NoticeCommand.cpp \
 			Srcs/Command/PartCommand.cpp \
 			Srcs/Command/UserCommand.cpp \
+			Srcs/Command/PassCommand.cpp \
 			Srcs/Command/NickCommand.cpp \
 			Srcs/Command/ModeCommand.cpp \
 			Srcs/Command/QuitCommand.cpp \

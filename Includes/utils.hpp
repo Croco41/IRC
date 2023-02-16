@@ -59,5 +59,6 @@
 #define RPL_KICK(source, channel, target, message)	":" + source + " KICK " + channel + " " + target + " " + message
 #define RPL_KILL(source, target, message)			":" + source + " KILL " + target + " " + message
 #define RPL_QUIT(source, message)					":" + source + " QUIT " + " :" + message
+#define RPL_ERROR(source)							":" + source + " ERROR " + " :Server closing client connection->wrong password"
 
 #endif

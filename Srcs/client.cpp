@@ -264,7 +264,10 @@ void	Client::leave_channel(Channel *channel, std::string message, bool kill)
 	if (kill == 0)
 		channel->sendall(RPL_PART(getPrefix(), channel->getName(), message));
 	channel->removeClient(this);
-
+	// if (channel->getNbclients() == 0)
+	// {
+	// 	_server->destroyChannel(channel);
+	// }
 	std::vector<Channel *>::iterator	it;
 	for (it = _Cchannels.begin(); it != _Cchannels.end(); it++)
 	{	

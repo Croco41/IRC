@@ -55,6 +55,12 @@ void NickCommand::execute(Client *client, std::vector<std::string> arg)
 		client->reply(ERR_ERRONEUSNICKNAME(client->getNickname()));
 		return;
 	}
+	std::map<int, Client *> _clients = _server->getClients();
+	for (std::map<int, Client *>::iterator it = _clients.begin(); it != _clients.end(); it++)
+	{
+		if (nickname == it.operator*().second->getNickname())
+				nickname.push_back('_');
+	}
 	if (_server->getClient(nickname))
 	{
 		client->reply(ERR_NICKNAMEINUSE(client->getNickname()));
