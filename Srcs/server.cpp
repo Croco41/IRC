@@ -358,8 +358,6 @@ void		Server::onClientConnect(sockaddr_in connect_serv_socket, int socket_client
 		client->reply_command(RPL_ERROR(client->getNickname(), message));
 		onClientDisconnect(client->getFd(), getEpollfd());
 	}
-
-	// createChannel("Fantasy", "Gandalf", client);
 }
 
 void		Server::onClientDisconnect(int fd, int epoll_fd)
