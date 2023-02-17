@@ -27,7 +27,7 @@ void OperCommand::execute(Client *client, std::vector<std::string> arg)
 		{
 			client->setModes(client->getModes() + "+o");
 			client->setOperator(1);
-			std::cout << YELLOW << " modes: " << client->getModes() << RESET << std::endl;
+			//std::cout << YELLOW << " modes: " << client->getModes() << RESET << std::endl;
 			client->reply(RPL_YOUREOPER(client->getNickname()));
 			client->reply_command(RPL_MODE(client->getPrefix(), client->getNickname(), client->getModes(), ""));
 		}

@@ -34,13 +34,12 @@ void KillCommand::execute(Client *client, std::vector<std::string> arg)
 				std::cout << GREEN << "KILL EN COURS : " << target << RESET << std::endl;
 				std::string	kill_message = arg[1];
 				std::string	message_chan;
-				std::cout << YELLOW << arg.size() << RESET << std::endl;
+				//std::cout << YELLOW << arg.size() << RESET << std::endl;
 				if (clientkill == client)
 				{
 					std::cout << "You can't kill yourself" << std::endl;
 					return;
 				}
-				std::cout << GREEN << "Faudra coder l'user kill etait dans un chan(operator, client size)!" << RESET << std::endl;
 				//vector des channels de l'user a kill
 				std::vector<Channel *>	channels_userkill;
 				channels_userkill = client->getChannel();
@@ -52,23 +51,16 @@ void KillCommand::execute(Client *client, std::vector<std::string> arg)
 				for (std::vector<Channel *>::iterator it = channels_userkill.begin(); it != channels_userkill.end(); it++)
 				{	
 					(*it)->sendall(RPL_QUIT(clientkill->getNickname(), message_chan));
-					std::cout <<  "boucle for de KILL  chans " << it.operator*()->getName() << std::endl;
-					std::cout <<  "boucle for de KILL  chans avec (*it)" << (*it)->getName() << std::endl;
-					std::cout <<  "boucle for de KILL " << clientkill->getNickname() << std::endl;
+					// std::cout <<  "boucle for de KILL  chans " << it.operator*()->getName() << std::endl;
+					// std::cout <<  "boucle for de KILL  chans avec (*it)" << (*it)->getName() << std::endl;
+					// std::cout <<  "boucle for de KILL " << clientkill->getNickname() << std::endl;
 					clientkill->leave_channel((*it), kill_message, 1);
 				}
-				//clientkill->reply_command(RPL_KILL(client->getPrefix(), clientkill->getNickname(), kill_message));
 				client->reply_command(RPL_ERROR(client->getNickname(), kill_message));
-				std::cout << "Client n°" << clientkill->getFd() << " username via serveur: " << clientkill->getNickname() << " va se déconnecter." << std::endl;
+				//std::cout << "Client n°" << clientkill->getFd() << " username via serveur: " << clientkill->getNickname() << " va se déconnecter." << std::endl;
 				int fd = clientkill->getFd();
 				_server->onClientDisconnect(fd, _server->getEpollfd());
-			//	std::map<int, Client *> serv_clients = _server->getClients();
-			//	delete serv_clients.at(fd);
-			//	serv_clients.erase(fd);
-			//	close(fd);
-				// Log the client disconnection
-				std::cout << "Client n°" << fd << " s'est déconnecté." << std::endl;
-
+				std::cout << "Client n°" << fd << " s'est déconnecté(KILL). " << std::endl;
 		}
 	}
 	else

@@ -21,10 +21,10 @@ void TopicCommand::execute(Client *client, std::vector<std::string> arg)
 		std::string modesOn = channel->getModes();
 		if(arg.size() == 1)
 		{
-			std::cout << YELLOW << " topic: " << channel->getTopic() << "fin" << RESET << std::endl;
+			//std::cout << YELLOW << " topic: " << channel->getTopic() << "fin" << RESET << std::endl;
 			if(channel->getTopic() == "")
 			{
-				std::cout << "je suis dans topic unset" << std::endl;
+				//std::cout << "je suis dans topic unset" << std::endl;
 				client->reply(RPL_NOTOPIC(client->getNickname(), channel->getName()));
 			}
 			else
@@ -40,7 +40,6 @@ void TopicCommand::execute(Client *client, std::vector<std::string> arg)
 				topic.append(*it);
 				topic.append(" ");
 			}
-			// std::string topic = arg.at(1);
 			if(modesOn.find("+t") != std::string::npos && (client->getOperator() == false && (client != channel->getAdmin()))) 
 			{
 				client->reply(ERR_CHANOPRIVSNEEDED(client->getNickname(), channel->getName()));

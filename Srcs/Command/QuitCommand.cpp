@@ -22,7 +22,6 @@ void QuitCommand::execute(Client *client, std::vector<std::string> arg)
 		if (leave.at(0) == ':')
 			leave = leave.substr(1);
 	}
-	//client->reply_command(RPL_QUIT(client->getPrefix(), leave));
 	std::cout << GREEN << "Clean channel dans QUIT" << RESET << std::endl;
 	//vector des channels de l'user a kill
 	std::vector<Channel *>	channels_userkill;

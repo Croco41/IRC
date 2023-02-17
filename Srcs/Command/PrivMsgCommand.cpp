@@ -10,8 +10,7 @@ PrivMsgCommand::~PrivMsgCommand()
 	return;
 }
 
-// ATTENTION !!!!!!!!!!! Si tu modifies ! 
-// sur privmsg verifié que tous les cas fonctionent -> c'est dans le sujet de correc			
+// ATTENTION !!!!!!!!!!! Si tu modifies ! 		
 // PENSEZ a mettre à jour NOTICE si PRIVMSG modifié			
 
 void PrivMsgCommand::execute(Client *client, std::vector<std::string> arg)
@@ -28,14 +27,12 @@ void PrivMsgCommand::execute(Client *client, std::vector<std::string> arg)
 	for (std::vector<std::string>::iterator it = arg.begin(); it != arg.end(); it++)
 		message.append(*it + " ");
 	// si le message commence par ':' -> on élague le ':' ! (car les usernames ont tjs un : devant...)
-	std::cout << "message apres append " "= " << message << std::endl;
-
+	//std::cout << "message apres append " "= " << message << std::endl;
 	int i = 0;
 	while (message.at(i) != ':')
 		i++;
 	message = message.substr(i + 1);
-
-	std::cout << "message apres if := " << message << std::endl;
+	//std::cout << "message apres if := " << message << std::endl;
 	// On vérifie si le Client target existe
 	std::string target = arg.at(0);
 	Client		*dest = _server->getClient(target);
