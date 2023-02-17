@@ -29,7 +29,7 @@ void TopicCommand::execute(Client *client, std::vector<std::string> arg)
 			}
 			else
 			{
-				client->reply(RPL_TOPIC(client->getNickname(), channel->getName(), channel->getTopic()));
+				client->reply(RPL_TOPIC(client->getNickname(), channel->getTopic(), channel->getName()));
 			}	
 		}
 		else if (arg.size() >= 2)
@@ -58,7 +58,7 @@ void TopicCommand::execute(Client *client, std::vector<std::string> arg)
 				{
 					channel->setTopic(topic);
 					std::cout << YELLOW << " topic: " << channel->getTopic() << RESET << std::endl;
-					client->reply_command(RPL_TOPIC(client->getPrefix(), channel->getName(), channel->getTopic()));
+					client->reply(RPL_TOPIC(client->getNickname(), channel->getTopic(), channel->getName()));
 				}
 				channel->sendall(RPL_TOPICALL(client->getPrefix(), channel->getName(), channel->getTopic()));
 			}

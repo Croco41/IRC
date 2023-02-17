@@ -246,7 +246,7 @@ void	Client::join_channel(Channel *channel)
 	}
 	else
 	{
-		reply(RPL_TOPIC(getNickname(), channel->getName(), channel->getTopic()));
+		reply(RPL_TOPIC(getNickname(), channel->getTopic(), channel->getName()));
 	}	
 	std::cout << _nickname << " has joined channel " << channel->getName() << std::endl;
 	std::cout << YELLOW << _nickname << "estdans les channel suivants: " << getListChannel() << RESET << std::endl;

@@ -42,7 +42,7 @@
 #define RPL_LISTEND(source)						"323 " + source + " :End of /LIST" 
 #define RPL_CHANNELMODEIS(target, modes, param)	"324 MODE " + target + " " + modes + " " + param
 #define RPL_NOTOPIC(source, channel)			"331 " + source + " " + channel + " :No topic is set"
-#define RPL_TOPIC(source, channel, topic)		"332 " + source + " " + channel + " " + topic
+#define RPL_TOPIC(source, topic, channel)		"332 " + source + " " + channel + " :" + topic
 #define RPL_WHOREPLY(source, arg)				"352 " + source + " 0 " + arg
 #define RPL_NAMREPLY(source, channel, users)    "353 " + source + " = " + channel + " :" + users
 #define RPL_ENDOFNAMES(source, channel)			"366 " + source + " " + channel + " :End of /NAMES list."
@@ -62,6 +62,6 @@
 #define RPL_KICK(source, channel, target, message)	":" + source + " KICK " + channel + " " + target + " " + message
 #define RPL_KILL(source, target, message)			":" + source + " KILL " + target + " " + message
 #define RPL_QUIT(source, message)					":" + source + " QUIT " + " :" + message
-#define RPL_ERROR(source, message)							":" + source + " ERROR " + " :" + message
+#define RPL_ERROR(source, message)					":" + source + " ERROR " + " :" + message
 
 #endif
