@@ -165,17 +165,22 @@ int			Server::launch_socket()
 	return sockfd;
 }
 
+// La fonction epoll_ctl est utilisée pour contrôler les descripteurs de fichiers enregistrés auprès d'un objet epoll. 
+//Cette fonction prend en compte les paramètres :
+// int epfd: un descripteur de fichier qui représente l'objet epoll sur lequel les modifications doivent être effectuées.
+// int op : une constante qui indique l'opération à effectuer sur les descripteurs de fichiers. Les valeurs possibles sont EPOLL_CTL_ADD, EPOLL_CTL_MOD et EPOLL_CTL_DEL.
+// int fd : un descripteur de fichier qui représente le descripteur de fichier à ajouter, à modifier ou à supprimer de l'objet epoll.
+// struct epoll_event *event : un pointeur vers une structure epoll_event qui contient des informations sur les événements à surveiller sur le descripteur de fichier.
+// L'opération EPOLL_CTL_ADD permet d'ajouter un descripteur de fichier à l'objet epoll, et de définir les événements à surveiller sur ce descripteur de fichier. L'opération EPOLL_CTL_MOD permet de modifier les événements à surveiller sur un descripteur de fichier déjà enregistré auprès de l'objet epoll. L'opération EPOLL_CTL_DEL permet de supprimer un descripteur de fichier de l'objet epoll.
+
+
+
 void		Server::start_epoll()
 {
 	int epoll_fd = epoll_create1(0); // create an epoll instance
 	_epollfd = epoll_fd;
 	if (epoll_fd < 0)
 		throw std::runtime_error("Error while creating epoll file descriptor.\n");
-	// if (epoll_fd == -1) 
-	// {
-	//     perror("epoll_create1");
-	//     exit(EXIT_FAILURE);
-	// }
 	struct epoll_event server_ev;
 	memset(&server_ev, 0, sizeof(server_ev)); // Initialiser tous les octets de event à zéro
 	server_ev.data.fd = _socket;
@@ -184,7 +189,6 @@ void		Server::start_epoll()
 		throw std::runtime_error("Error while adding server socket to epoll.\n");
 	struct epoll_event connect_ev[MAX_EVENTS];
 	std::cout << "Server listening..." << std::endl;
-	// ft_log("Server listening...");
 	while (Run)
 	{
 		if (Run == 0)
@@ -218,7 +222,6 @@ void		Server::start_epoll()
 					std::cout << "Client n°" << server_ev.data.fd << " s'est connecté !" << std::endl;
 					onClientConnect(connect_serv_socket, connect_sockfd);
 					break;
-					//continue;
 				}
 			}
 			else
@@ -239,7 +242,6 @@ void		Server::start_epoll()
 				else
 				{
 					onClientMessage(fd, buffer, n);
-					//break;
 				}
 			}
 			consolDeBUGserver();
@@ -316,7 +318,6 @@ void		Server::onClientConnect(sockaddr_in connect_serv_socket, int socket_client
 	std::cout << hostname << ":" << ntohs(connect_serv_socket.sin_port) << " has connected." << std::endl << std::endl;
 	_clients.insert(std::make_pair(socket_client, client)); // on enregistre l'instance client au niveau de la clé fd (il ne peut y avoir 2x le même fd, donc map parfait !)
 
-	//std::string message;
 	std:: string message;
 	char tmp[100] = {0};
 	while (message.find("\r\n") == std::string::npos)
@@ -330,15 +331,6 @@ void		Server::onClientConnect(sockaddr_in connect_serv_socket, int socket_client
 		message.append(tmp, r);
 	}
 	std::cout << "message = " << message << std::endl;
-	// client->setPassword(ParsingonClientConnect(message, "PASS", client));
-	// client->setNickname(ParsingonClientConnect(message, "NICK", client));
-	// client->setRealname(ParsingonClientConnect(message, "USER", client));
-	
-	// std::cout << "password: " << client->getPassword() << std::endl;
-	// std::cout << "nickname: " << client->getNickname() << std::endl;
-	// std::cout << "username: " << client->getUsername() << std::endl;
-	// std::cout << "realname: " << client->getRealname() << std::endl;
-
 	_commandHandler->recup_msg(client, message);
 	std::cout << YELLOW;
 	if (_errorpass == 0)
@@ -396,7 +388,6 @@ Channel*	Server::createChannel(const std::string &name, const std::string &passw
 	// std::cout << "Nom du channel auquel est lié le client :" << client->getChannel(channel)->getName() << std::endl;
 	_channels.push_back(channel);
 	std::cout << "channel name = " << _channels.front()->getName() << std::endl;
-	std::cout << "password = ";
 	if (_channels.front()->getPassword() == "")
 		std::cout << "no password registered" << std::endl;
 	else
@@ -416,8 +407,6 @@ void	Server::destroyChannel(Channel *channel)
 
 		if (*it == channel)
 		{
-			// delete (*it);
-			// _channels.erase(std::remove(_channels.begin(), _channels.end(), channel), _channels.end());
 			delete (*it);
 			_channels.erase(it);
 			break;
