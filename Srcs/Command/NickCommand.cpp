@@ -74,6 +74,5 @@ void NickCommand::execute(Client *client, std::vector<std::string> arg)
 	client->reply_command(reply);
 	client->reply_command(RPL_NICK(oldNick, newNick));
 
-
 	std::cout << FUCHSIA << "NICKCOMMAND : execute - end" << RESET << std::endl;
 }

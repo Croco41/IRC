@@ -13,7 +13,7 @@ TopicCommand::~TopicCommand()
 // Clients joining the channel in the future will receive a RPL_TOPIC numeric (or lack thereof) accordingly. FAIRE CA!!!!!!
 void TopicCommand::execute(Client *client, std::vector<std::string> arg)
 {
-	std::cout << FUCHSIA << "\nTopicCOMMAND : execute - start" << RESET << std::endl;
+	std::cout << FUCHSIA << "\nTOPICCOMMAND : execute - start" << RESET << std::endl;
 	std::string target = arg.at(0);
 	Channel *channel = _server->getChannel(target);
 	if(channel)
@@ -75,5 +75,5 @@ void TopicCommand::execute(Client *client, std::vector<std::string> arg)
 		client->reply(ERR_NOSUCHCHANNEL(client->getNickname(), target));
 	}
 	
-	std::cout << FUCHSIA << "TopicCOMMAND : execute - end" << RESET << std::endl;
+	std::cout << FUCHSIA << "TOPICCOMMAND : execute - end" << RESET << std::endl;
 }

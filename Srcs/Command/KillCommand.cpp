@@ -12,7 +12,7 @@ KillCommand::~KillCommand()
 
 void KillCommand::execute(Client *client, std::vector<std::string> arg)
 {
-	std::cout << FUCHSIA << "\nKillCOMMAND : execute - start" << RESET << std::endl;
+	std::cout << FUCHSIA << "\nKILLCOMMAND : execute - start" << RESET << std::endl;
 
 	if (arg.size() == 2)
 	{
@@ -76,5 +76,5 @@ void KillCommand::execute(Client *client, std::vector<std::string> arg)
 		 client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "Kill"));
 		 return;
 	}
-	std::cout << FUCHSIA << "KillCOMMAND : execute - end" << RESET << std::endl;
+	std::cout << FUCHSIA << "KILLCOMMAND : execute - end" << RESET << std::endl;
 }

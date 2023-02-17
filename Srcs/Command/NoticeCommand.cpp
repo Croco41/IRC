@@ -38,7 +38,7 @@ NoticeCommand::~NoticeCommand()
 
 void NoticeCommand::execute(Client *client, std::vector<std::string> arg)
 {
-		std::cout << FUCHSIA << "\nNOTICECOMMAND : execute - start" << RESET << std::endl;
+	std::cout << FUCHSIA << "\nNOTICECOMMAND : execute - start" << RESET << std::endl;
 	// Notice prend tjs 2 arg : la cible du Message (channel ou autre client), et le Message lui-même. Verif :
 	if (arg.size() < 2 || arg[0].empty() || arg[1].empty())
 	{

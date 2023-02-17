@@ -35,7 +35,7 @@
 #define RPL_WHOISUSER(nick, usernick, username, host, realname)		"311 " + nick + " " + username + " " + host + " :" + realname
 #define RPL_WHOISSERVER(nick, server)			"312 " + nick + " is using " + server
 #define RPL_WHOISOPERATOR(nick)					"313 " + nick + " is an IRC Operator"
-#define RPL_WHOISCHANNELS(nick, channel)		"319 " + nick + " is on " + channel
+#define RPL_WHOISCHANNELS(source, nick, channel)"319 " + source + " " + nick + " :" + channel
 #define RPL_ENDOFWHO(source, mask)				"315 " + source + " " + mask + " :End of WHO list"
 #define RPL_ENDOFWHOIS(source, usernick)		"318 " + source + " " + usernick + " :End of WHOIS list"
 #define RPL_LIST(source, channel, count, topic)	"322 " + source + " " + channel + " " + count + " :" + topic

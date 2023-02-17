@@ -38,6 +38,7 @@ void UserCommand::execute(Client *client, std::vector<std::string> arg)
 		std::string realname;
 		std::string username = arg[0];
 		client->setUsername(username);
+		
 		for (std::vector<std::string>::iterator it = arg.begin(); it != arg.end(); ++it) 
 		{
 			std::string tosend; 

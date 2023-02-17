@@ -16,7 +16,7 @@ PrivMsgCommand::~PrivMsgCommand()
 
 void PrivMsgCommand::execute(Client *client, std::vector<std::string> arg)
 {
-	std::cout << "je rentre dans execute privmes" << std::endl;
+	std::cout << FUCHSIA << "\nPRIVMSGCOMMAND : execute - start" << RESET << std::endl;
 	// PRIVMSG prend tjs 2 arg : la cible du Message (channel ou autre client), et le Message lui-même. Verif :
 	if (arg.size() < 2 || arg[0].empty() || arg[1].empty())
 	{
@@ -80,4 +80,5 @@ void PrivMsgCommand::execute(Client *client, std::vector<std::string> arg)
 	std::cout << "target= " << target << std::endl;
 	std::cout << "message= " << message << std::endl;
 	dest->writetosend(RPL_PRIVMSG(client->getPrefix(), target, message));
+	std::cout << FUCHSIA << "\nPRIVMSGCOMMAND : execute - start" << RESET << std::endl;
 }

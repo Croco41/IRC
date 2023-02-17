@@ -12,7 +12,7 @@ OperCommand::~OperCommand()
 
 void OperCommand::execute(Client *client, std::vector<std::string> arg)
 {
-	std::cout << FUCHSIA << "\nOperCOMMAND : execute - start" << RESET << std::endl;
+	std::cout << FUCHSIA << "\nOPERCOMMAND : execute - start" << RESET << std::endl;
 	std::string name = "Isabelle";
 	std::string password = "Cyrielle";
 	if (arg.size() == 2)
@@ -37,5 +37,5 @@ void OperCommand::execute(Client *client, std::vector<std::string> arg)
 		 client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "OPER"));
 		 return;
 	}
-	std::cout << FUCHSIA << "OperCOMMAND : execute - end" << RESET << std::endl;
+	std::cout << FUCHSIA << "OPERCOMMAND : execute - end" << RESET << std::endl;
 }

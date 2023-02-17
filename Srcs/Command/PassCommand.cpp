@@ -13,7 +13,7 @@ PassCommand::~PassCommand()
 // syntax : /Pass <Pass> -> 1 paramètre obligatoire !
 void PassCommand::execute(Client *client, std::vector<std::string> arg)
 {
-	std::cout << FUCHSIA << "\nPassCOMMAND : execute - start" << RESET << std::endl;
+	std::cout << FUCHSIA << "\nPASSCOMMAND : execute - start" << RESET << std::endl;
 	int param_size = arg.size();
 	if (param_size < 1)
 	{
@@ -40,6 +40,5 @@ void PassCommand::execute(Client *client, std::vector<std::string> arg)
 		_server->setErrorPass(1);
 		return;
 	}
-
-	std::cout << FUCHSIA << "PassCOMMAND : execute - end" << RESET << std::endl;
+	std::cout << FUCHSIA << "PASSCOMMAND : execute - end" << RESET << std::endl;
 }

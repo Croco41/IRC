@@ -89,5 +89,5 @@ void ListCommand::execute(Client *client, std::vector<std::string> arg)
 		client->reply_command(RPL_LISTEND(client->getNickname()));
 		return;
 	}
-	std::cout << FUCHSIA << "NAMECOMMAND : execute - end" << RESET << std::endl;
+	std::cout << FUCHSIA << "LISTCOMMAND : execute - end" << RESET << std::endl;
 }

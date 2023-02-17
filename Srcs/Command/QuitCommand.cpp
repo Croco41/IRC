@@ -12,6 +12,7 @@ QuitCommand::~QuitCommand()
 
 void QuitCommand::execute(Client *client, std::vector<std::string> arg)
 {
+	std::cout << FUCHSIA << "\nQUITCOMMAND : execute - start" << RESET << std::endl;
 	std::string	leave;
 	if (arg.empty())
 		leave = "QUIT: Leaving.";
@@ -34,6 +35,5 @@ void QuitCommand::execute(Client *client, std::vector<std::string> arg)
 		if ((*it)->getNbclients() == 0)
 			_server->destroyChannel(*it);
 	}
-
-	//_server->~Server();
+	std::cout << FUCHSIA << "QUITCOMMAND : execute - start" << RESET << std::endl;
 }

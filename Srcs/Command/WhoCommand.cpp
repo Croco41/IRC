@@ -13,6 +13,7 @@ WhoCommand::~WhoCommand()
 // syntax : /WHO <mask>
 void WhoCommand::execute(Client *client, std::vector<std::string> arg)
 {
+	std::cout << FUCHSIA << "\nWHOCOMMAND : execute - start" << RESET << std::endl;
 	/*
 	/La commande /who permet d'afficher des informations sur les utilisateurs. 
 	Sans argument, cela retourne la liste des personnes connectées sur le réseau. 
@@ -23,6 +24,7 @@ void WhoCommand::execute(Client *client, std::vector<std::string> arg)
 	// for(std::vector<std::string>::iterator it = arg.begin(); it != arg.end(); it++)
 	// 	std::cout << *it << std::endl;
 	// std::cout << RESET << std::endl;
+
 	if (arg.empty()) // donner les noms des users du serveur !
 	{
 		std::map<int, Client *>	serv_clients = _server->getClients();
@@ -43,7 +45,7 @@ void WhoCommand::execute(Client *client, std::vector<std::string> arg)
 			return;
 		}
 		std::vector<Client *> chan_clients = _server->getChannel(arg.at(0))->getClients();
-		std::cout << DARKVIOLET << arg.size() << RESET << std::endl;
+		// std::cout << DARKVIOLET << arg.size() << RESET << std::endl;
 		for (std::vector<Client *>::iterator it = chan_clients.begin(); it != chan_clients.end(); it++)
 		{
 			if (it.operator*()->getModes().find('i') != std::string::npos)
@@ -67,7 +69,7 @@ void WhoCommand::execute(Client *client, std::vector<std::string> arg)
 	}
 	else if (arg.size() < 2 && arg.at(0)[0] != '#')
 	{
-		std::cout << DARKVIOLET << "On entre ici ?" << RESET << std::endl;
+		// std::cout << DARKVIOLET << "On entre ici ?" << RESET << std::endl;
 		Client *target = _server->getClient(arg.at(0));
 		if (!target)
 		{
@@ -92,5 +94,6 @@ void WhoCommand::execute(Client *client, std::vector<std::string> arg)
 	std::string mask;
 	mask.append(arg[0]);
 	client->reply_command(RPL_ENDOFWHO(client->getNickname(), mask));
+	std::cout << FUCHSIA << "WHOCOMMAND : execute - end" << RESET << std::endl;
 }
 

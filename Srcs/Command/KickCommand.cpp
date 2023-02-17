@@ -12,7 +12,7 @@ KickCommand::~KickCommand()
 
 void KickCommand::execute(Client *client, std::vector<std::string> arg)
 {
-	std::cout << FUCHSIA << "\nKickCOMMAND : execute - start" << RESET << std::endl;
+	std::cout << FUCHSIA << "\nKICKCOMMAND : execute - start" << RESET << std::endl;
 	if (arg.size() >= 3)
 	{
 		std::string target = arg.at(0);
@@ -88,5 +88,5 @@ void KickCommand::execute(Client *client, std::vector<std::string> arg)
 		 client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "Kick"));
 		 return;
 	}
-	std::cout << FUCHSIA << "KickCOMMAND : execute - end" << RESET << std::endl;
+	std::cout << FUCHSIA << "KICKCOMMAND : execute - end" << RESET << std::endl;
 }

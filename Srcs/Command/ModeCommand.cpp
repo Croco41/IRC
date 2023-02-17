@@ -298,7 +298,7 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
 
 void ModeCommand::execute(Client *client, std::vector<std::string> arg)
 {
-	std::cout << FUCHSIA << "on entre dans MODE ?" << RESET << std::endl;
+	std::cout << FUCHSIA << "\nMODECOMMAND : execute - start" << RESET << std::endl;
 	// La commande MODE doit toujours avoir au moins un paramètre !
 	if (arg.size() < 1)
 	{
@@ -332,7 +332,7 @@ void ModeCommand::execute(Client *client, std::vector<std::string> arg)
 		else
 			client->reply(ERR_NOSUCHNICK(client->getNickname(), target));
 	}
-	std::cout << YELLOW << "Fin Mode command, modes du client: " << client->getModes() << RESET << std::endl;
+	std::cout << FUCHSIA << "MODECOMMAND : execute - end" << RESET << std::endl;
 }
 
 /*
