@@ -55,44 +55,32 @@ void NoticeCommand::execute(Client *client, std::vector<std::string> arg)
 	message = message.substr(i + 1);
 	// On vérifie si le Client target existe
 	std::string target = arg.at(0);
-	Client		*dest = _server->getClient(target);
-	if (!dest)
+	std::cout << PURPLE << target  << target.at(0) << RESET << std::endl;
+	if (target.at(0) != '#')
 	{
-		return;
+		Client		*dest = _server->getClient(target);
+		if (!dest) // && target[0] != '#')
+		{
+			std::cout << PURPLE << "client n'existe pas ?" << RESET << std::endl;
+			return;
+		}
+		std::cout << "target= " << target << std::endl;
+		std::cout << "message= " << message << std::endl;
+		dest->writetosend(RPL_PRIVMSG(client->getPrefix(), target, message));
 	}
 	// On vérifie si le message est envoyé sur un channel (commence par #)
 	if (target.at(0) == '#')
 	{
-		// on récupère le channel via le Client et on vérifie qu'il existe !
-		std::vector<Channel *>::iterator	it;
-		for (it = client->getChannel().begin(); it != client->getChannel().end(); it++)
+		if (client->findChannel(target) == true)
 		{
-			if (it.operator*()->getName() == target)
-			{
-				Channel *channel = *it;
-				if (!channel)
-				{
-					return;
-				}
-				// on cherche le bon destinataire dans la liste des clients connectés à ce channel
-				std::vector<std::string>			nicknames(channel->getNicknames());
-				std::vector<std::string>::iterator	it;
-
-				for (it = nicknames.begin(); it != nicknames.end(); it++)
-					if (*it == client->getNickname())
-						break;
-				// si on ne trouve pas de correspondant :
-				if (it == nicknames.end())
-				{
-					return;
-				}
-				channel->sendall(message, client);
-				return;
-			}
+			std::cout << "j'arrive jusqu'ici" << std::endl;
+			Channel		*channel = _server->getChannel(target);
+			channel->sendall(RPL_NOTICE(client->getPrefix(), target, message));
 		}
-	}
-	std::cout << "target= " << target << std::endl;
-	std::cout << "message= " << message << std::endl;
-	dest->writetosend(RPL_NOTICE(client->getPrefix(), target, message));
+		else
+		{
+			std::cout << PURPLE << "pas dans le chan" << RESET << std::endl;
+		}
+	}	
 	std::cout << FUCHSIA << "NOTICECOMMAND : execute - end" << RESET << std::endl;
 }

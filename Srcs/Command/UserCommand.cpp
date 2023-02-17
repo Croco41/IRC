@@ -54,6 +54,7 @@ void UserCommand::execute(Client *client, std::vector<std::string> arg)
 		if(message.find(":") == std::string::npos)
 		{
 			realname = arg[2];
+			// std::cout << start << std::endl;
 		}
 		else
 		{

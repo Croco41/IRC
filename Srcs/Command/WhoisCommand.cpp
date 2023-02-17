@@ -32,7 +32,7 @@ void WhoisCommand::execute(Client *client, std::vector<std::string> arg)
 		client->reply(ERR_NOSUCHNICK(client->getNickname(), "WHO"));
 		return;
 	}
-	client->reply(RPL_WHOISUSER(client->getNickname(), target->getNickname(), target->getUsername(), "0*", target->getRealname()));
+	client->reply(RPL_WHOISUSER(client->getNickname(), target->getNickname(), target->getNickname(), "0*", target->getRealname()));
 	client->reply(RPL_WHOISSERVER(target->getNickname(), _server->getServname()));
 	if (target->getModes().find('o') != std::string::npos)
 		client->reply(RPL_WHOISOPERATOR(target->getNickname()));

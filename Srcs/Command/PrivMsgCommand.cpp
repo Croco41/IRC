@@ -16,6 +16,12 @@ PrivMsgCommand::~PrivMsgCommand()
 void PrivMsgCommand::execute(Client *client, std::vector<std::string> arg)
 {
 	std::cout << FUCHSIA << "\nPRIVMSGCOMMAND : execute - start" << RESET << std::endl;
+
+	std::cout << DARKVIOLET << "contenu du vecteur arg : " << std::endl;
+	for(std::vector<std::string>::iterator it = arg.begin(); it != arg.end(); it++)
+		std::cout << *it << std::endl;
+	std::cout << RESET << std::endl;
+
 	// PRIVMSG prend tjs 2 arg : la cible du Message (channel ou autre client), et le Message lui-même. Verif :
 	if (arg.size() < 2 || arg[0].empty() || arg[1].empty())
 	{
@@ -32,50 +38,47 @@ void PrivMsgCommand::execute(Client *client, std::vector<std::string> arg)
 	while (message.at(i) != ':')
 		i++;
 	message = message.substr(i + 1);
-	//std::cout << "message apres if := " << message << std::endl;
+	std::cout << "message apres if := " << message << std::endl;
 	// On vérifie si le Client target existe
+
+// VERIF DE LA NATURE DE L'ARG 0 : client ou channel ?
+
+
 	std::string target = arg.at(0);
-	Client		*dest = _server->getClient(target);
-	if (!dest)
+	std::cout << PURPLE << target  << target.at(0) << RESET << std::endl;
+	if (target.at(0) != '#')
 	{
-		client->reply(ERR_NOSUCHNICK(client->getNickname(), target));
-		return;
+		Client		*dest = _server->getClient(target);
+		if (!dest) // && target[0] != '#')
+		{
+			std::cout << PURPLE << "On est ici ?" << RESET << std::endl;
+			client->reply(ERR_NOSUCHNICK(client->getNickname(), target));
+			return;
+		}
+		std::cout << "target= " << target << std::endl;
+		std::cout << "message= " << message << std::endl;
+		dest->writetosend(RPL_PRIVMSG(client->getPrefix(), target, message));
 	}
 	// On vérifie si le message est envoyé sur un channel (commence par #)
-	if (target.at(0) == '#')
+	// if (target.at(0) == '#')
+	else
 	{
 		// on récupère le channel via le Client et on vérifie qu'il existe !
-		std::vector<Channel *>::iterator	it;
-		for (it = client->getChannel().begin(); it != client->getChannel().end(); it++)
-		{
-			if (it.operator*()->getName() == target)
-			{
-				Channel *channel = *it;
-				if (!channel)
-				{
-					client->reply(ERR_NOSUCHCHANNEL(client->getNickname(), target));
-					return;
-				}
-				// on cherche le bon destinataire dans la liste des clients connectés à ce channel
-				std::vector<std::string>			nicknames(channel->getNicknames());
-				std::vector<std::string>::iterator	it;
 
-				for (it = nicknames.begin(); it != nicknames.end(); it++)
-					if (*it == client->getNickname())
-						break;
-				// si on ne trouve pas de correspondant :
-				if (it == nicknames.end())
-				{
-					client->reply(ERR_CANNOTSENDTOCHAN(client->getNickname(), target));
-					return;
-				}
-				channel->sendall(message, client);
-				return;
-			}
+		if (client->findChannel(target) == true)
+		{
+			std::cout << "j'arrive jusqu'ici" << std::endl;
+			Channel		*channel = _server->getChannel(target);
+			channel->sendall(RPL_PRIVMSG(client->getPrefix(), target, message));
 		}
-	}
+		else
+		{
+			std::cout << PURPLE << "On est la ?" << RESET << std::endl;
+			client->reply(ERR_NOSUCHCHANNEL(client->getNickname(), target));
+		}
+	}	
 	std::cout << "target= " << target << std::endl;
 	std::cout << "message= " << message << std::endl;
-	dest->writetosend(RPL_PRIVMSG(client->getPrefix(), target, message));
+	// dest->writetosend(RPL_PRIVMSG(client->getPrefix(), target, message));
 	std::cout << FUCHSIA << "\nPRIVMSGCOMMAND : execute - start" << RESET << std::endl;
 }
