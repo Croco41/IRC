@@ -298,10 +298,13 @@ std::string	Server::recvMessage(int socket_client, char *tmp, size_t r)
 	{
 		bzero(tmp, 100);
 		int r = recv(socket_client, tmp, 1024, 0);
-		if (r < 0)
+		if (r <= 0)
 		{
-			if (errno != EWOULDBLOCK)
-				throw std::runtime_error("Error while receiving message from client.");			
+			std::cout << "je suis dans erreur recv" << std::endl;
+			std::cout << r << std::endl;
+			if (errno == EWOULDBLOCK || errno == EAGAIN)
+				throw std::runtime_error("Error while receiving message from client.");	
+			return("___lost connection___$");
 		}
 		message.append(tmp, r);
 	}
@@ -323,14 +326,24 @@ void		Server::onClientConnect(sockaddr_in connect_serv_socket, int socket_client
 	while (message.find("\r\n") == std::string::npos)
 	{
 		int r = recv(socket_client, tmp, 100, 0);
-		if (r < 0)
+		if (r <= 0)
 		{
-			if (errno != EWOULDBLOCK)
-				throw std::runtime_error("Error while receiving message from client.");			
+			std::cout << "je suis dans erreur recv" << std::endl;
+			std::cout << r << std::endl;
+			if (errno == EWOULDBLOCK || errno == EAGAIN)
+				throw std::runtime_error("Error while receiving message from client.");
+			message = "___lost connection___$";
+			break;
 		}
-		message.append(tmp, r);
+		else
+			message.append(tmp, r);
 	}
 	std::cout << "message = " << message << std::endl;
+	if (message == "___lost connection___$")
+	{
+		onClientDisconnect(client->getFd(), getEpollfd());
+		return;	
+	}
 	_commandHandler->recup_msg(client, message);
 	std::cout << YELLOW;
 	if (_errorpass == 0)
@@ -372,7 +385,8 @@ void	Server::onClientMessage(int fd, char *tmp, size_t r)
 		std::string message = recvMessage(fd, tmp, r);
 		std::cout << RED << "\nmessage = " << message << RESET;
 		Client	*client = _clients.at(fd);
-		_commandHandler->recup_msg(client, message);
+		if (message != "___lost connection___$")
+			_commandHandler->recup_msg(client, message);
 	}
 	catch(const std::exception& e)
 	{

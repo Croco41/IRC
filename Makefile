@@ -5,7 +5,7 @@ OBJDIR	=	Objs/
 SRCDIR	=	Srcs/
 
 CXC		=	c++
-CFLAGS	=	-Wall -Wextra -Werror -std=c++98 
+CFLAGS	=	-Wall -Wextra -Werror -std=c++98
 CINC	=	-I $(INC)
 CDEP	=	-MMD -MP
 # -Wshadow : Warn whenever a local variable or type declaration shadows another 
