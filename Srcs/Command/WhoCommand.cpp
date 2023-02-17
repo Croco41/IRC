@@ -27,7 +27,7 @@ void WhoCommand::execute(Client *client, std::vector<std::string> arg)
 	{
 		std::map<int, Client *>	serv_clients = _server->getClients();
 		for (std::map<int, Client *>::iterator it = serv_clients.begin(); it != serv_clients.end(); it++)
-			it.operator*().second->reply_command(RPL_WHOREPLY(_server->getServname(), "1", it.operator*().second->getUsername())); // ici : serveur, nb de serveurs intermediaires, nom du client sur le serveur
+			it.operator*().second->reply_command(RPL_WHOREPLY(_server->getServname(), it.operator*().second->getUsername())); // ici : serveur, nb de serveurs intermediaires, nom du client sur le serveur
 	}
 	else if (arg.size() > 1)
 	{
@@ -48,7 +48,21 @@ void WhoCommand::execute(Client *client, std::vector<std::string> arg)
 		{
 			if (it.operator*()->getModes().find('i') != std::string::npos)
 				continue;
-			it.operator*()->reply_command(RPL_WHOREPLY(arg.at(0), "1", it.operator*()->getNickname())); // ici : channel, nb de serveurs, nom du client
+			std::string str;
+			Client *target = *it;
+			str += channel->getName() + " ";
+			str += target->getUsername() + " ";
+			str += target->getHostname() + " ";
+			str += _server->getServname() + " ";
+			str += target->getNickname() + " ";
+			str += "H";
+			if (target->getOperator() == 1)
+						str += "*";
+			str += std::string(":0") + " ";
+			str += target->getRealname();
+		
+			//client->reply_command(RPL_WHOREPLY(client->getNickname(), str));
+			client->reply_command(RPL_WHOREPLY(client->getNickname(), str)); // ici : channel, nb de serveurs, nom du client
 		}
 	}
 	else if (arg.size() < 2 && arg.at(0)[0] != '#')
@@ -60,7 +74,23 @@ void WhoCommand::execute(Client *client, std::vector<std::string> arg)
 			client->reply(ERR_NOSUCHNICK(client->getNickname(), "WHO"));
 			return;
 		}
-		client->reply_command(RPL_WHOREPLY(client->getNickname(), "1", target->getUsername())); // ici :user, nb de serveurs, nom du client
+		std::string str;
+
+		str += std::string("*") + " ";
+		str += target->getUsername() + " ";
+		str += target->getHostname() + " ";
+		str += _server->getServname() + " ";
+		str += target->getNickname() + " ";
+		str += "H";
+		if (target->getOperator() == 1)
+					str += "*";
+		str += std::string(":0") + " ";
+		str += target->getRealname();
+		
+		client->reply_command(RPL_WHOREPLY(client->getNickname(), str)); // ici :user, nb de serveurs, nom du client
 	}
-	client->reply_command(RPL_ENDOFWHO(client->getRealname()));
+	std::string mask;
+	mask.append(arg[0]);
+	client->reply_command(RPL_ENDOFWHO(client->getNickname(), mask));
 }
+

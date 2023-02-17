@@ -32,18 +32,18 @@
 #define RPL_WELCOME(source)						"001 " + source + " :Welcome to the ft_irc network " + source
 #define RPL_UMODEIS(target, modes)				"221 " + target + " " + modes
 //faudra rajouter <mode_params> si on code des modes avec apram dans chan.
-#define RPL_WHOISUSER(nick, user)				"311 " + nick + " is " + user
+#define RPL_WHOISUSER(nick, usernick, username, host, realname)		"311 " + nick + " " + username + " " + host + " :" + realname
 #define RPL_WHOISSERVER(nick, server)			"312 " + nick + " is using " + server
 #define RPL_WHOISOPERATOR(nick)					"313 " + nick + " is an IRC Operator"
 #define RPL_WHOISCHANNELS(nick, channel)		"319 " + nick + " is on " + channel
-#define RPL_ENDOFWHO(source)					"315 " + source + " :End of WHO list"
-#define RPL_ENDOFWHOIS(source)					"318 " + source + " :End of WHOIS list"
+#define RPL_ENDOFWHO(source, mask)				"315 " + source + " " + mask + " :End of WHO list"
+#define RPL_ENDOFWHOIS(source, usernick)		"318 " + source + " " + usernick + " :End of WHOIS list"
 #define RPL_LIST(source, channel, count, topic)	"322 " + source + " " + channel + " " + count + " :" + topic
 #define RPL_LISTEND(source)						"323 " + source + " :End of /LIST" 
 #define RPL_CHANNELMODEIS(target, modes, param)	"324 MODE " + target + " " + modes + " " + param
 #define RPL_NOTOPIC(source, channel)			"331 " + source + " " + channel + " :No topic is set"
 #define RPL_TOPIC(source, channel, topic)		"332 " + source + " " + channel + " " + topic
-#define RPL_WHOREPLY(mask, hopcount, realname)	"352 " + mask + " :" + hopcount + " " + realname
+#define RPL_WHOREPLY(source, arg)				"352 " + source + " 0 " + arg
 #define RPL_NAMREPLY(source, channel, users)    "353 " + source + " = " + channel + " :" + users
 #define RPL_ENDOFNAMES(source, channel)			"366 " + source + " " + channel + " :End of /NAMES list."
 #define RPL_YOUREOPER(source)					"381 " + source + " ::You are now an IRC operator"
