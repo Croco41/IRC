@@ -25,17 +25,13 @@ void JoinCommand::execute(Client *client, std::vector<std::string> arg)
 	}
 	for (std::vector<std::string>::iterator it = arg.begin(); it != arg.end(); it++)
 		std::cout << "arg[" << *it << "]" << std::endl;
-	// on établit le mot de passe (soit arg 2, soit rien)
-	// std::string	chan_name = arg[0]; 
 	std::string	password;
-	//bon...
 	std::cout << KHAKI << "password" << RESET << std::endl;
 	if (arg.size() > 1)
 		password = arg[1];
 	else
 		password = "";
-	// on verifie si le client est déjà connecté
-	std::cout << KHAKI << "client déjà connecté ?" << RESET << std::endl;
+	//std::cout << KHAKI << "client déjà connecté ?" << RESET << std::endl;
 
 	// parsing des noms de channels !
 
@@ -51,16 +47,16 @@ void JoinCommand::execute(Client *client, std::vector<std::string> arg)
 		std::cout << GREEN << "CHANNEL EN COURS : " << *it << RESET << std::endl;
 		if (it.operator*().at(0) != '#')
 		{
-			std::cout << GREEN << "ON ENTRE ICI # ?" << it.operator*().at(0) << RESET << std::endl;
+			//std::cout << GREEN << "ON ENTRE ICI # ?" << it.operator*().at(0) << RESET << std::endl;
 			std::string	tmp = *it;
-			std::cout << PURPLE << tmp << RESET << std::endl;
+			//std::cout << PURPLE << tmp << RESET << std::endl;
 			*it = "#";
 			it.operator*().append(tmp);
-			std::cout << GREEN << *it << RESET << std::endl;
+			//std::cout << GREEN << *it << RESET << std::endl;
 		}
 		if (client->findChannel(*it) == true)
 		{
-			std::cout << RED << "On entre ici ?" << RESET << std::endl;
+			//std::cout << RED << "On entre ici ?" << RESET << std::endl;
 			client->reply(ERR_TOOMANYCHANNELS(client->getNickname(), *it));
 			return;
 		}
@@ -75,13 +71,13 @@ void JoinCommand::execute(Client *client, std::vector<std::string> arg)
 			return;
 		}
 		// verif du mot de passe
-		std::cout << KHAKI << "verif password" << RESET << std::endl;
+		//std::cout << KHAKI << "verif password" << RESET << std::endl;
 		if (channel->getPassword() != password)
 		{
 			client->reply(ERR_BADCHANNELKEY(client->getNickname(), *it));
 			return;
 		}
-		std::cout << KHAKI << "juste avant de join_channel" << RESET << std::endl;
+		//std::cout << KHAKI << "juste avant de join_channel" << RESET << std::endl;
 		client->join_channel(channel);
 		std::cout << "nb de clients dans notre channel (JOIN) " << channel->getNbclients() << std::endl;
 	}

@@ -10,7 +10,7 @@ ModeCommand::~ModeCommand()
 	return;
 }
 
-// 		- a : away// - i : invisible// - w : wallops// - r : restricted// - o : operator
+// 	- a : away// - i : invisible// - r : restricted// - o : operator
 void ModeCommand::mode_user(Client *client, std::vector<std::string> arg)
 {
 	int arg_size = arg.size();
@@ -24,7 +24,7 @@ void ModeCommand::mode_user(Client *client, std::vector<std::string> arg)
 		{
 			if (client->getNickname() == target)
 			{
-				std::cout << "dans mode sans arg " << modes << std::endl;
+				//std::cout << "dans mode sans arg " << modes << std::endl;
 				client->reply(RPL_UMODEIS(client->getNickname(), modes)); //221 To answer a query about a client's own mode, RPL_UMODEIS is sent back.
 			}
 			else
@@ -51,19 +51,21 @@ void ModeCommand::mode_user(Client *client, std::vector<std::string> arg)
 					sign = false;
 				else if (it.operator*().at(0) ==  '+')
 					sign = true;
+				else 
+				{
+					std::cout << "you need to have + or - with the mode" << std::endl;
+					return ;
+				}
 				std::cout << "value cherchée après + -: " << it.operator*().at(1) << std::endl;
 				if (modes.find((it.operator*().at(1))) != std::string::npos)
 				{
 					std::string client_modes = client->getModes();
 					std::cout << PURPLE << "client_modes: " << client_modes << RESET << std::endl;
-					//if (sign == true && (client_modes.find((*it)) == std::string::npos))
 					if ((it.operator*().at(1)) == 'a')
 					{
 						std::string reply = "The flag 'a' SHALL NOT be toggled using the MODE command,instead use of the AWAY command is REQUIRED but this mode is not implemented";
 						client->reply(reply);
 						std::cout << RED << reply << RESET << std::endl;
-						//client->writetosend(RPL_MODE_AWAY(client->getPrefix(), message));
-						//client->reply_command(RPL_MODE_NORIGHT(client->getPrefix(), client->getNickname(), message));
 					}
 					else if (sign == true && ((it.operator*().at(1)) == 'o' || (it.operator*().at(1)) == 'O'))
 					{
@@ -75,7 +77,6 @@ void ModeCommand::mode_user(Client *client, std::vector<std::string> arg)
 					{
 						std::cout << "add mode" << std::endl;
 						client->setModes(client->getModes() + (*it));
-						//client->setModes(client->getModes() + (it.operator*().at(0)) + (it.operator*().at(1)));
 					}
 					else if (sign == false && ((it.operator*().at(1)) == 'r'))
 					{
@@ -89,14 +90,11 @@ void ModeCommand::mode_user(Client *client, std::vector<std::string> arg)
 						std::string needle;
 						std::string tosend; // pour fix mode version irssi
 						tosend = (*it); // pour fix mode version irssi
-						std::cout << "tosend: " << tosend << std::endl;
 						readytosent.append(tosend); // pour fix mode version irssi
-						std::cout << "readytosent: " << readytosent << std::endl;
 						needle.push_back((it.operator*().at(1)));
 						std::size_t pos = client_modes.find(needle);
 						client_modes.erase(pos -1, 2);
-						//client_modes.append("-i");
-						std::cout << GREEN <<  "remove mode, size de new clientmodes (après erase): " << client_modes << client_modes.size() << RESET << std::endl;
+						//std::cout << GREEN <<  "remove mode, size de new clientmodes (après erase): " << client_modes << client_modes.size() << RESET << std::endl;
 						client->setModes(client_modes);
 					}
 					if (sign == false && ((it.operator*().at(1)) == 'o'))
@@ -107,7 +105,7 @@ void ModeCommand::mode_user(Client *client, std::vector<std::string> arg)
 				else
 				{
 					unknown_mode = true;
-					std::cout << RED << "je rentre ici dans unknow mode?? " << RESET << std::endl;
+					//std::cout << RED << "je rentre ici dans unknow mode? " << RESET << std::endl;
 				}
 			}
 			if (unknown_mode == true)
@@ -155,6 +153,11 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
 				sign = false;
 			else if (it.operator*().at(0) ==  '+')
 				sign = true;
+			else 
+			{
+				std::cout << "you need to have + or - with the mode" << std::endl;
+				return ;
+			}
 			std::cout << "value cherchée après + -: " << it.operator*().at(1) << std::endl;
 			if (modes.find((it.operator*().at(1))) != std::string::npos && ((it.operator*().at(1)) == 't'))
 			{
@@ -173,10 +176,9 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
 					if (chan_modes_save.find(needle) != std::string::npos)
 					{
 						std::size_t pos = chan_modes_save.find(needle);
-						std::cout << YELLOW << "chan_modes: " << chan_modes_save << " mode sauv dans chan: " << channel->getModes() << RESET <<std::endl; 
-						std::cout << "pour test si on enleve alors qu'y a pas pos= " << pos << std::endl;
+						//std::cout << YELLOW << "chan_modes: " << chan_modes_save << " mode sauv dans chan: " << channel->getModes() << RESET <<std::endl; 
 						chan_modes_save.erase(pos -1, 2);
-						std::cout << YELLOW << "DEBUG: newchanmod after delete: " << chan_modes_save << RESET << std::endl;
+						//std::cout << YELLOW << "DEBUG: newchanmod after delete: " << chan_modes_save << RESET << std::endl;
 						channel->setModes(chan_modes_save);
 					}
 				}
@@ -192,7 +194,7 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
 					{
 						std::size_t pos = chan_modes_save.find(needle);
 						chan_modes_save.erase(pos -1, 2);
-						std::cout << YELLOW << "DEBUG: new chan_mode after delete: " << chan_modes_save << RESET << std::endl;
+						//std::cout << YELLOW << "DEBUG: new chan_mode after delete: " << chan_modes_save << RESET << std::endl;
 						channel->setModes(chan_modes_save);
 						channel->setMaxclients(50); //(la valeur max qu'on a fixé sans limite)
 					}
@@ -238,6 +240,11 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
 				sign = false;
 			else if (it.operator*().at(0) ==  '+')
 				sign = true;
+			else 
+			{
+				std::cout << "you need to have + or - with the mode" << std::endl;
+				return ;
+			}
 			if ((it.operator*().at(1)) == 'o')
 			{
 				std::string reply = "You need to use OPER command to make an operator (or Mode user to do -o)";
@@ -257,14 +264,11 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
 				else if (sign == true && chan_modes_save.find((it.operator*().at(1))) == std::string::npos)
 				{
 					++it;
-					std::cout << RED << "je suis dans le +l apres ++it: " << (*it) << RESET << std::endl;
+					//std::cout << RED << "je suis dans le +l apres ++it: " << (*it) << RESET << std::endl;
 					size = (*it);
 					std::cout << "size transmis pour le mode l dans chan" << size << std::endl;
 					channel->setModes(channel->getModes() + "+l");
 
-					// std::stringstream sstream(size);
-					// size_t result = std::stoi(size);
-					// sstream >> result;
 					try
 					{
 						size_t result;
@@ -272,8 +276,6 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
 						sstream >> result;
 						std::cout << RED << "size en int pour l" << result << RESET << std::endl;
 						channel->setMaxclients(result);
-						//channel->setModes(channel->getModes()); // faut revoir ça
-						//channel->setParam(channel->getParam() + size);
 					}
 					catch(const std::exception& e)
 					{
@@ -299,17 +301,12 @@ void ModeCommand::mode_channel(Client *client, Channel *channel, std::vector<std
 void ModeCommand::execute(Client *client, std::vector<std::string> arg)
 {
 	std::cout << FUCHSIA << "\nMODECOMMAND : execute - start" << RESET << std::endl;
-	// La commande MODE doit toujours avoir au moins un paramètre !
 	if (arg.size() < 1)
 	{
 		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "MODE"));
 		return;
 	}
 	std::cout << FUCHSIA << "notre argument : " << arg.at(0) << RESET << std::endl;
-	// on aura deux types de paramètres : 
-	//		- soit un nom de client		-> USER MODE
-	//		- soit un nom de channel	-> CHANNEL MODE
-	// on checke le paramètre : client ou channel ?
 	std::string target = arg.at(0);
 
 	Client *targetclient = _server->getClient(target);
@@ -334,68 +331,3 @@ void ModeCommand::execute(Client *client, std::vector<std::string> arg)
 	}
 	std::cout << FUCHSIA << "MODECOMMAND : execute - end" << RESET << std::endl;
 }
-
-/*
-Command: MODE
-Parameters: <nickname>
-			*( ( "+" / "-" ) *( "i" / "w" / "o" / "O" / "r" ) )
-
-The user MODE's are typically changes which affect either how the
-client is seen by others or what 'extra' messages the client is sent.
-
-A user MODE command MUST only be accepted if both the sender of the
-message and the nickname given as a parameter are both the same.  If
-no other parameter is given, then the server will return the current
-settings for the nick.
-
-	The available modes are as follows:
-
-		a - user is flagged as away;
-		i - marks a users as invisible;
-		w - user receives wallops;
-		r - restricted user connection;
-		o - operator flag;
-		O - local operator flag;
-		s - marks a user for receipt of server notices.
-
-Additional modes may be available later on.
-
-Kalt                         Informational                     [Page 12]
-RFC 2812          Internet Relay Chat: Client Protocol        April 2000
-
-The flag 'a' SHALL NOT be toggled by the user using the MODE command,
-instead use of the AWAY command is REQUIRED.
-
-If a user attempts to make themselves an operator using the "+o" or
-"+O" flag, the attempt SHOULD be ignored as users could bypass the
-authentication mechanisms of the OPER command.  There is no
-restriction, however, on anyone `deopping' themselves (using "-o" or
-"-O").
-
-On the other hand, if a user attempts to make themselves unrestricted
-using the "-r" flag, the attempt SHOULD be ignored.  There is no
-restriction, however, on anyone `deopping' themselves (using "+r").
-This flag is typically set by the server upon connection for
-administrative reasons.  While the restrictions imposed are left up
-to the implementation, it is typical that a restricted user not be
-allowed to change nicknames, nor make use of the channel operator
-status on channels.
-
-The flag 's' is obsolete but MAY still be used.
-
-Numeric Replies:
-
-		ERR_NEEDMOREPARAMS              ERR_USERSDONTMATCH
-		ERR_UMODEUNKNOWNFLAG            RPL_UMODEIS
-
-Examples:
-
-MODE WiZ -w                     ; Command by WiZ to turn off
-								reception of WALLOPS messages.
-
-MODE Angel +i                   ; Command from Angel to make herself
-								invisible.
-
-MODE WiZ -o                     ; WiZ 'deopping' (removing operator
-								status).
-*/
